@@ -1,0 +1,17 @@
+//nolint:dupword
+package data
+
+import . "github.com/outofforest/uepik" //nolint:staticcheck
+
+var (
+	rejs2026HR01 = Usluga(
+		"2026/HR/01",
+		Sprzedaz(
+			Dokument("FV/01/2024", Data(2025, 1, 1)),
+			Kontrahent("INVINI sp. z o. o.", "", ""),
+			Platnosc(Kwota(1, 23, EUR), Data(2025, 1, 1), 1),
+			CIT(Data(2025, 1, 2)),
+			VAT(Data(2025, 1, 1)),
+		),
+	)
+)
