@@ -17,5 +17,5 @@ func Test2025(t *testing.T) {
 	lo.Must0(generators.Book(f, R2025))
 
 	lo.Must0(f.DeleteSheet(f.GetSheetName(0)))
-	lo.Must0(f.SaveAs("Data.xlsx"))
+	// lo.Must0(f.SaveAs("Data.xlsx"))
 }
