@@ -76,3 +76,22 @@ func (s *Sell) BookRecords(period types.Period, rates types.CurrencyRates) []typ
 
 	return result
 }
+
+// VATRecords returns VAT records for the sell.
+func (s *Sell) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
+	if !period.Contains(s.VAT.Date) {
+		return nil
+	}
+
+	incomeBase, incomeRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.VAT.Date))
+
+	return []types.VATRecord{
+		{
+			Date:       s.VAT.Date,
+			Document:   s.Document,
+			Contractor: s.Contractor,
+			Income:     incomeBase,
+			Notes:      fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate),
+		},
+	}
+}

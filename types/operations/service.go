@@ -27,3 +27,12 @@ func (s Service) BookRecords(period types.Period, rates types.CurrencyRates) []t
 	}
 	return records
 }
+
+// VATRecords returns VAT records for the service.
+func (s Service) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
+	records := []types.VATRecord{}
+	for _, o := range s.Operations {
+		records = append(records, o.VATRecords(period, rates)...)
+	}
+	return records
+}
