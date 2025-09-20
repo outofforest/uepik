@@ -123,6 +123,25 @@ func (d Denom) Add(denom Denom) Denom {
 	}
 }
 
+// Sub subtracts two denoms.
+func (d Denom) Sub(denom Denom) Denom {
+	if d.Currency != denom.Currency {
+		panic("Currency mismatch.")
+	}
+	return Denom{
+		Currency: d.Currency,
+		Amount:   newNumberFromDecimal(d.Amount.decimal.Sub(denom.Amount.decimal), d.Amount.precision),
+	}
+}
+
+// Neg negates denom.
+func (d Denom) Neg() Denom {
+	return Denom{
+		Currency: d.Currency,
+		Amount:   newNumberFromDecimal(d.Amount.decimal.Neg(), d.Amount.precision),
+	}
+}
+
 // ToBase converts denom to the base currency.
 func (d Denom) ToBase(rate Number) Denom {
 	currency := Currencies.Currency(d.Currency)
@@ -144,17 +163,6 @@ func (d Denom) Rate(denom Denom) Number {
 	currency := Currencies.Currency(denom.Currency)
 	return newNumberFromDecimal(d.Amount.decimal.DivRound(denom.Amount.decimal, int32(currency.RatePrecision)),
 		currency.RatePrecision)
-}
-
-// Sub subtracts two denoms.
-func (d Denom) Sub(denom Denom) Denom {
-	if d.Currency != denom.Currency {
-		panic("Currency mismatch.")
-	}
-	return Denom{
-		Currency: d.Currency,
-		Amount:   newNumberFromDecimal(d.Amount.decimal.Sub(denom.Amount.decimal), d.Amount.precision),
-	}
 }
 
 // NewNumber creates new number.
