@@ -123,24 +123,26 @@ func visualizeBankReports(f *excelize.File, reports []types.BankReport) error {
 		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "G1", "Kurs średni"))
 
 		for i, br := range r.Records {
-			lo.Must0(f.SetCellValue(string(r.OriginalCurrency.Symbol), fmt.Sprintf("A%d", i+rowOffset),
+			row := i + 2
+
+			lo.Must0(f.SetCellValue(string(r.OriginalCurrency.Symbol), fmt.Sprintf("A%d", row),
 				br.Date))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("B%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("B%d", row),
 				br.OriginalAmount.Amount.ToFloat64(),
 				int(r.OriginalCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("C%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("C%d", row),
 				br.BaseAmount.Amount.ToFloat64(),
 				int(r.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("D%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("D%d", row),
 				br.Rate.ToFloat64(),
 				int(r.OriginalCurrency.RatePrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("E%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("E%d", row),
 				br.OriginalSum.Amount.ToFloat64(),
 				int(r.OriginalCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("F%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("F%d", row),
 				br.BaseSum.Amount.ToFloat64(),
 				int(r.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("G%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("G%d", row),
 				br.RateAverage.ToFloat64(),
 				int(r.OriginalCurrency.RatePrecision), 64))
 		}

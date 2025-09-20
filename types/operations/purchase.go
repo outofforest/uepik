@@ -22,3 +22,8 @@ func (p Purchase) BankRecords(period types.Period) []*types.BankRecord {
 func (p Purchase) BookRecords(period types.Period, rates types.CurrencyRates) []types.BookRecord {
 	return nil
 }
+
+// VATRecords returns VAT records for the purchase.
+func (p Purchase) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
+	return nil
+}

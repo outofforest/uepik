@@ -7,8 +7,6 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-const rowOffset = 2
-
 var dateStyle = &excelize.Style{
 	CustomNumFmt: lo.ToPtr(`yyyy-mm-dd`),
 }

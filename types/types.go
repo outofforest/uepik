@@ -271,6 +271,19 @@ type Payment struct {
 type Operation interface {
 	BankRecords(period Period) []*BankRecord
 	BookRecords(period Period, rates CurrencyRates) []BookRecord
+	VATRecords(period Period, rates CurrencyRates) []VATRecord
+}
+
+// BankRecord defines the properties of bank record.
+type BankRecord struct {
+	Date           time.Time
+	Index          uint64
+	OriginalAmount Denom
+	BaseAmount     Denom
+	Rate           Number
+	OriginalSum    Denom
+	BaseSum        Denom
+	RateAverage    Number
 }
 
 // BookRecord defines the book record.
@@ -287,16 +300,14 @@ type BookRecord struct {
 	Notes           string
 }
 
-// BankRecord defines the properties of bank record.
-type BankRecord struct {
-	Date           time.Time
-	Index          uint64
-	OriginalAmount Denom
-	BaseAmount     Denom
-	Rate           Number
-	OriginalSum    Denom
-	BaseSum        Denom
-	RateAverage    Number
+// VATRecord defines the VAT record.
+type VATRecord struct {
+	Date       time.Time
+	Index      uint64
+	Document   Document
+	Contractor Contractor
+	Income     Denom
+	Notes      string
 }
 
 // PreviousDay computes the date of the previous day.

@@ -54,3 +54,8 @@ func (d *Donation) BookRecords(period types.Period, rates types.CurrencyRates) [
 
 	return result
 }
+
+// VATRecords returns VAT records for the donation.
+func (d *Donation) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
+	return nil
+}
