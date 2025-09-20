@@ -26,6 +26,8 @@ func (s *Sell) BankRecords(period types.Period) []*types.BankRecord {
 	s.paymentBankRecord = &types.BankRecord{
 		Date:           s.Payment.Date,
 		Index:          s.Payment.Index,
+		Document:       s.Document,
+		Contractor:     s.Contractor,
 		OriginalAmount: s.Payment.Amount,
 	}
 

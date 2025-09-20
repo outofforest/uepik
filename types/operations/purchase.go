@@ -26,6 +26,8 @@ func (p *Purchase) BankRecords(period types.Period) []*types.BankRecord {
 	p.paymentBankRecord = &types.BankRecord{
 		Date:           p.Payment.Date,
 		Index:          p.Payment.Index,
+		Document:       p.Document,
+		Contractor:     p.Contractor,
 		OriginalAmount: p.Payment.Amount.Neg(),
 	}
 
