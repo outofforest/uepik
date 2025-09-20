@@ -14,20 +14,38 @@ var dateStyle = &excelize.Style{
 
 var textStyle = &excelize.Style{
 	CustomNumFmt: lo.ToPtr("@"),
+	Alignment: &excelize.Alignment{
+		Horizontal: "left",
+		Vertical:   "top",
+		WrapText:   true,
+	},
 }
 
 var intStyle = &excelize.Style{
 	CustomNumFmt: lo.ToPtr("0"),
+	Alignment: &excelize.Alignment{
+		Horizontal: "right",
+		Vertical:   "top",
+	},
 }
 
-var styleHeader = &excelize.Style{
+var headerStyle = &excelize.Style{
 	Alignment: &excelize.Alignment{
 		Horizontal: "center",
 		Vertical:   "center",
 		WrapText:   true,
 	},
 	Font: &excelize.Font{
+		Size: 8,
 		Bold: true,
+	},
+}
+
+var columnIndexStyle = &excelize.Style{
+	CustomNumFmt: lo.ToPtr("0"),
+	Alignment: &excelize.Alignment{
+		Horizontal: "center",
+		Vertical:   "center",
 	},
 }
 
@@ -38,6 +56,10 @@ func excelNumberFormat(precision uint64) *excelize.Style {
 	}
 	return &excelize.Style{
 		CustomNumFmt: lo.ToPtr(format),
+		Alignment: &excelize.Alignment{
+			Horizontal: "right",
+			Vertical:   "top",
+		},
 	}
 }
 
@@ -70,4 +92,8 @@ func monthName(month time.Month) string {
 	default:
 		panic("invalid month")
 	}
+}
+
+func width(cms float64) float64 {
+	return 5.11 * cms
 }

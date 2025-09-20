@@ -113,7 +113,7 @@ func visualizeBankReports(f *excelize.File, reports []types.BankReport) error {
 		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "F:F", baseStyle))
 		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "G:G", rateStyle))
 
-		lo.Must0(f.SetRowStyle(string(r.OriginalCurrency.Symbol), 1, 1, lo.Must(f.NewStyle(styleHeader))))
+		lo.Must0(f.SetRowStyle(string(r.OriginalCurrency.Symbol), 1, 1, lo.Must(f.NewStyle(headerStyle))))
 		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "A1", "Data operacji"))
 		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "B1", "Kwota "+string(r.OriginalCurrency.Symbol)))
 		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "C1", "Kwota "+string(r.BaseCurrency.Symbol)))

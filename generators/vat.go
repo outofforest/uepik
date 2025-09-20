@@ -41,7 +41,7 @@ func VAT(f *excelize.File, year types.FiscalYear) error {
 	lo.Must0(f.SetColStyle(vatSheetName, "E:E", baseStyle))
 	lo.Must0(f.SetColStyle(vatSheetName, "F:F", textStyle))
 
-	lo.Must0(f.SetRowStyle(vatSheetName, 1, 1, lo.Must(f.NewStyle(styleHeader))))
+	lo.Must0(f.SetRowStyle(vatSheetName, 1, 1, lo.Must(f.NewStyle(headerStyle))))
 	lo.Must0(f.SetCellStr(vatSheetName, "A1", "Lp."))
 	lo.Must0(f.SetCellStr(vatSheetName, "B1", "Data powstania obowiązku VAT"))
 	lo.Must0(f.SetCellStr(vatSheetName, "C1", "Nr dowodu księgowego"))
