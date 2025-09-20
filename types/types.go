@@ -286,6 +286,8 @@ type Operation interface {
 type BankRecord struct {
 	Date           time.Time
 	Index          uint64
+	Document       Document
+	Contractor     Contractor
 	OriginalAmount Denom
 	BaseAmount     Denom
 	Rate           Number

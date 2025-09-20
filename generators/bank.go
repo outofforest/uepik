@@ -99,50 +99,81 @@ func bankReports(year types.FiscalYear) ([]types.BankReport, error) {
 }
 
 func visualizeBankReports(f *excelize.File, reports []types.BankReport) error {
+	textStyle := lo.Must(f.NewStyle(textStyle))
+
 	for _, r := range reports {
+		sheet := string(r.OriginalCurrency.Symbol)
+
 		lo.Must(f.NewSheet(string(r.OriginalCurrency.Symbol)))
 		originalStyle := lo.Must(f.NewStyle(excelNumberFormat(r.OriginalCurrency.AmountPrecision)))
 		baseStyle := lo.Must(f.NewStyle(excelNumberFormat(r.BaseCurrency.AmountPrecision)))
 		rateStyle := lo.Must(f.NewStyle(excelNumberFormat(r.OriginalCurrency.RatePrecision)))
 
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "A:A", lo.Must(f.NewStyle(dateStyle))))
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "B:B", originalStyle))
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "C:C", baseStyle))
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "D:D", rateStyle))
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "E:E", originalStyle))
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "F:F", baseStyle))
-		lo.Must0(f.SetColStyle(string(r.OriginalCurrency.Symbol), "G:G", rateStyle))
+		lo.Must0(f.SetPageLayout(sheet, &excelize.PageLayoutOptions{
+			Orientation: lo.ToPtr("portrait"),
+		}))
+		lo.Must0(f.SetPageMargins(sheet, &excelize.PageLayoutMarginsOptions{
+			Left:   lo.ToPtr(0.0),
+			Right:  lo.ToPtr(0.0),
+			Top:    lo.ToPtr(0.0),
+			Bottom: lo.ToPtr(0.0),
+			Header: lo.ToPtr(0.0),
+			Footer: lo.ToPtr(0.0),
+		}))
 
-		lo.Must0(f.SetRowStyle(string(r.OriginalCurrency.Symbol), 1, 1, lo.Must(f.NewStyle(headerStyle))))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "A1", "Data operacji"))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "B1", "Kwota "+string(r.OriginalCurrency.Symbol)))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "C1", "Kwota "+string(r.BaseCurrency.Symbol)))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "D1", "Kurs operacji"))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "E1", "Suma "+string(r.OriginalCurrency.Symbol)))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "F1", "Suma "+string(r.BaseCurrency.Symbol)))
-		lo.Must0(f.SetCellStr(string(r.OriginalCurrency.Symbol), "G1", "Kurs średni"))
+		lo.Must0(f.SetColStyle(sheet, "A:A", lo.Must(f.NewStyle(dateStyle))))
+		lo.Must0(f.SetColStyle(sheet, "B:B", textStyle))
+		lo.Must0(f.SetColStyle(sheet, "C:C", textStyle))
+		lo.Must0(f.SetColStyle(sheet, "D:D", originalStyle))
+		lo.Must0(f.SetColStyle(sheet, "E:E", baseStyle))
+		lo.Must0(f.SetColStyle(sheet, "F:F", rateStyle))
+		lo.Must0(f.SetColStyle(sheet, "G:G", originalStyle))
+		lo.Must0(f.SetColStyle(sheet, "H:H", baseStyle))
+		lo.Must0(f.SetColStyle(sheet, "I:I", rateStyle))
+
+		lo.Must0(f.SetColWidth(sheet, "A", "A", width(2.29)))
+		lo.Must0(f.SetColWidth(sheet, "B", "B", width(3.78)))
+		lo.Must0(f.SetColWidth(sheet, "C", "C", width(3.54)))
+		lo.Must0(f.SetColWidth(sheet, "D", "D", width(1.78)))
+		lo.Must0(f.SetColWidth(sheet, "E", "E", width(1.78)))
+		lo.Must0(f.SetColWidth(sheet, "F", "F", width(1.78)))
+		lo.Must0(f.SetColWidth(sheet, "G", "G", width(1.78)))
+		lo.Must0(f.SetColWidth(sheet, "H", "H", width(1.78)))
+		lo.Must0(f.SetColWidth(sheet, "I", "I", width(1.78)))
+
+		lo.Must0(f.SetRowStyle(sheet, 1, 1, lo.Must(f.NewStyle(headerStyle))))
+		lo.Must0(f.SetCellStr(sheet, "A1", "Data operacji"))
+		lo.Must0(f.SetCellStr(sheet, "B1", "Nr dowodu księgowego"))
+		lo.Must0(f.SetCellStr(sheet, "C1", "Kontrahent"))
+		lo.Must0(f.SetCellStr(sheet, "D1", "Kwota "+string(r.OriginalCurrency.Symbol)))
+		lo.Must0(f.SetCellStr(sheet, "E1", "Kwota "+string(r.BaseCurrency.Symbol)))
+		lo.Must0(f.SetCellStr(sheet, "F1", "Kurs operacji"))
+		lo.Must0(f.SetCellStr(sheet, "G1", "Suma "+string(r.OriginalCurrency.Symbol)))
+		lo.Must0(f.SetCellStr(sheet, "H1", "Suma "+string(r.BaseCurrency.Symbol)))
+		lo.Must0(f.SetCellStr(sheet, "I1", "Kurs średni"))
 
 		for i, br := range r.Records {
 			row := i + 2
 
-			lo.Must0(f.SetCellValue(string(r.OriginalCurrency.Symbol), fmt.Sprintf("A%d", row),
-				br.Date))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("B%d", row),
+			lo.Must0(f.SetCellValue(sheet, fmt.Sprintf("A%d", row), br.Date))
+			lo.Must0(f.SetCellStr(sheet, fmt.Sprintf("B%d", row), br.Document.ID))
+			lo.Must0(f.SetCellStr(sheet, fmt.Sprintf("C%d", row), br.Contractor.Name))
+			lo.Must0(f.SetCellFloat(sheet, fmt.Sprintf("D%d", row),
 				br.OriginalAmount.Amount.ToFloat64(),
 				int(r.OriginalCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("C%d", row),
+			lo.Must0(f.SetCellFloat(sheet, fmt.Sprintf("E%d", row),
 				br.BaseAmount.Amount.ToFloat64(),
 				int(r.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("D%d", row),
+			lo.Must0(f.SetCellFloat(sheet, fmt.Sprintf("F%d", row),
 				br.Rate.ToFloat64(),
 				int(r.OriginalCurrency.RatePrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("E%d", row),
+			lo.Must0(f.SetCellFloat(sheet, fmt.Sprintf("G%d", row),
 				br.OriginalSum.Amount.ToFloat64(),
 				int(r.OriginalCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("F%d", row),
+			lo.Must0(f.SetCellFloat(sheet, fmt.Sprintf("H%d", row),
 				br.BaseSum.Amount.ToFloat64(),
 				int(r.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(string(r.OriginalCurrency.Symbol), fmt.Sprintf("G%d", row),
+			lo.Must0(f.SetCellFloat(sheet, fmt.Sprintf("I%d", row),
 				br.RateAverage.ToFloat64(),
 				int(r.OriginalCurrency.RatePrecision), 64))
 		}

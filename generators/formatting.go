@@ -10,6 +10,10 @@ import (
 
 var dateStyle = &excelize.Style{
 	CustomNumFmt: lo.ToPtr(`yyyy-mm-dd`),
+	Alignment: &excelize.Alignment{
+		Horizontal: "right",
+		Vertical:   "top",
+	},
 }
 
 var textStyle = &excelize.Style{

@@ -24,6 +24,8 @@ func (d *Donation) BankRecords(period types.Period) []*types.BankRecord {
 	d.paymentBankRecord = &types.BankRecord{
 		Date:           d.Payment.Date,
 		Index:          d.Payment.Index,
+		Document:       d.Document,
+		Contractor:     d.Contractor,
 		OriginalAmount: d.Payment.Amount,
 	}
 
