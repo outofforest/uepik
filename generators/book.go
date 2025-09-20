@@ -63,6 +63,7 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 	lo.Must0(f.SetCellStr(bookSheetName, "L1", "Koszty niestanowiące kosztów uzyskania przychodów"))
 
 	for i, r := range records {
+		fmt.Println(r.Date)
 		lo.Must0(f.SetCellInt(bookSheetName, fmt.Sprintf("A%d", i+rowOffset), int64(i)+1))
 		lo.Must0(f.SetCellInt(bookSheetName, fmt.Sprintf("B%d", i+rowOffset), int64(r.Date.Day())))
 		lo.Must0(f.SetCellStr(bookSheetName, fmt.Sprintf("C%d", i+rowOffset), r.Document.ID))
@@ -79,9 +80,16 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 				r.IncomeTrading.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 		}
 		if r.IncomeOthers.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(bookSheetName, fmt.Sprintf("H%d", i+rowOffset),
+			lo.Must0(f.SetCellFloat(bookSheetName, fmt.Sprintf("I%d", i+rowOffset),
 				r.IncomeOthers.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 		}
+
+		incomeSum := r.IncomeDonations.Add(r.IncomeTrading).Add(r.IncomeOthers)
+		if incomeSum.NEQ(types.BaseZero) {
+			lo.Must0(f.SetCellFloat(bookSheetName, fmt.Sprintf("J%d", i+rowOffset),
+				incomeSum.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
+		}
+
 		if r.CostTaxed.NEQ(types.BaseZero) {
 			lo.Must0(f.SetCellFloat(bookSheetName, fmt.Sprintf("K%d", i+rowOffset),
 				r.CostTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))

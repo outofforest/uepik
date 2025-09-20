@@ -124,6 +124,19 @@ func Platnosc(kwota types.Denom, data time.Time, index uint64) types.Payment {
 	}
 }
 
+// Darowizna definiuje darowiznę.
+func Darowizna(
+	dokument types.Document,
+	kontrahent types.Contractor,
+	platnosc types.Payment,
+) *operations.Donation {
+	return &operations.Donation{
+		Document:   dokument,
+		Contractor: kontrahent,
+		Payment:    platnosc,
+	}
+}
+
 // Sprzedaz definiuje sprzedaż.
 func Sprzedaz(
 	dokument types.Document,
