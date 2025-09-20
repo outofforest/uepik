@@ -16,4 +16,5 @@ var kursy2025 = Kursy(
 	Kurs(EUR, Data(2024, 12, 31), 4, 3400),
 	Kurs(EUR, Data(2025, 1, 1), 4, 5200),
 	Kurs(EUR, Data(2025, 1, 2), 4, 4300),
+	Kurs(EUR, Data(2025, 1, 7), 4, 4800),
 )

@@ -161,8 +161,8 @@ func Zakup(
 	platnosc types.Payment,
 	cit types.CIT,
 	vat types.VAT,
-) operations.Purchase {
-	return operations.Purchase{
+) *operations.Purchase {
+	return &operations.Purchase{
 		Document:   dokument,
 		Contractor: kontrahent,
 		Payment:    platnosc,

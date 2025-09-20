@@ -13,5 +13,12 @@ var (
 			CIT(Data(2025, 1, 2)),
 			VAT(Data(2025, 1, 1)),
 		),
+		Zakup(
+			Dokument("FV/01/2024", Data(2025, 1, 5)),
+			Kontrahent("INVINI sp. z o. o.", "", ""),
+			Platnosc(Kwota(10, 11, EUR), Data(2025, 1, 6), 1),
+			CIT(Data(2025, 1, 8)),
+			VAT(Data(2025, 1, 5)),
+		),
 	)
 )
