@@ -43,6 +43,7 @@ func (s *Sell) BookRecords(period types.Period, rates types.CurrencyRates) []typ
 	incomeBase, incomeRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.CIT.Date))
 
 	result = append(result, types.BookRecord{
+		Date:            s.CIT.Date,
 		Document:        s.Document,
 		Contractor:      s.Contractor,
 		IncomeDonations: types.BaseZero,
@@ -55,6 +56,7 @@ func (s *Sell) BookRecords(period types.Period, rates types.CurrencyRates) []typ
 
 	if s.paymentBankRecord != nil && s.paymentBankRecord.BaseAmount.NEQ(incomeBase) {
 		rateDiff := types.BookRecord{
+			Date:            s.CIT.Date,
 			IncomeDonations: types.BaseZero,
 			IncomeTrading:   types.BaseZero,
 			IncomeOthers:    types.BaseZero,
