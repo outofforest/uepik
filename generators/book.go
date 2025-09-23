@@ -164,13 +164,12 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 	lo.Must0(f.SetCellInt(flowSheetName, "I2", 9))
 
 	var (
-		previousProfit = types.BaseZero
+		previousUnspent = types.BaseZero
 
-		month               time.Month
-		monthIncome         = types.BaseZero
-		monthCostsTaxed     = types.BaseZero
-		monthCostsNotTaxed  = types.BaseZero
-		monthCostsNotTaxed2 = types.BaseZero
+		month              time.Month
+		monthIncome        = types.BaseZero
+		monthCostsTaxed    = types.BaseZero
+		monthCostsNotTaxed = types.BaseZero
 
 		yearIncome         = types.BaseZero
 		yearCostsTaxed     = types.BaseZero
@@ -183,23 +182,19 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 			row1 := 2*(month-1) + 3
 			row2 := row1 + 1
 
+			monthProfit := monthIncome.Sub(monthCostsTaxed)
+			monthCostsNotTaxed2 := previousUnspent.Sub(yearCostsNotTaxed2)
+			if monthCostsNotTaxed2.GT(monthCostsNotTaxed) {
+				monthCostsNotTaxed2 = monthCostsNotTaxed
+			}
+			monthCostsNotTaxed = monthCostsNotTaxed.Sub(monthCostsNotTaxed2)
+
 			yearIncome = yearIncome.Add(monthIncome)
 			yearCostsTaxed = yearCostsTaxed.Add(monthCostsTaxed)
 			yearProfit := yearIncome.Sub(yearCostsTaxed)
-
-			monthProfit := monthIncome.Sub(monthCostsTaxed)
-			if monthCostsNotTaxed.GT(yearProfit) {
-				subCosts := types.BaseZero
-				if yearProfit.GT(types.BaseZero) {
-					subCosts = yearProfit
-				}
-				monthCostsNotTaxed2 = monthCostsNotTaxed.Sub(subCosts)
-				monthCostsNotTaxed = subCosts
-			}
-			monthUnspent := monthProfit.Add(previousProfit).Sub(monthCostsNotTaxed).Sub(monthCostsNotTaxed2)
-
 			yearCostsNotTaxed = yearCostsNotTaxed.Add(monthCostsNotTaxed)
-			yearUnspent := yearProfit.Add(previousProfit).Sub(yearCostsNotTaxed).Sub(yearCostsNotTaxed2)
+			yearCostsNotTaxed2 = yearCostsNotTaxed2.Add(monthCostsNotTaxed2)
+			yearUnspent := yearProfit.Add(previousUnspent).Sub(yearCostsNotTaxed).Sub(yearCostsNotTaxed2)
 
 			lo.Must0(f.SetCellStr(flowSheetName, fmt.Sprintf("A%d", row1), monthName(month)))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("B%d", row1),
@@ -212,12 +207,8 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 				monthProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("F%d", row1),
 				monthCostsNotTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("G%d", row1),
-				previousProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("H%d", row1),
 				monthCostsNotTaxed2.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("I%d", row1),
-				monthUnspent.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 
 			lo.Must0(f.SetCellStr(flowSheetName, fmt.Sprintf("A%d", row2), "narastająco"))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("B%d", row2),
@@ -231,7 +222,7 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("F%d", row2),
 				yearCostsNotTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("G%d", row2),
-				previousProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
+				previousUnspent.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("H%d", row2),
 				yearCostsNotTaxed2.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
 			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("I%d", row2),
@@ -240,7 +231,6 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 			monthIncome = types.BaseZero
 			monthCostsTaxed = types.BaseZero
 			monthCostsNotTaxed = types.BaseZero
-			monthCostsNotTaxed2 = types.BaseZero
 		}
 	}
 
