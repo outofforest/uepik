@@ -189,8 +189,12 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 
 			monthProfit := monthIncome.Sub(monthCostsTaxed)
 			if monthCostsNotTaxed.GT(yearProfit) {
-				monthCostsNotTaxed2 = monthCostsNotTaxed.Sub(yearProfit)
-				monthCostsNotTaxed = yearProfit
+				subCosts := types.BaseZero
+				if yearProfit.GT(types.BaseZero) {
+					subCosts = yearProfit
+				}
+				monthCostsNotTaxed2 = monthCostsNotTaxed.Sub(subCosts)
+				monthCostsNotTaxed = subCosts
 			}
 			monthUnspent := monthProfit.Add(previousProfit).Sub(monthCostsNotTaxed).Sub(monthCostsNotTaxed2)
 

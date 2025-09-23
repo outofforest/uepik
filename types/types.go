@@ -8,6 +8,15 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// CostTaxType defines the tax type of the cost.
+type CostTaxType string
+
+// Cost tax types.
+const (
+	CostTaxTypeTaxable    CostTaxType = "taxable"
+	CostTaxTypeNonTaxable CostTaxType = "nonTaxable"
+)
+
 // Currency symbols.
 const (
 	PLN CurrencySymbol = "PLN"
