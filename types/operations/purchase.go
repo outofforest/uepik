@@ -8,11 +8,12 @@ import (
 
 // Purchase defines the cost of purchased goods or service.
 type Purchase struct {
-	Document   types.Document
-	Contractor types.Contractor
-	Payment    types.Payment
-	CIT        types.CIT
-	VAT        types.VAT
+	Document    types.Document
+	Contractor  types.Contractor
+	Payment     types.Payment
+	CostTaxType types.CostTaxType
+	CIT         types.CIT
+	VAT         types.VAT
 
 	paymentBankRecord *types.BankRecord
 }
@@ -44,17 +45,28 @@ func (p *Purchase) BookRecords(period types.Period, rates types.CurrencyRates) [
 
 	costBase, costRate := rates.ToBase(p.Payment.Amount, types.PreviousDay(p.CIT.Date))
 
-	result = append(result, types.BookRecord{
+	record := types.BookRecord{
 		Date:            p.CIT.Date,
 		Document:        p.Document,
 		Contractor:      p.Contractor,
 		IncomeDonations: types.BaseZero,
 		IncomeTrading:   types.BaseZero,
 		IncomeOthers:    types.BaseZero,
-		CostTaxed:       costBase,
+		CostTaxed:       types.BaseZero,
 		CostNotTaxed:    types.BaseZero,
 		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", p.Payment.Amount, costRate),
-	})
+	}
+
+	switch p.CostTaxType {
+	case types.CostTaxTypeTaxable:
+		record.CostTaxed = costBase
+	case types.CostTaxTypeNonTaxable:
+		record.CostNotTaxed = costBase
+	default:
+		panic("invalid cost type")
+	}
+
+	result = append(result, record)
 
 	if p.paymentBankRecord != nil && p.paymentBankRecord.BaseAmount.NEQ(costBase.Neg()) {
 		rateDiff := types.BookRecord{

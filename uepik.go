@@ -15,6 +15,12 @@ const (
 	EUR = types.EUR
 )
 
+// Typy podatkowe.
+const (
+	KUP  = types.CostTaxTypeTaxable
+	NKUP = types.CostTaxTypeNonTaxable
+)
+
 // Data tworzy datę.
 func Data(rok, miesiac, dzien uint64) time.Time {
 	return time.Date(int(rok), time.Month(miesiac), int(dzien), 0, 0, 0, 0, time.Local)
@@ -159,14 +165,16 @@ func Zakup(
 	dokument types.Document,
 	kontrahent types.Contractor,
 	platnosc types.Payment,
+	typPodatkowy types.CostTaxType,
 	cit types.CIT,
 	vat types.VAT,
 ) *operations.Purchase {
 	return &operations.Purchase{
-		Document:   dokument,
-		Contractor: kontrahent,
-		Payment:    platnosc,
-		CIT:        cit,
-		VAT:        vat,
+		Document:    dokument,
+		Contractor:  kontrahent,
+		Payment:     platnosc,
+		CostTaxType: typPodatkowy,
+		CIT:         cit,
+		VAT:         vat,
 	}
 }
