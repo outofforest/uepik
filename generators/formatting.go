@@ -2,7 +2,6 @@ package generators
 
 import "time"
 
-//nolint:unused
 func monthName(month time.Month) string {
 	switch month {
 	case time.January:

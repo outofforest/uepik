@@ -306,6 +306,11 @@ type BankRecord struct {
 	RateAverage    Number
 }
 
+// GetDate returns record's date.
+func (r BankRecord) GetDate() time.Time {
+	return r.Date
+}
+
 // BookRecord defines the book record.
 type BookRecord struct {
 	Date            time.Time
@@ -322,15 +327,9 @@ type BookRecord struct {
 	CostNotTaxed    Denom
 }
 
-// FlowRecord is the flow record.
-type FlowRecord struct {
-	Income                Denom
-	CostsTaxed            Denom
-	ProfitCurrent         Denom
-	CostsNotTaxedCurrent  Denom
-	ProfitPrevious        Denom
-	CostsNotTaxedPrevious Denom
-	ProfitTotal           Denom
+// GetDate returns record's date.
+func (r BookRecord) GetDate() time.Time {
+	return r.Date
 }
 
 // VATRecord defines the VAT record.
@@ -344,27 +343,69 @@ type VATRecord struct {
 	Income     Denom
 }
 
-// MonthReport contains data for month report.
-type MonthReport struct {
-	Year            uint64
-	Month           string
-	Bank            []BankReport
-	Book            []BookRecord
-	FlowMonth       FlowRecord
-	FlowIncremental FlowRecord
-	VAT             []VATRecord
+// GetDate returns record's date.
+func (r VATRecord) GetDate() time.Time {
+	return r.Date
+}
+
+// Report is the full report.
+type Report struct {
+	Book []BookReport
+	Flow []FlowReport
+	VAT  []VATReport
+	Bank []BankCurrency
+}
+
+// BookReport stores book report.
+type BookReport struct {
+	Year    uint64
+	Month   string
+	Records []BookRecord
+}
+
+// FlowReport is the flow report.
+type FlowReport struct {
+	Year  uint64
+	Month string
+
+	MonthIncome                Denom
+	MonthCostsTaxed            Denom
+	MonthProfit                Denom
+	MonthCostsNotTaxedCurrent  Denom
+	MonthCostsNotTaxedPrevious Denom
+
+	TotalIncome                Denom
+	TotalCostsTaxed            Denom
+	TotalProfitYear            Denom
+	TotalCostsNotTaxedCurrent  Denom
+	TotalProfitPrevious        Denom
+	TotalCostsNotTaxedPrevious Denom
+	TotalProfit                Denom
+}
+
+// VATReport stores VAT report.
+type VATReport struct {
+	Year    uint64
+	Month   string
+	Records []VATRecord
+}
+
+// BankCurrency stores bank reports for single currency.
+type BankCurrency struct {
+	Currency Currency
+	Reports  []BankReport
+}
+
+// BankReport is the bank report.
+type BankReport struct {
+	Year    uint64
+	Month   string
+	Records []BankRecord
 }
 
 // PreviousDay computes the date of the previous day.
 func PreviousDay(date time.Time) time.Time {
 	return date.AddDate(0, 0, -1)
-}
-
-// BankReport is the bank report.
-type BankReport struct {
-	OriginalCurrency Currency
-	BaseCurrency     Currency
-	Records          []BankRecord
 }
 
 // FiscalYear defines fiscal year.

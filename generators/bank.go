@@ -2,7 +2,6 @@ package generators
 
 import (
 	"sort"
-	"strings"
 
 	"github.com/pkg/errors"
 
@@ -10,7 +9,7 @@ import (
 )
 
 // Bank generates bank reports.
-func Bank(year types.FiscalYear) []types.BankReport {
+func Bank(year types.FiscalYear) map[types.CurrencySymbol]*[]types.BankRecord {
 	currencies := map[types.CurrencySymbol][]*types.BankRecord{}
 	for _, o := range year.Operations {
 		for _, br := range o.BankRecords(year.Period) {
@@ -21,7 +20,7 @@ func Bank(year types.FiscalYear) []types.BankReport {
 	var zeroDenom types.Denom
 	var zeroRate types.Number
 
-	reports := make([]types.BankReport, 0, len(currencies))
+	reports := map[types.CurrencySymbol]*[]types.BankRecord{}
 
 	for currencySymbol, records := range currencies {
 		currency := types.Currencies.Currency(currencySymbol)
@@ -31,11 +30,7 @@ func Bank(year types.FiscalYear) []types.BankReport {
 				records[i].Index < records[j].Index)
 		})
 
-		report := types.BankReport{
-			OriginalCurrency: currency,
-			BaseCurrency:     types.BaseCurrency,
-			Records:          make([]types.BankRecord, 0, len(records)),
-		}
+		records2 := make([]types.BankRecord, 0, len(records))
 
 		originalZero := types.Denom{
 			Currency: currencySymbol,
@@ -75,16 +70,11 @@ func Bank(year types.FiscalYear) []types.BankReport {
 			br.BaseSum = baseSum
 			br.RateAverage = rate
 
-			report.Records = append(report.Records, *br)
+			records2 = append(records2, *br)
 		}
 
-		reports = append(reports, report)
+		reports[currencySymbol] = &records2
 	}
-
-	sort.Slice(reports, func(i, j int) bool {
-		return strings.Compare(string(reports[i].OriginalCurrency.Symbol),
-			string(reports[j].OriginalCurrency.Symbol)) < 0
-	})
 
 	return reports
 }
