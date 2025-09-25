@@ -1,24 +1,14 @@
-//nolint:misspell
 package generators
 
 import (
-	"fmt"
 	"sort"
 	"time"
-
-	"github.com/samber/lo"
-	"github.com/xuri/excelize/v2"
 
 	"github.com/outofforest/uepik/types"
 )
 
-const (
-	operationsSheetName = "Przychody i koszty"
-	flowSheetName       = "Przepływy finansowe"
-)
-
 // Book generates book reports.
-func Book(f *excelize.File, year types.FiscalYear) error {
+func Book(year types.FiscalYear) []types.BookRecord {
 	records := []types.BookRecord{}
 	for _, o := range year.Operations {
 		records = append(records, o.BookRecords(year.Period, year.CurrencyRates)...)
@@ -32,136 +22,10 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 			records[i].Index < records[j].Index)
 	})
 
-	lo.Must(f.NewSheet(operationsSheetName))
-	lo.Must(f.NewSheet(flowSheetName))
-
-	baseStyle := lo.Must(f.NewStyle(excelNumberFormat(types.Currencies.Currency(types.PLN).AmountPrecision)))
-	intStyle := lo.Must(f.NewStyle(intStyle))
-	textStyle := lo.Must(f.NewStyle(textStyle))
-	headerStyle := lo.Must(f.NewStyle(headerStyle))
-	columnIndexStyle := lo.Must(f.NewStyle(columnIndexStyle))
-
-	lo.Must0(f.SetPageLayout(operationsSheetName, &excelize.PageLayoutOptions{
-		Orientation: lo.ToPtr("landscape"),
-	}))
-	lo.Must0(f.SetPageMargins(operationsSheetName, &excelize.PageLayoutMarginsOptions{
-		Left:   lo.ToPtr(0.0),
-		Right:  lo.ToPtr(0.0),
-		Top:    lo.ToPtr(0.0),
-		Bottom: lo.ToPtr(0.0),
-		Header: lo.ToPtr(0.0),
-		Footer: lo.ToPtr(0.0),
-	}))
-
-	lo.Must0(f.SetColStyle(operationsSheetName, "A:A", intStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "B:B", intStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "C:C", textStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "D:D", textStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "E:E", textStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "F:F", textStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "G:G", baseStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "H:H", baseStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "I:I", baseStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "J:J", baseStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "K:K", baseStyle))
-	lo.Must0(f.SetColStyle(operationsSheetName, "L:L", baseStyle))
-
-	lo.Must0(f.SetColWidth(operationsSheetName, "A", "A", width(0.84)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "B", "B", width(1.35)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "C", "C", width(3.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "D", "D", width(3.54)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "E", "E", width(3.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "F", "F", width(3.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "G", "G", width(1.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "H", "H", width(1.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "I", "I", width(1.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "J", "J", width(1.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "K", "K", width(1.78)))
-	lo.Must0(f.SetColWidth(operationsSheetName, "L", "L", width(1.78)))
-
-	lo.Must0(f.SetRowStyle(operationsSheetName, 1, 1, headerStyle))
-	lo.Must0(f.SetCellStr(operationsSheetName, "A1", "Lp."))
-	lo.Must0(f.SetCellStr(operationsSheetName, "B1", "Data zdarzenia lub operacji"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "C1", "Nr dowodu księgowego"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "D1", "Nazwa"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "E1", "Adres"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "F1", "Opis zdarzenia"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "G1", "Przychody z działalności nieodpłatnej pożytku publicznego"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "H1",
-		"Przychody z działalności odpłatnej pożytku publicznego z tytułu sprzedaży towarów i usług"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "I1", "Pozostałe przychody"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "J1", "Razem przychody"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "K1", "Koszty uzyskania przychodów"))
-	lo.Must0(f.SetCellStr(operationsSheetName, "L1", "Koszty niestanowiące kosztów uzyskania przychodów"))
-
-	lo.Must0(f.SetRowStyle(operationsSheetName, 2, 2, columnIndexStyle))
-	lo.Must0(f.SetCellInt(operationsSheetName, "A2", 1))
-	lo.Must0(f.SetCellInt(operationsSheetName, "B2", 2))
-	lo.Must0(f.SetCellInt(operationsSheetName, "C2", 3))
-	lo.Must0(f.SetCellInt(operationsSheetName, "D2", 4))
-	lo.Must0(f.SetCellInt(operationsSheetName, "E2", 5))
-	lo.Must0(f.SetCellInt(operationsSheetName, "F2", 6))
-	lo.Must0(f.SetCellInt(operationsSheetName, "G2", 7))
-	lo.Must0(f.SetCellInt(operationsSheetName, "H2", 8))
-	lo.Must0(f.SetCellInt(operationsSheetName, "I2", 9))
-	lo.Must0(f.SetCellInt(operationsSheetName, "J2", 10))
-	lo.Must0(f.SetCellInt(operationsSheetName, "K2", 11))
-	lo.Must0(f.SetCellInt(operationsSheetName, "L2", 12))
-
-	lo.Must0(f.SetPageLayout(flowSheetName, &excelize.PageLayoutOptions{
-		Orientation: lo.ToPtr("portrait"),
-	}))
-	lo.Must0(f.SetPageMargins(flowSheetName, &excelize.PageLayoutMarginsOptions{
-		Left:   lo.ToPtr(0.0),
-		Right:  lo.ToPtr(0.0),
-		Top:    lo.ToPtr(0.0),
-		Bottom: lo.ToPtr(0.0),
-		Header: lo.ToPtr(0.0),
-		Footer: lo.ToPtr(0.0),
-	}))
-
-	lo.Must0(f.SetColWidth(flowSheetName, "A", "A", width(2.2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "B", "B", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "C", "C", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "D", "D", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "E", "E", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "F", "F", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "G", "G", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "H", "H", width(2)))
-	lo.Must0(f.SetColWidth(flowSheetName, "I", "I", width(2)))
-
-	lo.Must0(f.SetColStyle(flowSheetName, "A:A", textStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "B:B", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "C:C", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "D:D", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "E:E", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "F:F", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "G:G", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "H:H", baseStyle))
-	lo.Must0(f.SetColStyle(flowSheetName, "I:I", baseStyle))
-
-	lo.Must0(f.SetRowStyle(flowSheetName, 1, 1, headerStyle))
-	lo.Must0(f.SetCellStr(flowSheetName, "B1", "Przychody"))
-	lo.Must0(f.SetCellStr(flowSheetName, "C1", "Koszty uzyskania przychodów"))
-	lo.Must0(f.SetCellStr(flowSheetName, "D1", "Dochód"))
-	lo.Must0(f.SetCellStr(flowSheetName, "E1", "Dochód wolny od podatku przeznaczony na cele statutowe"))
-	lo.Must0(f.SetCellStr(flowSheetName, "F1",
-		"Wydatki na cele statutowe pokryte z dochodu zwolnionego od podatku w roku podatkowym"))
-	lo.Must0(f.SetCellStr(flowSheetName, "G1", "Dochód wolny od podatku z lat ubiegłych przeznaczony na cele statutowe"))
-	lo.Must0(f.SetCellStr(flowSheetName, "H1",
-		"Wydatki na cele statutowe pokryte z dochodu z lat ubiegłych zwolnionego od podatku"))
-	lo.Must0(f.SetCellStr(flowSheetName, "I1", "Ogółem dochód wolny od podatku niewydatkowany na cele statutowe"))
-
-	lo.Must0(f.SetRowStyle(flowSheetName, 2, 2, columnIndexStyle))
-	lo.Must0(f.SetCellInt(flowSheetName, "A2", 1))
-	lo.Must0(f.SetCellInt(flowSheetName, "B2", 2))
-	lo.Must0(f.SetCellInt(flowSheetName, "C2", 3))
-	lo.Must0(f.SetCellInt(flowSheetName, "D2", 4))
-	lo.Must0(f.SetCellInt(flowSheetName, "E2", 5))
-	lo.Must0(f.SetCellInt(flowSheetName, "F2", 6))
-	lo.Must0(f.SetCellInt(flowSheetName, "G2", 7))
-	lo.Must0(f.SetCellInt(flowSheetName, "H2", 8))
-	lo.Must0(f.SetCellInt(flowSheetName, "I2", 9))
+	for i := range records {
+		records[i].Index = uint64(i + 1)
+		records[i].DayOfMonth = uint8(records[i].Date.Day())
+	}
 
 	var (
 		previousUnspent = types.BaseZero
@@ -179,10 +43,7 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 
 	flowMonth := func() {
 		if month != 0 {
-			row1 := 2*(month-1) + 3
-			row2 := row1 + 1
-
-			monthProfit := monthIncome.Sub(monthCostsTaxed)
+			// monthProfit := monthIncome.Sub(monthCostsTaxed)
 			monthCostsNotTaxed2 := previousUnspent.Sub(yearCostsNotTaxed2)
 			if monthCostsNotTaxed2.GT(monthCostsNotTaxed) {
 				monthCostsNotTaxed2 = monthCostsNotTaxed
@@ -191,42 +52,10 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 
 			yearIncome = yearIncome.Add(monthIncome)
 			yearCostsTaxed = yearCostsTaxed.Add(monthCostsTaxed)
-			yearProfit := yearIncome.Sub(yearCostsTaxed)
+			// yearProfit := yearIncome.Sub(yearCostsTaxed)
 			yearCostsNotTaxed = yearCostsNotTaxed.Add(monthCostsNotTaxed)
 			yearCostsNotTaxed2 = yearCostsNotTaxed2.Add(monthCostsNotTaxed2)
-			yearUnspent := yearProfit.Add(previousUnspent).Sub(yearCostsNotTaxed).Sub(yearCostsNotTaxed2)
-
-			lo.Must0(f.SetCellStr(flowSheetName, fmt.Sprintf("A%d", row1), monthName(month)))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("B%d", row1),
-				monthIncome.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("C%d", row1),
-				monthCostsTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("D%d", row1),
-				monthProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("E%d", row1),
-				monthProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("F%d", row1),
-				monthCostsNotTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("H%d", row1),
-				monthCostsNotTaxed2.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-
-			lo.Must0(f.SetCellStr(flowSheetName, fmt.Sprintf("A%d", row2), "narastająco"))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("B%d", row2),
-				yearIncome.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("C%d", row2),
-				yearCostsTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("D%d", row2),
-				yearProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("E%d", row2),
-				yearProfit.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("F%d", row2),
-				yearCostsNotTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("G%d", row2),
-				previousUnspent.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("H%d", row2),
-				yearCostsNotTaxed2.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-			lo.Must0(f.SetCellFloat(flowSheetName, fmt.Sprintf("I%d", row2),
-				yearUnspent.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
+			// yearUnspent := yearProfit.Add(previousUnspent).Sub(yearCostsNotTaxed).Sub(yearCostsNotTaxed2)
 
 			monthIncome = types.BaseZero
 			monthCostsTaxed = types.BaseZero
@@ -234,7 +63,7 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 		}
 	}
 
-	for i, r := range records {
+	for _, r := range records {
 		if r.Date.Month() != month {
 			flowMonth()
 		}
@@ -242,46 +71,9 @@ func Book(f *excelize.File, year types.FiscalYear) error {
 		monthIncome = monthIncome.Add(r.IncomeDonations).Add(r.IncomeTrading).Add(r.IncomeOthers)
 		monthCostsTaxed = monthCostsTaxed.Add(r.CostTaxed)
 		monthCostsNotTaxed = monthCostsNotTaxed.Add(r.CostNotTaxed)
-
-		row := i + 3
-
-		lo.Must0(f.SetCellInt(operationsSheetName, fmt.Sprintf("A%d", row), int64(i)+1))
-		lo.Must0(f.SetCellInt(operationsSheetName, fmt.Sprintf("B%d", row), int64(r.Date.Day())))
-		lo.Must0(f.SetCellStr(operationsSheetName, fmt.Sprintf("C%d", row), r.Document.ID))
-		lo.Must0(f.SetCellStr(operationsSheetName, fmt.Sprintf("D%d", row), r.Contractor.Name))
-		lo.Must0(f.SetCellStr(operationsSheetName, fmt.Sprintf("E%d", row), r.Contractor.Address))
-		lo.Must0(f.SetCellStr(operationsSheetName, fmt.Sprintf("F%d", row), r.Notes))
-
-		if r.IncomeDonations.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(operationsSheetName, fmt.Sprintf("G%d", row),
-				r.IncomeDonations.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-		}
-		if r.IncomeTrading.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(operationsSheetName, fmt.Sprintf("H%d", row),
-				r.IncomeTrading.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-		}
-		if r.IncomeOthers.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(operationsSheetName, fmt.Sprintf("I%d", row),
-				r.IncomeOthers.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-		}
-
-		incomeSum := r.IncomeDonations.Add(r.IncomeTrading).Add(r.IncomeOthers)
-		if incomeSum.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(operationsSheetName, fmt.Sprintf("J%d", row),
-				incomeSum.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-		}
-
-		if r.CostTaxed.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(operationsSheetName, fmt.Sprintf("K%d", row),
-				r.CostTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-		}
-		if r.CostNotTaxed.NEQ(types.BaseZero) {
-			lo.Must0(f.SetCellFloat(operationsSheetName, fmt.Sprintf("L%d", row),
-				r.CostNotTaxed.Amount.ToFloat64(), int(types.BaseCurrency.AmountPrecision), 64))
-		}
 	}
 
 	flowMonth()
 
-	return nil
+	return records
 }

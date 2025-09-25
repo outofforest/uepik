@@ -1,72 +1,8 @@
 package generators
 
-import (
-	"strings"
-	"time"
+import "time"
 
-	"github.com/samber/lo"
-	"github.com/xuri/excelize/v2"
-)
-
-var dateStyle = &excelize.Style{
-	CustomNumFmt: lo.ToPtr(`yyyy-mm-dd`),
-	Alignment: &excelize.Alignment{
-		Horizontal: "right",
-		Vertical:   "top",
-	},
-}
-
-var textStyle = &excelize.Style{
-	CustomNumFmt: lo.ToPtr("@"),
-	Alignment: &excelize.Alignment{
-		Horizontal: "left",
-		Vertical:   "top",
-		WrapText:   true,
-	},
-}
-
-var intStyle = &excelize.Style{
-	CustomNumFmt: lo.ToPtr("0"),
-	Alignment: &excelize.Alignment{
-		Horizontal: "right",
-		Vertical:   "top",
-	},
-}
-
-var headerStyle = &excelize.Style{
-	Alignment: &excelize.Alignment{
-		Horizontal: "center",
-		Vertical:   "center",
-		WrapText:   true,
-	},
-	Font: &excelize.Font{
-		Size: 8,
-		Bold: true,
-	},
-}
-
-var columnIndexStyle = &excelize.Style{
-	CustomNumFmt: lo.ToPtr("0"),
-	Alignment: &excelize.Alignment{
-		Horizontal: "center",
-		Vertical:   "center",
-	},
-}
-
-func excelNumberFormat(precision uint64) *excelize.Style {
-	format := "0"
-	if precision > 0 {
-		format += "." + strings.Repeat("0", int(precision))
-	}
-	return &excelize.Style{
-		CustomNumFmt: lo.ToPtr(format),
-		Alignment: &excelize.Alignment{
-			Horizontal: "right",
-			Vertical:   "top",
-		},
-	}
-}
-
+//nolint:unused
 func monthName(month time.Month) string {
 	switch month {
 	case time.January:
@@ -96,8 +32,4 @@ func monthName(month time.Month) string {
 	default:
 		panic("invalid month")
 	}
-}
-
-func width(cms float64) float64 {
-	return 5.11 * cms
 }

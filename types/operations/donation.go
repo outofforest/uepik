@@ -46,12 +46,13 @@ func (d *Donation) BookRecords(period types.Period, rates types.CurrencyRates) [
 		Date:            d.Payment.Date,
 		Document:        d.Document,
 		Contractor:      d.Contractor,
+		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate),
 		IncomeDonations: incomeBase,
 		IncomeTrading:   types.BaseZero,
 		IncomeOthers:    types.BaseZero,
+		IncomeSum:       incomeBase,
 		CostTaxed:       types.BaseZero,
 		CostNotTaxed:    types.BaseZero,
-		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate),
 	})
 
 	return result

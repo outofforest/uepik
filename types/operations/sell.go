@@ -48,29 +48,32 @@ func (s *Sell) BookRecords(period types.Period, rates types.CurrencyRates) []typ
 		Date:            s.CIT.Date,
 		Document:        s.Document,
 		Contractor:      s.Contractor,
+		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate),
 		IncomeDonations: types.BaseZero,
 		IncomeTrading:   incomeBase,
 		IncomeOthers:    types.BaseZero,
+		IncomeSum:       incomeBase,
 		CostTaxed:       types.BaseZero,
 		CostNotTaxed:    types.BaseZero,
-		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate),
 	})
 
 	if s.paymentBankRecord != nil && s.paymentBankRecord.BaseAmount.NEQ(incomeBase) {
 		rateDiff := types.BookRecord{
-			Date:            s.CIT.Date,
+			Date: s.CIT.Date,
+			Notes: fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s",
+				s.Payment.Amount, incomeRate, s.paymentBankRecord.Rate),
 			IncomeDonations: types.BaseZero,
 			IncomeTrading:   types.BaseZero,
 			IncomeOthers:    types.BaseZero,
+			IncomeSum:       types.BaseZero,
 			CostTaxed:       types.BaseZero,
 			CostNotTaxed:    types.BaseZero,
-			Notes: fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s",
-				s.Payment.Amount, incomeRate, s.paymentBankRecord.Rate),
 		}
 		if incomeBase.GT(s.paymentBankRecord.BaseAmount) {
 			rateDiff.CostTaxed = incomeBase.Sub(s.paymentBankRecord.BaseAmount)
 		} else {
 			rateDiff.IncomeOthers = s.paymentBankRecord.BaseAmount.Sub(incomeBase)
+			rateDiff.IncomeSum = rateDiff.IncomeOthers
 		}
 
 		result = append(result, rateDiff)
@@ -92,8 +95,8 @@ func (s *Sell) VATRecords(period types.Period, rates types.CurrencyRates) []type
 			Date:       s.VAT.Date,
 			Document:   s.Document,
 			Contractor: s.Contractor,
-			Income:     incomeBase,
 			Notes:      fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate),
+			Income:     incomeBase,
 		},
 	}
 }
