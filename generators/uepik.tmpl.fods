@@ -688,7 +688,7 @@
    <style:table-row-properties style:row-height="0.263cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro11" style:family="table-row">
-   <style:table-row-properties style:row-height="0.1cm" fo:break-before="page" style:use-optimal-row-height="false"/>
+   <style:table-row-properties style:row-height="0.001cm" fo:break-before="page" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro12" style:family="table-row">
    <style:table-row-properties style:row-height="4.711cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
@@ -1896,6 +1896,7 @@
      </table:table-row>
     </table:table-header-rows>
 {{ range .Book }}
+{{ range .Records }}
     <table:table-row table:style-name="ro8">
      <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" />
      <table:table-cell office:value-type="float" office:value="{{ .DayOfMonth }}" calcext:value-type="float" />
@@ -2037,7 +2038,7 @@
      <table:covered-table-cell table:style-name="ce6"/>
      <table:covered-table-cell table:style-name="Default"/>
      <table:table-cell table:style-name="ce82" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-      <text:p>Styczeń 2024</text:p>
+      <text:p>{{ .Month }} {{ .Year }}</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce40"/>
      <table:table-cell table:style-name="Default" table:number-columns-repeated="4"/>
@@ -2052,6 +2053,7 @@
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
     </table:table-row>
+{{ end }}
    </table:table>
    <table:table table:name="PF" table:style-name="ta1">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
@@ -2154,6 +2156,7 @@
       </table:table-cell>
      </table:table-row>
     </table:table-header-rows>
+{{ range .Flow }}
     <table:table-row table:style-name="ro13">
      <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
       <text:p>Razem w okresie sprawozdawczym, w tym w zakresie art.17 ust. 1:</text:p>
@@ -2319,7 +2322,7 @@
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce2"/>
      <table:table-cell table:style-name="ce108" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-      <text:p>Styczeń 2024</text:p>
+      <text:p>{{ .Month }} {{ .Year }}</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce2"/>
      <table:table-cell table:style-name="Default" table:number-columns-repeated="5"/>
@@ -2327,6 +2330,7 @@
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
     </table:table-row>
+{{ end }}
    </table:table>
    <table:table table:name="VAT" table:style-name="ta2">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
@@ -2433,6 +2437,7 @@
       </table:table-cell>
      </table:table-row>
     </table:table-header-rows>
+{{ range .VAT }}
     <table:table-row table:style-name="ro7">
      <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
       <text:p>Suma z przeniesienia:</text:p>
@@ -2443,7 +2448,7 @@
       <text:p>1,23</text:p>
      </table:table-cell>
     </table:table-row>
-{{ range .VAT }}
+{{ range .Records }}
     <table:table-row table:style-name="ro8">
      <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" />
      <table:table-cell office:value-type="float" office:value="{{ .DayOfMonth }}" calcext:value-type="float" />
@@ -2479,7 +2484,7 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="2" table:style-name="Default"/>
      <table:table-cell table:style-name="ce55" office:value-type="string" calcext:value-type="string">
-      <text:p>Styczeń 2025</text:p>
+      <text:p>{{ .Month }} {{ .Year }}</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string">
       <text:p>Numer karty:</text:p>
@@ -2491,9 +2496,10 @@
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="6"/>
     </table:table-row>
+{{ end }}
    </table:table>
 {{ range .Bank }}
-   <table:table table:name="{{ .OriginalCurrency.Symbol }}" table:style-name="ta2">
+   <table:table table:name="{{ .Currency.Symbol }}" table:style-name="ta2">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co21" table:default-cell-style-name="ce67"/>
     <table:table-column table:style-name="co22" table:default-cell-style-name="ce71"/>
@@ -2542,7 +2548,7 @@
        <text:p>Waluta:</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="ce54" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-       <text:p>EUR</text:p>
+       <text:p>{{ .Currency.Symbol }}</text:p>
       </table:table-cell>
       <table:covered-table-cell table:style-name="ce54"/>
       <table:table-cell/>
@@ -2639,6 +2645,7 @@
       <table:table-cell/>
      </table:table-row>
     </table:table-header-rows>
+{{ range .Reports }}
     <table:table-row table:style-name="ro7">
      <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
       <text:p>Suma z przeniesienia:</text:p>
@@ -2702,7 +2709,7 @@
      <table:covered-table-cell table:style-name="ce124"/>
      <table:covered-table-cell table:number-columns-repeated="2" table:style-name="Default"/>
      <table:table-cell table:style-name="ce55" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-      <text:p>Styczeń 2024</text:p>
+      <text:p>{{ .Month }} {{ .Year }}</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce125"/>
      <table:covered-table-cell table:style-name="Default"/>
@@ -2719,6 +2726,7 @@
      <table:table-cell table:style-name="Default" table:number-columns-repeated="10"/>
      <table:table-cell/>
     </table:table-row>
+{{ end }}
    </table:table>
 {{ end }}
    <table:named-expressions/>
