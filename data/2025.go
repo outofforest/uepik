@@ -7,7 +7,7 @@ import . "github.com/outofforest/uepik" //nolint:staticcheck
 var R2025 = Rok(2025, kursy2025,
 	Darowizna(
 		Dokument("WB/EUR/2025/01/01", Data(2025, 1, 3)),
-		Kontrahent("INVINI sp. z o. o.", "", ""),
+		Kontrahent("INVINI sp. z o. o.", "Felińskiego 2/17", ""),
 		Platnosc(Kwota(500, 0, EUR), Data(2025, 1, 3), 1)),
 	rejs2026HR01,
 )

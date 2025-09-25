@@ -295,6 +295,7 @@ type Operation interface {
 type BankRecord struct {
 	Date           time.Time
 	Index          uint64
+	DayOfMonth     uint8
 	Document       Document
 	Contractor     Contractor
 	OriginalAmount Denom
@@ -309,24 +310,49 @@ type BankRecord struct {
 type BookRecord struct {
 	Date            time.Time
 	Index           uint64
+	DayOfMonth      uint8
 	Document        Document
 	Contractor      Contractor
+	Notes           string
 	IncomeDonations Denom
 	IncomeTrading   Denom
 	IncomeOthers    Denom
+	IncomeSum       Denom
 	CostTaxed       Denom
 	CostNotTaxed    Denom
-	Notes           string
+}
+
+// FlowRecord is the flow record.
+type FlowRecord struct {
+	Income                Denom
+	CostsTaxed            Denom
+	ProfitCurrent         Denom
+	CostsNotTaxedCurrent  Denom
+	ProfitPrevious        Denom
+	CostsNotTaxedPrevious Denom
+	ProfitTotal           Denom
 }
 
 // VATRecord defines the VAT record.
 type VATRecord struct {
 	Date       time.Time
 	Index      uint64
+	DayOfMonth uint8
 	Document   Document
 	Contractor Contractor
-	Income     Denom
 	Notes      string
+	Income     Denom
+}
+
+// MonthReport contains data for month report.
+type MonthReport struct {
+	Year            uint64
+	Month           string
+	Bank            []BankReport
+	Book            []BookRecord
+	FlowMonth       FlowRecord
+	FlowIncremental FlowRecord
+	VAT             []VATRecord
 }
 
 // PreviousDay computes the date of the previous day.
