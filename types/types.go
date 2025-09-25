@@ -306,6 +306,7 @@ type BankRecord struct {
 	RateAverage    Number
 }
 
+// GetDate returns record's date.
 func (r BankRecord) GetDate() time.Time {
 	return r.Date
 }
@@ -326,6 +327,7 @@ type BookRecord struct {
 	CostNotTaxed    Denom
 }
 
+// GetDate returns record's date.
 func (r BookRecord) GetDate() time.Time {
 	return r.Date
 }
@@ -341,10 +343,12 @@ type VATRecord struct {
 	Income     Denom
 }
 
+// GetDate returns record's date.
 func (r VATRecord) GetDate() time.Time {
 	return r.Date
 }
 
+// Report is the full report.
 type Report struct {
 	Book []BookReport
 	Flow []FlowReport
@@ -352,6 +356,7 @@ type Report struct {
 	Bank []BankCurrency
 }
 
+// BookReport stores book report.
 type BookReport struct {
 	Year    uint64
 	Month   string
@@ -378,12 +383,14 @@ type FlowReport struct {
 	TotalProfit                Denom
 }
 
+// VATReport stores VAT report.
 type VATReport struct {
 	Year    uint64
 	Month   string
 	Records []VATRecord
 }
 
+// BankCurrency stores bank reports for single currency.
 type BankCurrency struct {
 	Currency Currency
 	Reports  []BankReport
