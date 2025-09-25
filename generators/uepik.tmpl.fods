@@ -13,8 +13,8 @@
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="BANK">
-       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">9</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -35,7 +35,7 @@
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="PF">
        <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">5</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -55,8 +55,8 @@
        <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="PiK">
-       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">8</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -76,8 +76,8 @@
        <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="VAT">
-       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">33</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -86,7 +86,7 @@
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">32</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">8</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">120</config:config-item>
@@ -107,7 +107,7 @@
      <config:config-item config:name="ShowNotes" config:type="boolean">true</config:config-item>
      <config:config-item config:name="ShowNoteAuthor" config:type="boolean">true</config:config-item>
      <config:config-item config:name="ShowFormulasMarks" config:type="boolean">false</config:config-item>
-     <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="ShowGrid" config:type="boolean">false</config:config-item>
      <config:config-item config:name="GridColor" config:type="int">12632256</config:config-item>
      <config:config-item config:name="ShowPageBreaks" config:type="boolean">true</config:config-item>
      <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
@@ -170,7 +170,7 @@
    <config:config-item config:name="SaveThumbnail" config:type="boolean">true</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="ShowFormulasMarks" config:type="boolean">false</config:config-item>
-   <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ShowGrid" config:type="boolean">false</config:config-item>
    <config:config-item config:name="ShowNoteAuthor" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ShowNotes" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ShowPageBreaks" config:type="boolean">true</config:config-item>
@@ -179,7 +179,7 @@
    <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
    <config:config-item-map-named config:name="ScriptConfiguration">
     <config:config-item-map-entry config:name="PiK">
-     <config:config-item config:name="CodeName" config:type="string">Sheet1</config:config-item>
+     <config:config-item config:name="CodeName" config:type="string">PiK</config:config-item>
     </config:config-item-map-entry>
     <config:config-item-map-entry config:name="PF">
      <config:config-item config:name="CodeName" config:type="string">PF</config:config-item>
@@ -564,50 +564,6 @@
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="swiss" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Arial" style:font-family-complex="Arial" style:font-family-generic-complex="swiss" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ConditionalStyle_5f_37" style:display-name="ConditionalStyle_37" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#d9d9d9">
-    <loext:char-complex-color loext:theme-type="light1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="8500"/>
-    </loext:char-complex-color>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ConditionalStyle_5f_38" style:display-name="ConditionalStyle_38" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#d9d9d9">
-    <loext:char-complex-color loext:theme-type="light1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="8500"/>
-    </loext:char-complex-color>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ConditionalStyle_5f_39" style:display-name="ConditionalStyle_39" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#d9d9d9">
-    <loext:char-complex-color loext:theme-type="light1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="8500"/>
-    </loext:char-complex-color>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ConditionalStyle_5f_41" style:display-name="ConditionalStyle_41" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#d9d9d9">
-    <loext:char-complex-color loext:theme-type="light1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="8500"/>
-    </loext:char-complex-color>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ConditionalStyle_5f_35" style:display-name="ConditionalStyle_35" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#c5e0b4">
-    <loext:char-complex-color loext:theme-type="accent6" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="4000"/>
-     <loext:transformation loext:type="lumoff" loext:value="5999"/>
-    </loext:char-complex-color>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ConditionalStyle_5f_36" style:display-name="ConditionalStyle_36" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#c5e0b4">
-    <loext:char-complex-color loext:theme-type="accent6" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="4000"/>
-     <loext:transformation loext:type="lumoff" loext:value="5999"/>
-    </loext:char-complex-color>
    </style:text-properties>
   </style:style>
   <draw:marker draw:name="Arrowheads_20_1" draw:display-name="Arrowheads 1" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
@@ -1290,7 +1246,6 @@
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="ConditionalStyle_5f_41" style:base-cell-address="PiK.G18"/>
   </style:style>
   <style:style style:name="ce96" style:family="table-cell" style:parent-style-name="Normalny_20_2" style:data-style-name="N4">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" fo:background-color="transparent" fo:border="0.74pt solid #7f7f7f" style:rotation-align="none" style:vertical-align="middle">
@@ -1314,7 +1269,6 @@
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="ConditionalStyle_5f_39" style:base-cell-address="PiK.G19"/>
   </style:style>
   <style:style style:name="ce97" style:family="table-cell" style:parent-style-name="Normalny_20_2" style:data-style-name="N4">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" fo:background-color="transparent" fo:border="0.74pt solid #7f7f7f" style:rotation-align="none" style:vertical-align="middle">
@@ -1338,7 +1292,6 @@
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="ConditionalStyle_5f_38" style:base-cell-address="PiK.G20"/>
   </style:style>
   <style:style style:name="ce98" style:family="table-cell" style:parent-style-name="Normalny_20_2" style:data-style-name="N4">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" fo:background-color="transparent" fo:border="0.74pt solid #7f7f7f" style:rotation-align="none" style:vertical-align="middle">
@@ -1362,7 +1315,6 @@
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="ConditionalStyle_5f_37" style:base-cell-address="PiK.G21"/>
   </style:style>
   <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Normalny_20_2">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
@@ -1408,7 +1360,6 @@
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="ConditionalStyle_5f_36" style:base-cell-address="PF.B7"/>
   </style:style>
   <style:style style:name="ce104" style:family="table-cell" style:parent-style-name="Normalny_20_2" style:data-style-name="N4">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="0.74pt solid #7f7f7f" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto">
@@ -1464,7 +1415,6 @@
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="ConditionalStyle_5f_35" style:base-cell-address="PF.B12"/>
   </style:style>
   <style:style style:name="ce107" style:family="table-cell" style:parent-style-name="Normalny_20_2">
    <style:table-cell-properties fo:background-color="transparent" style:rotation-align="none" style:vertical-align="middle"/>
@@ -2377,14 +2327,6 @@
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
     </table:table-row>
-    <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="PF.B12:PF.I12">
-      <calcext:condition calcext:apply-style-name="ConditionalStyle_35" calcext:value="=0" calcext:base-cell-address="PF.B12"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="PF.B7:PF.I7">
-      <calcext:condition calcext:apply-style-name="ConditionalStyle_36" calcext:value="=0" calcext:base-cell-address="PF.B7"/>
-     </calcext:conditional-format>
-    </calcext:conditional-formats>
    </table:table>
    <table:table table:name="VAT" table:style-name="ta2">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
