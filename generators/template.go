@@ -146,8 +146,14 @@ func newReport(year types.FiscalYear) types.Report {
 			for !bankAdded[c] || (len(*bankRecords[c]) > 0 && (*bankRecords[c])[0].Date.Month() == month.Month()) {
 				bankAdded[c] = true
 
-				previous := types.NewBankSummary(report.Bank[i].Currency)
-				if len(report.Bank[i].Reports) > 0 {
+				var previous types.BankSummary
+				if len(report.Bank[i].Reports) == 0 {
+					currencyInit, exists := year.Init.Currencies[c]
+					if !exists {
+						panic("brak bilansu otwarcia waluty")
+					}
+					previous = types.NewBankSummary(currencyInit)
+				} else {
 					previous = report.Bank[i].Reports[len(report.Bank[i].Reports)-1].CurrentPageSummary
 				}
 

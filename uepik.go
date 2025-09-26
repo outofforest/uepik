@@ -92,13 +92,38 @@ func Rok(
 }
 
 // BilansOtwarcia tworzy bilans otwarcia roku.
-func BilansOtwarcia(niewydanyZysk types.Denom) types.Init {
+func BilansOtwarcia(niewydanyZysk types.Denom, waluty types.InitCurrencies) types.Init {
 	if niewydanyZysk.Currency != types.BaseCurrency.Symbol {
 		panic("nieprawidłowa waluta dla niewydanego zysku")
 	}
-
 	return types.Init{
 		UnspentProfit: niewydanyZysk,
+		Currencies:    waluty,
+	}
+}
+
+// Waluty tworzą bilans otwarcia dla banku walut.
+func Waluty(waluty ...types.InitCurrency) types.InitCurrencies {
+	result := types.InitCurrencies{}
+
+	for _, c := range waluty {
+		if _, exists := result[c.OriginalSum.Currency]; exists {
+			panic("bilans waluty już istnieje")
+		}
+		result[c.OriginalSum.Currency] = c
+	}
+
+	return result
+}
+
+// Waluta tworzy bilans otwarcia dla waluty.
+func Waluta(kwota types.Denom, kwotaPLN types.Denom) types.InitCurrency {
+	if kwotaPLN.Currency != types.BaseCurrency.Symbol {
+		panic("nieprawidłowa waluta dla kwoty PLN")
+	}
+	return types.InitCurrency{
+		OriginalSum: kwota,
+		BaseSum:     kwotaPLN,
 	}
 }
 

@@ -190,11 +190,11 @@ func (r BankRecord) Summary() BankSummary {
 }
 
 // NewBankSummary creates new bank summary.
-func NewBankSummary(currency Currency) BankSummary {
+func NewBankSummary(currencyInit InitCurrency) BankSummary {
 	return BankSummary{
-		OriginalSum: BaseZero,
-		BaseSum:     BaseZero,
-		RateAverage: NewNumber(0, 0, currency.RatePrecision),
+		OriginalSum: currencyInit.OriginalSum,
+		BaseSum:     currencyInit.BaseSum,
+		RateAverage: currencyInit.BaseSum.Rate(currencyInit.OriginalSum),
 	}
 }
 

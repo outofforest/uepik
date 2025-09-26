@@ -32,16 +32,16 @@ func Bank(year types.FiscalYear) map[types.CurrencySymbol]*[]types.BankRecord {
 
 		records2 := make([]types.BankRecord, 0, len(records))
 
+		total, exists := year.Init.Currencies[currencySymbol]
+		if !exists {
+			panic("brak bilansu otwarcia waluty")
+		}
+
 		originalZero := types.Denom{
 			Currency: currencySymbol,
 			Amount:   types.NewNumber(0, 0, currency.AmountPrecision),
 		}
-		originalSum := originalZero
-		baseSum := types.Denom{
-			Currency: types.PLN,
-			Amount:   types.NewNumber(0, 0, types.BaseCurrency.AmountPrecision),
-		}
-		rate := types.NewNumber(0, 0, currency.RatePrecision)
+		rate := total.BaseSum.Rate(total.OriginalSum)
 
 		for i, br := range records {
 			br.Index = uint64(i + 1)
@@ -62,12 +62,12 @@ func Bank(year types.FiscalYear) map[types.CurrencySymbol]*[]types.BankRecord {
 				panic(errors.New("invalid data in bank record"))
 			}
 
-			originalSum = originalSum.Add(br.OriginalAmount)
-			baseSum = baseSum.Add(br.BaseAmount)
-			rate = baseSum.Rate(originalSum)
+			total.OriginalSum = total.OriginalSum.Add(br.OriginalAmount)
+			total.BaseSum = total.BaseSum.Add(br.BaseAmount)
+			rate = total.BaseSum.Rate(total.OriginalSum)
 
-			br.OriginalSum = originalSum
-			br.BaseSum = baseSum
+			br.OriginalSum = total.OriginalSum
+			br.BaseSum = total.BaseSum
 			br.RateAverage = rate
 
 			records2 = append(records2, *br)
