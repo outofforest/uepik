@@ -6,6 +6,7 @@ import . "github.com/outofforest/uepik" //nolint:staticcheck
 // R2025 to dane księgowe za rok 2025.
 var R2025 = Rok(2025,
 	"NazwaFirmy", "Al. Jerozolimskie 1, 00-199 Warszawa",
+	BilansOtwarcia(Kwota(123, 23, PLN)),
 	kursy2025,
 	Darowizna(
 		Dokument("WB/EUR/2025/01/01", Data(2025, 5, 3)),
