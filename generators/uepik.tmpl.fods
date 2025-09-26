@@ -1420,12 +1420,12 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>{{ .Notes }}</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="{{ .IncomeDonations }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .IncomeTrading }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .IncomeOthers }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .IncomeSum }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .CostTaxed }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .CostNotTaxed }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .IncomeDonations.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .IncomeTrading.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .IncomeOthers.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .IncomeSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .CostTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
 {{ end }}
     <table:table-row table:style-name="ro9">
@@ -1436,24 +1436,12 @@
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce29"/>
      <table:covered-table-cell table:style-name="ce91"/>
-     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="9" calcext:value-type="float">
-      <text:p>9,00</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro9">
      <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
@@ -1463,24 +1451,12 @@
      </table:table-cell>
      <table:covered-table-cell table:style-name="Default"/>
      <table:covered-table-cell table:style-name="ce91"/>
-     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro9">
      <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
@@ -1490,24 +1466,12 @@
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce11"/>
      <table:covered-table-cell table:style-name="ce91"/>
-     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="9" calcext:value-type="float">
-      <text:p>9,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro9">
      <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
@@ -1517,24 +1481,12 @@
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce11"/>
      <table:covered-table-cell table:style-name="ce91"/>
-     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="9" calcext:value-type="float">
-      <text:p>9,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1,00</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro10">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
@@ -1930,9 +1882,7 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="3"/>
      <table:covered-table-cell table:style-name="ce25"/>
-     <table:table-cell office:value-type="float" office:value="1.23" calcext:value-type="float">
-      <text:p>1,23</text:p>
-     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="{{ .PreviousPageSummary.Income.Amount }}" calcext:value-type="float" />
     </table:table-row>
 {{ range .Records }}
     <table:table-row table:style-name="ro8">
@@ -1947,7 +1897,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>{{ .Notes }}</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="{{ .Income }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .Income.Amount }}" calcext:value-type="float" />
     </table:table-row>
 {{ end }}
     <table:table-row table:style-name="ro7">
@@ -1956,9 +1906,7 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="3"/>
      <table:covered-table-cell table:style-name="ce25"/>
-     <table:table-cell office:value-type="float" office:value="4.54" calcext:value-type="float">
-      <text:p>4,54</text:p>
-     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="{{ .CurrentPageSummary.Income.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce6"/>
@@ -2119,16 +2067,9 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="3"/>
      <table:covered-table-cell table:number-columns-repeated="3" table:style-name="ce90"/>
-     <table:table-cell office:value-type="float" office:value="2.34" calcext:value-type="float">
-      <text:p>2,34</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="7.16" calcext:value-type="float">
-      <text:p>7,16</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="3.2222" calcext:value-type="float">
-      <text:p>3,2222</text:p>
-     </table:table-cell>
-     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="{{ .PreviousPageSummary.OriginalSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .PreviousPageSummary.BaseSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .PreviousPageSummary.RateAverage }}" calcext:value-type="float" />
     </table:table-row>
 {{ range .Records }}
     <table:table-row table:style-name="ro8">
@@ -2140,11 +2081,11 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>{{ .Contractor.Name }}</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="{{ .OriginalAmount }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .BaseAmount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .OriginalAmount.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .BaseAmount.Amount }}" calcext:value-type="float" />
      <table:table-cell office:value-type="float" office:value="{{ .Rate }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .OriginalSum }}" calcext:value-type="float" />
-     <table:table-cell office:value-type="float" office:value="{{ .BaseSum }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .OriginalSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .BaseSum.Amount }}" calcext:value-type="float" />
      <table:table-cell office:value-type="float" office:value="{{ .RateAverage }}" calcext:value-type="float" />
     </table:table-row>
 {{ end }}
@@ -2154,20 +2095,12 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="3"/>
      <table:covered-table-cell table:number-columns-repeated="3" table:style-name="ce90"/>
-     <table:table-cell office:value-type="float" office:value="4.44" calcext:value-type="float">
-      <text:p>4,44</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2.12" calcext:value-type="float">
-      <text:p>2,12</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="8.7878" calcext:value-type="float">
-      <text:p>8,7878</text:p>
-     </table:table-cell>
-     <table:table-cell/>
+     <table:table-cell office:value-type="float" office:value="{{ .CurrentPageSummary.OriginalSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .CurrentPageSummary.BaseSum.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .CurrentPageSummary.RateAverage }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="10"/>
-     <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
      <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
@@ -2185,11 +2118,9 @@
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce124"/>
      <table:table-cell table:style-name="ce54" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
-     <table:table-cell table:style-name="ce54"/>
     </table:table-row>
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="10"/>
-     <table:table-cell/>
     </table:table-row>
 {{ end }}
    </table:table>

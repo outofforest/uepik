@@ -46,20 +46,40 @@ func newReport(year types.FiscalYear) types.Report {
 
 	bookRecords := Book(year)
 	vatRecords := VAT(year)
+
+	bookYear := types.NewBookSummary()
+	vatPreviousPage := types.NewVATSummary()
 	for month := year.Period.Start; year.Period.Contains(month); month = month.AddDate(0, 1, 0) {
 		year := uint64(month.Year())
 		monthName := monthName(month.Month())
+
+		bookPreviousPage := types.NewBookSummary()
+		bookMonth := types.NewBookSummary()
 
 		var bookAdded bool
 		for !bookAdded || (len(bookRecords) > 0 && bookRecords[0].Date.Month() == month.Month()) {
 			bookAdded = true
 
+			bookCurrentPage := types.NewBookSummary()
+			records := findRecords(&bookRecords, month, 10)
+			for _, r := range records {
+				bookCurrentPage = bookCurrentPage.AddRecord(r)
+			}
+			bookMonth = bookMonth.AddSummary(bookCurrentPage)
+			bookYear = bookYear.AddSummary(bookCurrentPage)
+
 			report.Book = append(report.Book, types.BookReport{
-				Year:    year,
-				Month:   monthName,
-				Page:    page(report.Book),
-				Records: findRecords(&bookRecords, month, 10),
+				Year:                year,
+				Month:               monthName,
+				Page:                page(report.Book),
+				Records:             records,
+				CurrentPageSummary:  bookCurrentPage,
+				PreviousPageSummary: bookPreviousPage,
+				MonthSummary:        bookMonth,
+				YearSummary:         bookYear,
 			})
+
+			bookPreviousPage = bookCurrentPage
 		}
 
 		report.Flow = append(report.Flow, types.FlowReport{
@@ -85,12 +105,22 @@ func newReport(year types.FiscalYear) types.Report {
 		for !vatAdded || (len(vatRecords) > 0 && vatRecords[0].Date.Month() == month.Month()) {
 			vatAdded = true
 
+			vatCurrentPage := vatPreviousPage
+			records := findRecords(&vatRecords, month, 25)
+			for _, r := range records {
+				vatCurrentPage = vatCurrentPage.AddRecord(r)
+			}
+
 			report.VAT = append(report.VAT, types.VATReport{
-				Year:    year,
-				Month:   monthName,
-				Page:    page(report.VAT),
-				Records: findRecords(&vatRecords, month, 25),
+				Year:                year,
+				Month:               monthName,
+				Page:                page(report.VAT),
+				Records:             records,
+				CurrentPageSummary:  vatCurrentPage,
+				PreviousPageSummary: vatPreviousPage,
 			})
+
+			vatPreviousPage = vatCurrentPage
 		}
 
 		bankAdded := map[types.CurrencySymbol]bool{}
@@ -98,12 +128,24 @@ func newReport(year types.FiscalYear) types.Report {
 			for !bankAdded[c] || (len(*bankRecords[c]) > 0 && (*bankRecords[c])[0].Date.Month() == month.Month()) {
 				bankAdded[c] = true
 
-				report.Bank[i].Reports = append(report.Bank[i].Reports, types.BankReport{
-					Year:    year,
-					Month:   monthName,
-					Page:    page(report.Bank[i].Reports),
-					Records: findRecords(bankRecords[c], month, 26),
-				})
+				previous := types.NewBankSummary(report.Bank[i].Currency)
+				if len(report.Bank[i].Reports) > 0 {
+					previous = report.Bank[i].Reports[len(report.Bank[i].Reports)-1].CurrentPageSummary
+				}
+
+				bankReport := types.BankReport{
+					Year:                year,
+					Month:               monthName,
+					Page:                page(report.Bank[i].Reports),
+					Records:             findRecords(bankRecords[c], month, 26),
+					PreviousPageSummary: previous,
+					CurrentPageSummary:  previous,
+				}
+				if len(bankReport.Records) > 0 {
+					bankReport.CurrentPageSummary = bankReport.Records[len(bankReport.Records)-1].Summary()
+				}
+
+				report.Bank[i].Reports = append(report.Bank[i].Reports, bankReport)
 			}
 		}
 	}
