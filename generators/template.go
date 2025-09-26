@@ -49,14 +49,19 @@ func newReport(year types.FiscalYear) types.Report {
 	for month := year.Period.Start; year.Period.Contains(month); month = month.AddDate(0, 1, 0) {
 		year := uint64(month.Year())
 		monthName := monthName(month.Month())
-		page := uint64(month.Month())
 
-		report.Book = append(report.Book, types.BookReport{
-			Year:    year,
-			Month:   monthName,
-			Page:    page,
-			Records: findRecords(&bookRecords, month),
-		})
+		var bookAdded bool
+		for !bookAdded || (len(bookRecords) > 0 && bookRecords[0].Date.Month() == month.Month()) {
+			bookAdded = true
+
+			report.Book = append(report.Book, types.BookReport{
+				Year:    year,
+				Month:   monthName,
+				Page:    page(report.Book),
+				Records: findRecords(&bookRecords, month, 10),
+			})
+		}
+
 		report.Flow = append(report.Flow, types.FlowReport{
 			Year:  year,
 			Month: monthName,
@@ -75,20 +80,31 @@ func newReport(year types.FiscalYear) types.Report {
 			TotalCostsNotTaxedPrevious: types.BaseZero,
 			TotalProfit:                types.BaseZero,
 		})
-		report.VAT = append(report.VAT, types.VATReport{
-			Year:    year,
-			Month:   monthName,
-			Page:    page,
-			Records: findRecords(&vatRecords, month),
-		})
 
-		for i, c := range currencies {
-			report.Bank[i].Reports = append(report.Bank[i].Reports, types.BankReport{
+		var vatAdded bool
+		for !vatAdded || (len(vatRecords) > 0 && vatRecords[0].Date.Month() == month.Month()) {
+			vatAdded = true
+
+			report.VAT = append(report.VAT, types.VATReport{
 				Year:    year,
 				Month:   monthName,
-				Page:    page,
-				Records: findRecords(bankRecords[c], month),
+				Page:    page(report.VAT),
+				Records: findRecords(&vatRecords, month, 25),
 			})
+		}
+
+		bankAdded := map[types.CurrencySymbol]bool{}
+		for i, c := range currencies {
+			for !bankAdded[c] || (len(*bankRecords[c]) > 0 && (*bankRecords[c])[0].Date.Month() == month.Month()) {
+				bankAdded[c] = true
+
+				report.Bank[i].Reports = append(report.Bank[i].Reports, types.BankReport{
+					Year:    year,
+					Month:   monthName,
+					Page:    page(report.Bank[i].Reports),
+					Records: findRecords(bankRecords[c], month, 26),
+				})
+			}
 		}
 	}
 
@@ -99,12 +115,19 @@ type withDate interface {
 	GetDate() time.Time
 }
 
-func findRecords[T withDate](records *[]T, month time.Time) []T {
+func findRecords[T withDate](records *[]T, month time.Time, count uint64) []T {
 	month = month.AddDate(0, 1, 0)
-	i := sort.Search(len(*records), func(i int) bool {
+	i := uint64(sort.Search(len(*records), func(i int) bool {
 		return !(*records)[i].GetDate().Before(month)
-	})
+	}))
+	if i > count {
+		i = count
+	}
 	result := (*records)[:i]
 	*records = (*records)[i:]
 	return result
+}
+
+func page[T any](slice []T) uint64 {
+	return uint64(len(slice) + 1)
 }
