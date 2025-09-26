@@ -360,6 +360,7 @@ type Report struct {
 type BookReport struct {
 	Year    uint64
 	Month   string
+	Page    uint64
 	Records []BookRecord
 }
 
@@ -387,6 +388,7 @@ type FlowReport struct {
 type VATReport struct {
 	Year    uint64
 	Month   string
+	Page    uint64
 	Records []VATRecord
 }
 
@@ -400,6 +402,7 @@ type BankCurrency struct {
 type BankReport struct {
 	Year    uint64
 	Month   string
+	Page    uint64
 	Records []BankRecord
 }
 
