@@ -66,14 +66,13 @@ func Kursy(kursy ...types.CurrencyRate) types.CurrencyRates {
 
 // Rok tworzy rok obrotowy.
 func Rok(
-	rok uint64,
 	nazwaFirmy, adresFirmy string,
+	dataRozpoczecia, dataZakonczenia time.Time,
 	bilansOtwarcia types.Init,
 	kursy types.CurrencyRates,
 	operacje ...types.Operation,
 ) types.FiscalYear {
-	start := time.Date(int(rok), time.January, 1, 0, 0, 0, 0, time.Local)
-	end := start.AddDate(1, 0, 0).Add(-time.Nanosecond)
+	end := dataZakonczenia.AddDate(0, 0, 1).Add(-time.Nanosecond)
 	now := time.Now().Local()
 	if end.After(now) {
 		end = now
@@ -82,7 +81,7 @@ func Rok(
 		CompanyName:    nazwaFirmy,
 		CompanyAddress: adresFirmy,
 		Period: types.Period{
-			Start: start,
+			Start: dataRozpoczecia,
 			End:   end,
 		},
 		Init:          bilansOtwarcia,
