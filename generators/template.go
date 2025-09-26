@@ -29,6 +29,10 @@ func Save(year types.FiscalYear) {
 }
 
 func newReport(year types.FiscalYear) types.Report {
+	previousUnspent := types.BaseZero
+	yearCostsNotTaxed := types.BaseZero
+	yearCostsNotTaxed2 := types.BaseZero
+
 	report := types.Report{
 		Book: make([]types.BookReport, 0, 12),
 		Flow: make([]types.FlowReport, 0, 12),
@@ -84,23 +88,33 @@ func newReport(year types.FiscalYear) types.Report {
 			bookPreviousPage = bookCurrentPage
 		}
 
+		monthCostsNotTaxed2 := previousUnspent.Sub(yearCostsNotTaxed2)
+		if monthCostsNotTaxed2.GT(bookMonth.CostNotTaxed) {
+			monthCostsNotTaxed2 = bookMonth.CostNotTaxed
+		}
+		monthCostsNotTaxed := bookMonth.CostNotTaxed.Sub(monthCostsNotTaxed2)
+
+		yearCostsNotTaxed = yearCostsNotTaxed.Add(monthCostsNotTaxed)
+		yearCostsNotTaxed2 = yearCostsNotTaxed2.Add(monthCostsNotTaxed2)
+		yearProfit := bookYear.IncomeSum.Sub(bookYear.CostTaxed)
+
 		report.Flow = append(report.Flow, types.FlowReport{
 			Year:  year,
 			Month: monthName,
 
-			MonthIncome:                types.BaseZero,
-			MonthCostsTaxed:            types.BaseZero,
-			MonthProfit:                types.BaseZero,
-			MonthCostsNotTaxedCurrent:  types.BaseZero,
-			MonthCostsNotTaxedPrevious: types.BaseZero,
+			MonthIncome:                bookMonth.IncomeSum,
+			MonthCostsTaxed:            bookMonth.CostTaxed,
+			MonthProfit:                bookMonth.IncomeSum.Sub(bookMonth.CostTaxed),
+			MonthCostsNotTaxedCurrent:  monthCostsNotTaxed,
+			MonthCostsNotTaxedPrevious: monthCostsNotTaxed2,
 
-			TotalIncome:                types.BaseZero,
-			TotalCostsTaxed:            types.BaseZero,
-			TotalProfitYear:            types.BaseZero,
-			TotalCostsNotTaxedCurrent:  types.BaseZero,
-			TotalProfitPrevious:        types.BaseZero,
-			TotalCostsNotTaxedPrevious: types.BaseZero,
-			TotalProfit:                types.BaseZero,
+			TotalIncome:                bookYear.IncomeSum,
+			TotalCostsTaxed:            bookYear.CostTaxed,
+			TotalProfitYear:            yearProfit,
+			TotalCostsNotTaxedCurrent:  yearCostsNotTaxed,
+			TotalProfitPrevious:        previousUnspent,
+			TotalCostsNotTaxedPrevious: yearCostsNotTaxed,
+			TotalProfit:                yearProfit.Add(previousUnspent).Sub(yearCostsNotTaxed).Sub(yearCostsNotTaxed2),
 		})
 
 		var vatAdded bool

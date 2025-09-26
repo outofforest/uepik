@@ -1010,30 +1010,6 @@
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
   </style:style>
-  <style:style style:name="ce113" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="NBase">
-   <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="wrap" fo:border="0.74pt solid #7f7f7f" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto">
-    <loext:border-bottom-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-bottom-complex-color>
-    <loext:border-left-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-left-complex-color>
-    <loext:border-right-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-right-complex-color>
-    <loext:border-top-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-top-complex-color>
-   </style:table-cell-properties>
-   <style:paragraph-properties fo:text-align="end" css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal">
-    <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
-   </style:text-properties>
-  </style:style>
   <style:style style:name="ce114" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
    <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
@@ -1544,7 +1520,7 @@
     <table:table-column table:style-name="co5" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co11" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co12" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co13" table:default-cell-style-name="ce113"/>
+    <table:table-column table:style-name="co13" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co11" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co3" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co14" table:default-cell-style-name="ce104"/>
@@ -1634,59 +1610,27 @@
      <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
       <text:p>Razem w okresie sprawozdawczym, w tym w zakresie art.17 ust. 1:</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="{{ .MonthIncome.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="{{ .MonthCostsTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="{{ .MonthProfit.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="{{ .MonthProfit.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="{{ .MonthCostsNotTaxedCurrent.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce103" />
+     <table:table-cell table:style-name="ce103" office:value-type="float" office:value="{{ .MonthCostsNotTaxedPrevious.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce103" />
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>a) pkt 4</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="{{ .MonthIncome.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .MonthCostsTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell />
+     <table:table-cell office:value-type="float" office:value="{{ .MonthProfit.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .MonthCostsNotTaxedCurrent.Amount }}" calcext:value-type="float" />
+     <table:table-cell />
+     <table:table-cell office:value-type="float" office:value="{{ .MonthCostsNotTaxedPrevious.Amount }}" calcext:value-type="float" />
+     <table:table-cell />
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1710,66 +1654,34 @@
      <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
       <text:p>Razem od początku roku podatkowego, w tym w zakresie art.17 ust. 1:</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalIncome.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalCostsTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalProfitYear.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalProfitYear.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalCostsNotTaxedCurrent.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalProfitPrevious.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalCostsNotTaxedPrevious.Amount }}" calcext:value-type="float" />
+     <table:table-cell table:style-name="ce106" office:value-type="float" office:value="{{ .TotalProfit.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>a) pkt 4</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4,00</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce104" office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
-      <text:p>6,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="7" calcext:value-type="float">
-      <text:p>7,00</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
-      <text:p>8,00</text:p>
-     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="{{ .TotalIncome.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .TotalCostsTaxed.Amount }}" calcext:value-type="float" />
+     <table:table-cell />
+     <table:table-cell office:value-type="float" office:value="{{ .TotalProfitYear.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .TotalCostsNotTaxedCurrent.Amount }}" calcext:value-type="float" />
+     <table:table-cell />
+     <table:table-cell office:value-type="float" office:value="{{ .TotalCostsNotTaxedPrevious.Amount }}" calcext:value-type="float" />
+     <table:table-cell office:value-type="float" office:value="{{ .TotalProfit.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b) pkt 40</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce104"/>
+     <table:table-cell />
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
@@ -1777,7 +1689,7 @@
       <text:p>c) pkt 47</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce104"/>
+     <table:table-cell />
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro15">
@@ -1962,10 +1874,10 @@
     <table:table-column table:style-name="co23" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co24" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce{{ .Currency.Symbol }}"/>
-    <table:table-column table:style-name="co25" table:default-cell-style-name="ce113"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce{{ .Currency.Symbol }}Rate"/>
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce{{ .Currency.Symbol }}"/>
-    <table:table-column table:style-name="co25" table:default-cell-style-name="ce113"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce104"/>
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce{{ .Currency.Symbol }}Rate"/>
     <table:table-header-rows>
      <table:table-row table:style-name="ro1">
