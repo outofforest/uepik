@@ -442,10 +442,12 @@ type BankSummary struct {
 
 // Report is the full report.
 type Report struct {
-	Book []BookReport
-	Flow []FlowReport
-	VAT  []VATReport
-	Bank []BankCurrency
+	CompanyName    string
+	CompanyAddress string
+	Book           []BookReport
+	Flow           []FlowReport
+	VAT            []VATReport
+	Bank           []BankCurrency
 }
 
 // BookReport stores book report.
@@ -513,7 +515,9 @@ func PreviousDay(date time.Time) time.Time {
 
 // FiscalYear defines fiscal year.
 type FiscalYear struct {
-	Period        Period
-	CurrencyRates CurrencyRates
-	Operations    []Operation
+	CompanyName    string
+	CompanyAddress string
+	Period         Period
+	CurrencyRates  CurrencyRates
+	Operations     []Operation
 }
