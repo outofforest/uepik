@@ -10,6 +10,7 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
 
@@ -29,6 +30,8 @@ func Save(year types.FiscalYear) {
 }
 
 func newReport(year types.FiscalYear) types.Report {
+	coa := year.ChartOfAccounts
+	period := year.Period
 	yearCostsNotTaxed := types.BaseZero
 	yearCostsNotTaxed2 := types.BaseZero
 
@@ -51,12 +54,14 @@ func newReport(year types.FiscalYear) types.Report {
 		})
 	}
 
-	bookRecords := Book(year)
-	vatRecords := VAT(year)
+	Book(year)
+	bookEntries := coa.Entries(types.NewAccountID(accounts.CIT))
+	vatEntries := coa.Entries(types.NewAccountID(accounts.VAT))
 
 	bookYear := types.NewBookSummary()
+	var bookIndex, vatIndex uint64
 	vatPreviousPage := types.NewVATSummary()
-	for month := year.Period.Start; year.Period.Contains(month); month = month.AddDate(0, 1, 0) {
+	for month := period.Start; period.Contains(month); month = month.AddDate(0, 1, 0) {
 		yearNumber := uint64(month.Year())
 		monthName := monthName(month.Month())
 
@@ -64,12 +69,34 @@ func newReport(year types.FiscalYear) types.Report {
 		bookMonth := types.NewBookSummary()
 
 		var bookAdded bool
-		for !bookAdded || (len(bookRecords) > 0 && bookRecords[0].Date.Month() == month.Month()) {
+		for !bookAdded || (len(bookEntries) > 0 && bookEntries[0].Date.Month() == month.Month()) {
 			bookAdded = true
 
 			bookCurrentPage := types.NewBookSummary()
-			records := findRecords(&bookRecords, month, 10)
-			for _, r := range records {
+			entries := findRecords(&bookEntries, month, 10)
+			records := make([]types.BookRecord, 0, len(entries))
+			for _, e := range entries {
+				bookIndex++
+				r := types.BookRecord{
+					Date:       e.Date,
+					Index:      bookIndex,
+					DayOfMonth: uint8(e.Date.Day()),
+					Document:   e.Document,
+					Contractor: e.Contractor,
+					Notes:      e.Notes,
+					IncomeDonations: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
+						accounts.PrzychodyOperacyjne, accounts.PrzychodyZNieodplatnejDPP), e.ID),
+					IncomeTrading: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
+						accounts.PrzychodyOperacyjne, accounts.PrzychodyZOdplatnejDPP), e.ID),
+					IncomeOthers: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
+						accounts.PrzychodyNieoperacyjne), e.ID),
+					IncomeSum: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody), e.ID),
+					CostTaxed: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Koszty,
+						accounts.KosztyPodatkowe), e.ID),
+					CostNotTaxed: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Koszty,
+						accounts.KosztyNiepodatkowe), e.ID),
+				}
+				records = append(records, r)
 				bookCurrentPage = bookCurrentPage.AddRecord(r)
 			}
 			bookMonth = bookMonth.AddSummary(bookCurrentPage)
@@ -89,28 +116,36 @@ func newReport(year types.FiscalYear) types.Report {
 			bookPreviousPage = bookCurrentPage
 		}
 
+		monthIncome := coa.SumMonth(types.NewAccountID(accounts.CIT, accounts.Przychody), month)
+		monthCostsTaxed := coa.SumMonth(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe),
+			month)
+		monthCostsNotTaxed := coa.SumMonth(types.NewAccountID(accounts.CIT, accounts.Koszty,
+			accounts.KosztyNiepodatkowe), month)
 		monthCostsNotTaxed2 := year.Init.UnspentProfit.Sub(yearCostsNotTaxed2)
-		if monthCostsNotTaxed2.GT(bookMonth.CostNotTaxed) {
-			monthCostsNotTaxed2 = bookMonth.CostNotTaxed
+		if monthCostsNotTaxed2.GT(monthCostsNotTaxed) {
+			monthCostsNotTaxed2 = monthCostsNotTaxed
 		}
-		monthCostsNotTaxed := bookMonth.CostNotTaxed.Sub(monthCostsNotTaxed2)
+		monthCostsNotTaxed = monthCostsNotTaxed.Sub(monthCostsNotTaxed2)
 
 		yearCostsNotTaxed = yearCostsNotTaxed.Add(monthCostsNotTaxed)
 		yearCostsNotTaxed2 = yearCostsNotTaxed2.Add(monthCostsNotTaxed2)
-		yearProfit := bookYear.IncomeSum.Sub(bookYear.CostTaxed)
+		yearIncome := coa.SumIncremental(types.NewAccountID(accounts.CIT, accounts.Przychody), month)
+		yearCostsTaxed := coa.SumIncremental(types.NewAccountID(accounts.CIT, accounts.Koszty,
+			accounts.KosztyPodatkowe), month)
+		yearProfit := yearIncome.Sub(yearCostsTaxed)
 
 		report.Flow = append(report.Flow, types.FlowReport{
 			Year:  yearNumber,
 			Month: monthName,
 
-			MonthIncome:                bookMonth.IncomeSum,
-			MonthCostsTaxed:            bookMonth.CostTaxed,
-			MonthProfit:                bookMonth.IncomeSum.Sub(bookMonth.CostTaxed),
+			MonthIncome:                monthIncome,
+			MonthCostsTaxed:            monthCostsTaxed,
+			MonthProfit:                monthIncome.Sub(monthCostsTaxed),
 			MonthCostsNotTaxedCurrent:  monthCostsNotTaxed,
 			MonthCostsNotTaxedPrevious: monthCostsNotTaxed2,
 
-			TotalIncome:                bookYear.IncomeSum,
-			TotalCostsTaxed:            bookYear.CostTaxed,
+			TotalIncome:                yearIncome,
+			TotalCostsTaxed:            yearCostsTaxed,
 			TotalProfitYear:            yearProfit,
 			TotalCostsNotTaxedCurrent:  yearCostsNotTaxed,
 			TotalProfitPrevious:        year.Init.UnspentProfit,
@@ -120,12 +155,24 @@ func newReport(year types.FiscalYear) types.Report {
 		})
 
 		var vatAdded bool
-		for !vatAdded || (len(vatRecords) > 0 && vatRecords[0].Date.Month() == month.Month()) {
+		for !vatAdded || (len(vatEntries) > 0 && vatEntries[0].Date.Month() == month.Month()) {
 			vatAdded = true
 
 			vatCurrentPage := vatPreviousPage
-			records := findRecords(&vatRecords, month, 25)
-			for _, r := range records {
+			entries := findRecords(&vatEntries, month, 25)
+			records := make([]types.VATRecord, 0, len(entries))
+			for _, e := range entries {
+				vatIndex++
+				r := types.VATRecord{
+					Date:       e.Date,
+					Index:      vatIndex,
+					DayOfMonth: uint8(e.Date.Day()),
+					Document:   e.Document,
+					Contractor: e.Contractor,
+					Notes:      e.Notes,
+					Income:     e.Amount,
+				}
+				records = append(records, r)
 				vatCurrentPage = vatCurrentPage.AddRecord(r)
 			}
 

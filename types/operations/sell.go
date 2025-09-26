@@ -3,6 +3,7 @@ package operations
 import (
 	"fmt"
 
+	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
 
@@ -35,68 +36,31 @@ func (s *Sell) BankRecords(period types.Period) []*types.BankRecord {
 }
 
 // BookRecords returns book records for the sell.
-func (s *Sell) BookRecords(period types.Period, rates types.CurrencyRates) []types.BookRecord {
-	if !period.Contains(s.CIT.Date) {
-		return nil
-	}
-
-	result := []types.BookRecord{}
-
+func (s *Sell) BookRecords(coa *types.ChartOfAccounts, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.CIT.Date))
-
-	result = append(result, types.BookRecord{
-		Date:            s.CIT.Date,
-		Document:        s.Document,
-		Contractor:      s.Contractor,
-		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate),
-		IncomeDonations: types.BaseZero,
-		IncomeTrading:   incomeBase,
-		IncomeOthers:    types.BaseZero,
-		IncomeSum:       incomeBase,
-		CostTaxed:       types.BaseZero,
-		CostNotTaxed:    types.BaseZero,
-	})
+	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
+		accounts.PrzychodyZOdplatnejDPP, accounts.PrzychodyZeSprzedazy),
+		types.NewEntry(s.CIT.Date, 0, s.Document, s.Contractor, incomeBase,
+			fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate)))
 
 	if s.paymentBankRecord != nil && s.paymentBankRecord.BaseAmount.NEQ(incomeBase) {
-		rateDiff := types.BookRecord{
-			Date: s.CIT.Date,
-			Notes: fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s",
-				s.Payment.Amount, incomeRate, s.paymentBankRecord.Rate),
-			IncomeDonations: types.BaseZero,
-			IncomeTrading:   types.BaseZero,
-			IncomeOthers:    types.BaseZero,
-			IncomeSum:       types.BaseZero,
-			CostTaxed:       types.BaseZero,
-			CostNotTaxed:    types.BaseZero,
-		}
 		if incomeBase.GT(s.paymentBankRecord.BaseAmount) {
-			rateDiff.CostTaxed = incomeBase.Sub(s.paymentBankRecord.BaseAmount)
+			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
+				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
+				types.NewEntry(s.CIT.Date, 0, types.Document{},
+					types.Contractor{}, incomeBase.Sub(s.paymentBankRecord.BaseAmount),
+					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
+						s.paymentBankRecord.Rate)))
 		} else {
-			rateDiff.IncomeOthers = s.paymentBankRecord.BaseAmount.Sub(incomeBase)
-			rateDiff.IncomeSum = rateDiff.IncomeOthers
+			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
+				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.CIT.Date, 0, types.Document{},
+				types.Contractor{}, s.paymentBankRecord.BaseAmount.Sub(incomeBase),
+				fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
+					s.paymentBankRecord.Rate)))
 		}
-
-		result = append(result, rateDiff)
 	}
 
-	return result
-}
-
-// VATRecords returns VAT records for the sell.
-func (s *Sell) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
-	if !period.Contains(s.VAT.Date) {
-		return nil
-	}
-
-	incomeBase, incomeRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.VAT.Date))
-
-	return []types.VATRecord{
-		{
-			Date:       s.VAT.Date,
-			Document:   s.Document,
-			Contractor: s.Contractor,
-			Notes:      fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate),
-			Income:     incomeBase,
-		},
-	}
+	vatBase, vatRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.VAT.Date))
+	coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(s.VAT.Date, 0, s.Document, s.Contractor, vatBase,
+		fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, vatRate)))
 }

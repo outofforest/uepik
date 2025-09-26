@@ -3,6 +3,7 @@ package operations
 import (
 	"fmt"
 
+	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
 
@@ -33,32 +34,11 @@ func (d *Donation) BankRecords(period types.Period) []*types.BankRecord {
 }
 
 // BookRecords returns book records for the donation.
-func (d *Donation) BookRecords(period types.Period, rates types.CurrencyRates) []types.BookRecord {
-	if !period.Contains(d.Payment.Date) {
-		return nil
-	}
-
-	result := []types.BookRecord{}
-
+func (d *Donation) BookRecords(coa *types.ChartOfAccounts, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
 
-	result = append(result, types.BookRecord{
-		Date:            d.Payment.Date,
-		Document:        d.Document,
-		Contractor:      d.Contractor,
-		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate),
-		IncomeDonations: incomeBase,
-		IncomeTrading:   types.BaseZero,
-		IncomeOthers:    types.BaseZero,
-		IncomeSum:       incomeBase,
-		CostTaxed:       types.BaseZero,
-		CostNotTaxed:    types.BaseZero,
-	})
-
-	return result
-}
-
-// VATRecords returns VAT records for the donation.
-func (d *Donation) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
-	return nil
+	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
+		accounts.PrzychodyZNieodplatnejDPP, accounts.DarowiznyOtrzymane),
+		types.NewEntry(d.Payment.Date, 0, d.Document, d.Contractor, incomeBase,
+			fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate)))
 }
