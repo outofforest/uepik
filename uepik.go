@@ -68,6 +68,7 @@ func Kursy(kursy ...types.CurrencyRate) types.CurrencyRates {
 func Rok(
 	rok uint64,
 	nazwaFirmy, adresFirmy string,
+	bilansOtwarcia types.Init,
 	kursy types.CurrencyRates,
 	operacje ...types.Operation,
 ) types.FiscalYear {
@@ -84,8 +85,20 @@ func Rok(
 			Start: start,
 			End:   end,
 		},
+		Init:          bilansOtwarcia,
 		CurrencyRates: kursy,
 		Operations:    operacje,
+	}
+}
+
+// BilansOtwarcia tworzy bilans otwarcia roku.
+func BilansOtwarcia(niewydanyZysk types.Denom) types.Init {
+	if niewydanyZysk.Currency != types.BaseCurrency.Symbol {
+		panic("nieprawidłowa waluta dla niewydanego zysku")
+	}
+
+	return types.Init{
+		UnspentProfit: niewydanyZysk,
 	}
 }
 

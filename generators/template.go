@@ -29,7 +29,6 @@ func Save(year types.FiscalYear) {
 }
 
 func newReport(year types.FiscalYear) types.Report {
-	previousUnspent := types.BaseZero
 	yearCostsNotTaxed := types.BaseZero
 	yearCostsNotTaxed2 := types.BaseZero
 
@@ -58,7 +57,7 @@ func newReport(year types.FiscalYear) types.Report {
 	bookYear := types.NewBookSummary()
 	vatPreviousPage := types.NewVATSummary()
 	for month := year.Period.Start; year.Period.Contains(month); month = month.AddDate(0, 1, 0) {
-		year := uint64(month.Year())
+		yearNumber := uint64(month.Year())
 		monthName := monthName(month.Month())
 
 		bookPreviousPage := types.NewBookSummary()
@@ -77,7 +76,7 @@ func newReport(year types.FiscalYear) types.Report {
 			bookYear = bookYear.AddSummary(bookCurrentPage)
 
 			report.Book = append(report.Book, types.BookReport{
-				Year:                year,
+				Year:                yearNumber,
 				Month:               monthName,
 				Page:                page(report.Book),
 				Records:             records,
@@ -90,7 +89,7 @@ func newReport(year types.FiscalYear) types.Report {
 			bookPreviousPage = bookCurrentPage
 		}
 
-		monthCostsNotTaxed2 := previousUnspent.Sub(yearCostsNotTaxed2)
+		monthCostsNotTaxed2 := year.Init.UnspentProfit.Sub(yearCostsNotTaxed2)
 		if monthCostsNotTaxed2.GT(bookMonth.CostNotTaxed) {
 			monthCostsNotTaxed2 = bookMonth.CostNotTaxed
 		}
@@ -101,7 +100,7 @@ func newReport(year types.FiscalYear) types.Report {
 		yearProfit := bookYear.IncomeSum.Sub(bookYear.CostTaxed)
 
 		report.Flow = append(report.Flow, types.FlowReport{
-			Year:  year,
+			Year:  yearNumber,
 			Month: monthName,
 
 			MonthIncome:                bookMonth.IncomeSum,
@@ -114,9 +113,10 @@ func newReport(year types.FiscalYear) types.Report {
 			TotalCostsTaxed:            bookYear.CostTaxed,
 			TotalProfitYear:            yearProfit,
 			TotalCostsNotTaxedCurrent:  yearCostsNotTaxed,
-			TotalProfitPrevious:        previousUnspent,
+			TotalProfitPrevious:        year.Init.UnspentProfit,
 			TotalCostsNotTaxedPrevious: yearCostsNotTaxed,
-			TotalProfit:                yearProfit.Add(previousUnspent).Sub(yearCostsNotTaxed).Sub(yearCostsNotTaxed2),
+			TotalProfit: yearProfit.Add(year.Init.UnspentProfit).Sub(yearCostsNotTaxed).
+				Sub(yearCostsNotTaxed2),
 		})
 
 		var vatAdded bool
@@ -130,7 +130,7 @@ func newReport(year types.FiscalYear) types.Report {
 			}
 
 			report.VAT = append(report.VAT, types.VATReport{
-				Year:                year,
+				Year:                yearNumber,
 				Month:               monthName,
 				Page:                page(report.VAT),
 				Records:             records,
@@ -152,7 +152,7 @@ func newReport(year types.FiscalYear) types.Report {
 				}
 
 				bankReport := types.BankReport{
-					Year:                year,
+					Year:                yearNumber,
 					Month:               monthName,
 					Page:                page(report.Bank[i].Reports),
 					Records:             findRecords(bankRecords[c], month, 26),
