@@ -203,6 +203,11 @@ type Number struct {
 	decimal   decimal.Decimal
 }
 
+// IsZero checks if stored value is zero.
+func (n Number) IsZero() bool {
+	return n.decimal.IsZero()
+}
+
 // String returns string representation of the number.
 func (n Number) String() string {
 	return n.decimal.StringFixed(int32(n.precision))
