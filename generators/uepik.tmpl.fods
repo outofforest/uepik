@@ -1554,9 +1554,7 @@
       <text:p>Numer karty:</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="Default"/>
-     <table:table-cell table:style-name="ce102" table:content-validation-name="val1" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce102" table:content-validation-name="val1" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
@@ -1977,9 +1975,7 @@
      <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string">
       <text:p>Numer karty:</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce54" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce54" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro11">
      <table:table-cell table:style-name="Default" table:number-columns-repeated="6"/>
@@ -2188,9 +2184,7 @@
       <text:p>Numer karty:</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce124"/>
-     <table:table-cell table:style-name="ce54" office:value-type="float" office:value="1" calcext:value-type="float">
-      <text:p>1</text:p>
-     </table:table-cell>
+     <table:table-cell table:style-name="ce54" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
      <table:table-cell table:style-name="ce54"/>
     </table:table-row>
     <table:table-row table:style-name="ro11">

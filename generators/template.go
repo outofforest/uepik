@@ -49,10 +49,12 @@ func newReport(year types.FiscalYear) types.Report {
 	for month := year.Period.Start; year.Period.Contains(month); month = month.AddDate(0, 1, 0) {
 		year := uint64(month.Year())
 		monthName := monthName(month.Month())
+		page := uint64(month.Month())
 
 		report.Book = append(report.Book, types.BookReport{
 			Year:    year,
 			Month:   monthName,
+			Page:    page,
 			Records: findRecords(&bookRecords, month),
 		})
 		report.Flow = append(report.Flow, types.FlowReport{
@@ -76,6 +78,7 @@ func newReport(year types.FiscalYear) types.Report {
 		report.VAT = append(report.VAT, types.VATReport{
 			Year:    year,
 			Month:   monthName,
+			Page:    page,
 			Records: findRecords(&vatRecords, month),
 		})
 
@@ -83,6 +86,7 @@ func newReport(year types.FiscalYear) types.Report {
 			report.Bank[i].Reports = append(report.Bank[i].Reports, types.BankReport{
 				Year:    year,
 				Month:   monthName,
+				Page:    page,
 				Records: findRecords(bankRecords[c], month),
 			})
 		}
