@@ -1420,12 +1420,36 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>{{ .Notes }}</text:p>
      </table:table-cell>
+{{ if notZero .IncomeDonations.Amount }}
      <table:table-cell office:value-type="float" office:value="{{ .IncomeDonations.Amount }}" calcext:value-type="float" />
+{{ else }}
+     <table:table-cell />
+{{ end }}
+{{ if notZero .IncomeTrading.Amount }}
      <table:table-cell office:value-type="float" office:value="{{ .IncomeTrading.Amount }}" calcext:value-type="float" />
+{{ else }}
+     <table:table-cell />
+{{ end }}
+{{ if notZero .IncomeOthers.Amount }}
      <table:table-cell office:value-type="float" office:value="{{ .IncomeOthers.Amount }}" calcext:value-type="float" />
+{{ else }}
+     <table:table-cell />
+{{ end }}
+{{ if notZero .IncomeSum.Amount }}
      <table:table-cell office:value-type="float" office:value="{{ .IncomeSum.Amount }}" calcext:value-type="float" />
+{{ else }}
+     <table:table-cell />
+{{ end }}
+{{ if notZero .CostTaxed.Amount }}
      <table:table-cell office:value-type="float" office:value="{{ .CostTaxed.Amount }}" calcext:value-type="float" />
+{{ else }}
+     <table:table-cell />
+{{ end }}
+{{ if notZero .CostNotTaxed.Amount }}
      <table:table-cell office:value-type="float" office:value="{{ .CostNotTaxed.Amount }}" calcext:value-type="float" />
+{{ else }}
+     <table:table-cell />
+{{ end }}
     </table:table-row>
 {{ end }}
     <table:table-row table:style-name="ro9">

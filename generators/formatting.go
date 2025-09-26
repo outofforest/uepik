@@ -1,6 +1,14 @@
 package generators
 
-import "time"
+import (
+	"time"
+
+	"github.com/outofforest/uepik/types"
+)
+
+func notZero(n types.Number) bool {
+	return !n.IsZero()
+}
 
 func monthName(month time.Month) string {
 	switch month {

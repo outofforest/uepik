@@ -15,7 +15,9 @@ import (
 
 //go:embed uepik.tmpl.fods
 var tmpl string
-var tmplParsed = template.Must(template.New("").Parse(tmpl))
+var tmplParsed = template.Must(template.New("").Funcs(template.FuncMap{
+	"notZero": notZero,
+}).Parse(tmpl))
 
 // Save saves the report.
 func Save(year types.FiscalYear) {
