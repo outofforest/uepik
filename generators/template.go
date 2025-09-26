@@ -34,9 +34,11 @@ func newReport(year types.FiscalYear) types.Report {
 	yearCostsNotTaxed2 := types.BaseZero
 
 	report := types.Report{
-		Book: make([]types.BookReport, 0, 12),
-		Flow: make([]types.FlowReport, 0, 12),
-		VAT:  make([]types.VATReport, 0, 12),
+		CompanyName:    year.CompanyName,
+		CompanyAddress: year.CompanyAddress,
+		Book:           make([]types.BookReport, 0, 12),
+		Flow:           make([]types.FlowReport, 0, 12),
+		VAT:            make([]types.VATReport, 0, 12),
 	}
 
 	bankRecords := Bank(year)
