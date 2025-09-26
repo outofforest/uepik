@@ -150,6 +150,13 @@ func (d Denom) ToBase(rate Number) Denom {
 // Rate calculates the rate between two denoms.
 func (d Denom) Rate(denom Denom) Number {
 	currency := Currencies.Currency(denom.Currency)
+	if d.Amount.IsZero() && denom.Amount.IsZero() {
+		return NewNumber(0, 0, currency.RatePrecision)
+	}
+	if d.Amount.IsZero() || denom.Amount.IsZero() {
+		panic("one of denoms is zero")
+	}
+
 	return newNumberFromDecimal(d.Amount.decimal.DivRound(denom.Amount.decimal, int32(currency.RatePrecision)),
 		currency.RatePrecision)
 }
