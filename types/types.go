@@ -291,26 +291,6 @@ type Operation interface {
 	VATRecords(period Period, rates CurrencyRates) []VATRecord
 }
 
-// BankRecord defines the properties of bank record.
-type BankRecord struct {
-	Date           time.Time
-	Index          uint64
-	DayOfMonth     uint8
-	Document       Document
-	Contractor     Contractor
-	OriginalAmount Denom
-	BaseAmount     Denom
-	Rate           Number
-	OriginalSum    Denom
-	BaseSum        Denom
-	RateAverage    Number
-}
-
-// GetDate returns record's date.
-func (r BankRecord) GetDate() time.Time {
-	return r.Date
-}
-
 // BookRecord defines the book record.
 type BookRecord struct {
 	Date            time.Time
@@ -332,6 +312,50 @@ func (r BookRecord) GetDate() time.Time {
 	return r.Date
 }
 
+// NewBookSummary creates new book summary.
+func NewBookSummary() BookSummary {
+	return BookSummary{
+		IncomeDonations: BaseZero,
+		IncomeTrading:   BaseZero,
+		IncomeOthers:    BaseZero,
+		IncomeSum:       BaseZero,
+		CostTaxed:       BaseZero,
+		CostNotTaxed:    BaseZero,
+	}
+}
+
+// BookSummary is the page summary of the book report.
+type BookSummary struct {
+	IncomeDonations Denom
+	IncomeTrading   Denom
+	IncomeOthers    Denom
+	IncomeSum       Denom
+	CostTaxed       Denom
+	CostNotTaxed    Denom
+}
+
+// AddRecord adds record to the summary.
+func (bs BookSummary) AddRecord(r BookRecord) BookSummary {
+	bs.IncomeDonations = bs.IncomeDonations.Add(r.IncomeDonations)
+	bs.IncomeTrading = bs.IncomeTrading.Add(r.IncomeTrading)
+	bs.IncomeOthers = bs.IncomeOthers.Add(r.IncomeOthers)
+	bs.IncomeSum = bs.IncomeSum.Add(r.IncomeSum)
+	bs.CostTaxed = bs.CostTaxed.Add(r.CostTaxed)
+	bs.CostNotTaxed = bs.CostNotTaxed.Add(r.CostNotTaxed)
+	return bs
+}
+
+// AddSummary adds another summary to this one.
+func (bs BookSummary) AddSummary(bs2 BookSummary) BookSummary {
+	bs.IncomeDonations = bs.IncomeDonations.Add(bs2.IncomeDonations)
+	bs.IncomeTrading = bs.IncomeTrading.Add(bs2.IncomeTrading)
+	bs.IncomeOthers = bs.IncomeOthers.Add(bs2.IncomeOthers)
+	bs.IncomeSum = bs.IncomeSum.Add(bs2.IncomeSum)
+	bs.CostTaxed = bs.CostTaxed.Add(bs2.CostTaxed)
+	bs.CostNotTaxed = bs.CostNotTaxed.Add(bs2.CostNotTaxed)
+	return bs
+}
+
 // VATRecord defines the VAT record.
 type VATRecord struct {
 	Date       time.Time
@@ -348,6 +372,69 @@ func (r VATRecord) GetDate() time.Time {
 	return r.Date
 }
 
+// NewVATSummary creates new VAT summary.
+func NewVATSummary() VATSummary {
+	return VATSummary{
+		Income: BaseZero,
+	}
+}
+
+// VATSummary is the page summary of the VAT report.
+type VATSummary struct {
+	Income Denom
+}
+
+// AddRecord adds record to the summary.
+func (vs VATSummary) AddRecord(r VATRecord) VATSummary {
+	vs.Income = vs.Income.Add(r.Income)
+	return vs
+}
+
+// BankRecord defines the properties of bank record.
+type BankRecord struct {
+	Date           time.Time
+	Index          uint64
+	DayOfMonth     uint8
+	Document       Document
+	Contractor     Contractor
+	OriginalAmount Denom
+	BaseAmount     Denom
+	Rate           Number
+	OriginalSum    Denom
+	BaseSum        Denom
+	RateAverage    Number
+}
+
+// GetDate returns record's date.
+func (r BankRecord) GetDate() time.Time {
+	return r.Date
+}
+
+// Summary creates page summary from the record.
+func (r BankRecord) Summary() BankSummary {
+	return BankSummary{
+		OriginalSum: r.OriginalSum,
+		BaseSum:     r.BaseSum,
+		RateAverage: r.RateAverage,
+	}
+}
+
+// NewBankSummary creates new bank summary.
+func NewBankSummary(currency Currency) BankSummary {
+	return BankSummary{
+		OriginalSum: BaseZero,
+		BaseSum:     BaseZero,
+		RateAverage: NewNumber(0, 0, currency.RatePrecision),
+	}
+}
+
+// BankSummary is the page summary of the bank record.
+type BankSummary struct {
+	OriginalSum Denom
+	BaseSum     Denom
+	RateAverage Number
+}
+
 // Report is the full report.
 type Report struct {
 	Book []BookReport
@@ -358,10 +445,14 @@ type Report struct {
 
 // BookReport stores book report.
 type BookReport struct {
-	Year    uint64
-	Month   string
-	Page    uint64
-	Records []BookRecord
+	Year                uint64
+	Month               string
+	Page                uint64
+	Records             []BookRecord
+	CurrentPageSummary  BookSummary
+	PreviousPageSummary BookSummary
+	MonthSummary        BookSummary
+	YearSummary         BookSummary
 }
 
 // FlowReport is the flow report.
@@ -386,10 +477,12 @@ type FlowReport struct {
 
 // VATReport stores VAT report.
 type VATReport struct {
-	Year    uint64
-	Month   string
-	Page    uint64
-	Records []VATRecord
+	Year                uint64
+	Month               string
+	Page                uint64
+	Records             []VATRecord
+	PreviousPageSummary VATSummary
+	CurrentPageSummary  VATSummary
 }
 
 // BankCurrency stores bank reports for single currency.
@@ -400,10 +493,12 @@ type BankCurrency struct {
 
 // BankReport is the bank report.
 type BankReport struct {
-	Year    uint64
-	Month   string
-	Page    uint64
-	Records []BankRecord
+	Year                uint64
+	Month               string
+	Page                uint64
+	Records             []BankRecord
+	PreviousPageSummary BankSummary
+	CurrentPageSummary  BankSummary
 }
 
 // PreviousDay computes the date of the previous day.
