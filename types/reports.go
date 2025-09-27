@@ -1,6 +1,7 @@
 package types
 
 import (
+	"sort"
 	"time"
 )
 
@@ -54,10 +55,15 @@ type Payment struct {
 	Index  uint64
 }
 
+// IsPaid tells if payment has been paid.
+func (p Payment) IsPaid() bool {
+	return !p.Date.IsZero()
+}
+
 // Operation defines operation which might bee accounted.
 type Operation interface {
-	BankRecords(period Period) []*BankRecord
-	BookRecords(coa *ChartOfAccounts, rates CurrencyRates)
+	BankRecords() []*BankRecord
+	BookRecords(coa *ChartOfAccounts, bankRecords []*BankRecord, rates CurrencyRates)
 }
 
 // BookRecord defines the book record.
@@ -274,13 +280,114 @@ type FiscalYear struct {
 	ChartOfAccounts *ChartOfAccounts
 	Period          Period
 	Init            Init
-	CurrencyRates   CurrencyRates
 	Operations      []Operation
 }
 
-// BookRecords generates book records.
-func (fy FiscalYear) BookRecords() {
-	for _, o := range fy.Operations {
-		o.BookRecords(fy.ChartOfAccounts, fy.CurrencyRates)
+// BankReports returns bank reports.
+func (fy *FiscalYear) BankReports(
+	currencyRates CurrencyRates,
+	years []*FiscalYear,
+) (map[CurrencySymbol]*[]BankRecord, map[Operation][]*BankRecord) {
+	opBankRecords := make(map[Operation][]*BankRecord, len(fy.Operations))
+	for _, op := range fy.Operations {
+		opBankRecords[op] = nil
 	}
+	for _, y := range years {
+		bankRecords := []*BankRecord{}
+		for _, op := range y.Operations {
+			brs := op.BankRecords()
+			bankRecords = append(bankRecords, brs...)
+
+			if _, exists := opBankRecords[op]; exists {
+				for _, br := range brs {
+					if y.Period.Contains(br.Date) {
+						opBankRecords[op] = append(opBankRecords[op], br)
+					}
+				}
+			}
+		}
+		report := y.bankReports(bankRecords, currencyRates)
+		if y == fy {
+			return report, opBankRecords
+		}
+	}
+	panic("current fiscal year is not on the list")
+}
+
+// BookRecords generates book records.
+func (fy *FiscalYear) BookRecords(currencyRates CurrencyRates, bankRecords map[Operation][]*BankRecord) {
+	for _, o := range fy.Operations {
+		o.BookRecords(fy.ChartOfAccounts, bankRecords[o], currencyRates)
+	}
+}
+
+func (fy *FiscalYear) bankReports(
+	bankRecords []*BankRecord,
+	currencyRates CurrencyRates,
+) map[CurrencySymbol]*[]BankRecord {
+	currencies := map[CurrencySymbol][]*BankRecord{}
+	for _, br := range bankRecords {
+		currencies[br.OriginalAmount.Currency] = append(currencies[br.OriginalAmount.Currency], br)
+	}
+
+	var zeroDenom Denom
+	var zeroRate Number
+
+	reports := map[CurrencySymbol]*[]BankRecord{}
+
+	for currencySymbol, records := range currencies {
+		currency := Currencies.Currency(currencySymbol)
+
+		sort.Slice(records, func(i, j int) bool {
+			return records[i].Date.Before(records[j].Date) || (records[i].Date.Equal(records[j].Date) &&
+				records[i].Index < records[j].Index)
+		})
+
+		records2 := make([]BankRecord, 0, len(records))
+
+		total, exists := fy.Init.Currencies[currencySymbol]
+		if !exists {
+			panic("brak bilansu otwarcia waluty")
+		}
+
+		originalZero := Denom{
+			Currency: currencySymbol,
+			Amount:   NewNumber(0, 0, currency.AmountPrecision),
+		}
+		rate := total.BaseSum.Rate(total.OriginalSum)
+
+		for i, br := range records {
+			br.Index = uint64(i + 1)
+			br.DayOfMonth = uint8(br.Date.Day())
+
+			switch {
+			case br.OriginalAmount != zeroDenom && br.BaseAmount == zeroDenom && br.Rate == zeroRate &&
+				br.OriginalAmount.GT(originalZero):
+				br.BaseAmount, br.Rate = currencyRates.ToBase(br.OriginalAmount, PreviousDay(br.Date))
+			case br.OriginalAmount != zeroDenom && br.BaseAmount == zeroDenom && br.Rate == zeroRate:
+				br.Rate = rate
+				br.BaseAmount = br.OriginalAmount.ToBase(rate)
+			case br.OriginalAmount != zeroDenom && br.BaseAmount == zeroDenom && br.Rate != zeroRate:
+				br.BaseAmount = br.OriginalAmount.ToBase(br.Rate)
+			case br.OriginalAmount != zeroDenom && br.BaseAmount != zeroDenom && br.Rate == zeroRate:
+				br.Rate = br.BaseAmount.Rate(br.OriginalAmount)
+			default:
+				panic("invalid data in bank record")
+			}
+
+			total.OriginalSum = total.OriginalSum.Add(br.OriginalAmount)
+			total.BaseSum = total.BaseSum.Add(br.BaseAmount)
+			rate = total.BaseSum.Rate(total.OriginalSum)
+
+			br.OriginalSum = total.OriginalSum
+			br.BaseSum = total.BaseSum
+			br.RateAverage = rate
+
+			records2 = append(records2, *br)
+		}
+
+		reports[currencySymbol] = &records2
+	}
+
+	return reports
 }

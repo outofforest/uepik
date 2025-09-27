@@ -70,9 +70,8 @@ func Rok(
 	nazwaFirmy, adresFirmy string,
 	dataRozpoczecia, dataZakonczenia time.Time,
 	bilansOtwarcia types.Init,
-	kursy types.CurrencyRates,
-	operacje ...types.Operation,
-) types.FiscalYear {
+	operacje ...[]types.Operation,
+) *types.FiscalYear {
 	end := dataZakonczenia.AddDate(0, 0, 1).Add(-time.Nanosecond)
 	now := time.Now().Local()
 	if end.After(now) {
@@ -82,7 +81,8 @@ func Rok(
 		Start: dataRozpoczecia,
 		End:   end,
 	}
-	return types.FiscalYear{
+
+	return &types.FiscalYear{
 		CompanyName:    nazwaFirmy,
 		CompanyAddress: adresFirmy,
 		ChartOfAccounts: types.NewChartOfAccounts(period,
@@ -127,10 +127,9 @@ func Rok(
 			),
 			types.NewAccount(accounts.VAT),
 		),
-		Period:        period,
-		Init:          bilansOtwarcia,
-		CurrencyRates: kursy,
-		Operations:    operacje,
+		Period:     period,
+		Init:       bilansOtwarcia,
+		Operations: Grupa(operacje...),
 	}
 }
 
@@ -170,12 +169,17 @@ func Waluta(kwota types.Denom, kwotaPLN types.Denom) types.InitCurrency {
 	}
 }
 
-// Usluga grupuje operacje dotyczące jednej usługi.
-func Usluga(symbol string, operacje ...types.Operation) operations.Service {
-	return operations.Service{
-		ID:         symbol,
-		Operations: operacje,
+// Grupa grupuje operacje.
+func Grupa(operacje ...[]types.Operation) []types.Operation {
+	var count int
+	for _, ops := range operacje {
+		count += len(ops)
 	}
+	ops := make([]types.Operation, 0, count)
+	for _, ops2 := range operacje {
+		ops = append(ops, ops2...)
+	}
+	return ops
 }
 
 // Dokument tworzy dokument.
@@ -218,17 +222,22 @@ func Platnosc(kwota types.Denom, data time.Time, index uint64) types.Payment {
 	}
 }
 
+// Niezaplacono oznacza, że jeszcze nie ma płatnosci.
+func Niezaplacono() types.Payment {
+	return types.Payment{}
+}
+
 // Darowizna definiuje darowiznę.
 func Darowizna(
 	dokument types.Document,
 	kontrahent types.Contractor,
 	platnosc types.Payment,
-) *operations.Donation {
-	return &operations.Donation{
+) []types.Operation {
+	return []types.Operation{&operations.Donation{
 		Document:   dokument,
 		Contractor: kontrahent,
 		Payment:    platnosc,
-	}
+	}}
 }
 
 // Sprzedaz definiuje sprzedaż.
@@ -238,14 +247,14 @@ func Sprzedaz(
 	platnosc types.Payment,
 	cit types.CIT,
 	vat types.VAT,
-) *operations.Sell {
-	return &operations.Sell{
+) []types.Operation {
+	return []types.Operation{&operations.Sell{
 		Document:   dokument,
 		Contractor: kontrahent,
 		Payment:    platnosc,
 		CIT:        cit,
 		VAT:        vat,
-	}
+	}}
 }
 
 // Zakup definiuje zakup.
@@ -256,13 +265,13 @@ func Zakup(
 	typPodatkowy types.CostTaxType,
 	cit types.CIT,
 	vat types.VAT,
-) *operations.Purchase {
-	return &operations.Purchase{
+) []types.Operation {
+	return []types.Operation{&operations.Purchase{
 		Document:    dokument,
 		Contractor:  kontrahent,
 		Payment:     platnosc,
 		CostTaxType: typPodatkowy,
 		CIT:         cit,
 		VAT:         vat,
-	}
+	}}
 }
