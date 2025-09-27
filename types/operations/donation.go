@@ -31,6 +31,8 @@ func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 
 	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
 		accounts.PrzychodyZNieodplatnejDPP, accounts.DarowiznyOtrzymane),
-		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, incomeBase,
+		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase),
 			fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate)))
+	coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
+		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase), ""))
 }

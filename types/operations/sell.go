@@ -32,8 +32,10 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 	incomeBase, incomeRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.CIT.Date))
 	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
 		accounts.PrzychodyZOdplatnejDPP, accounts.PrzychodyZeSprzedazy),
-		types.NewEntry(s.CIT.Date, s.Document, s.Contractor, incomeBase,
+		types.NewEntry(s.CIT.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase),
 			fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate)))
+	coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
+		types.NewEntry(s.CIT.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase), ""))
 
 	if s.Payment.IsPaid() && len(bankRecords) == 0 {
 		panic("brak rekordu walutowego dla płatności")
@@ -44,23 +46,31 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 
 		if br.BaseAmount.NEQ(incomeBase) {
 			if incomeBase.GT(br.BaseAmount) {
+				amount := types.DebitBalance(incomeBase.Sub(br.BaseAmount))
 				coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
 					accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
 					types.NewEntry(s.CIT.Date, types.Document{},
-						types.Contractor{}, incomeBase.Sub(br.BaseAmount),
-						fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
-							br.Rate)))
+						types.Contractor{}, amount,
+						fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount,
+							incomeRate, br.Rate)))
+				coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
+					accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.CIT.Date, s.Document, s.Contractor,
+					amount, ""))
 			} else {
+				amount := types.CreditBalance(br.BaseAmount.Sub(incomeBase))
 				coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
-					accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.CIT.Date, types.Document{},
-					types.Contractor{}, br.BaseAmount.Sub(incomeBase),
-					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
-						br.Rate)))
+					accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.CIT.Date,
+					types.Document{}, types.Contractor{}, amount,
+					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount,
+						incomeRate, br.Rate)))
+				coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
+					accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.CIT.Date, s.Document, s.Contractor,
+					amount, ""))
 			}
 		}
 	}
 
 	vatBase, vatRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.VAT.Date))
-	coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(s.VAT.Date, s.Document, s.Contractor, vatBase,
-		fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, vatRate)))
+	coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(s.VAT.Date, s.Document, s.Contractor,
+		types.CreditBalance(vatBase), fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, vatRate)))
 }

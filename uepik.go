@@ -65,6 +65,54 @@ func Kursy(kursy ...types.CurrencyRate) types.CurrencyRates {
 	return rates
 }
 
+var coaAccounts = []*types.Account{
+	types.NewAccount(
+		accounts.CIT, types.Liabilities,
+		types.NewAccount(
+			accounts.Przychody, types.Incomes,
+			types.NewAccount(
+				accounts.PrzychodyNieoperacyjne, types.Incomes,
+				types.NewAccount(
+					accounts.PrzychodyFinansowe, types.Incomes,
+					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes),
+				),
+			),
+			types.NewAccount(
+				accounts.PrzychodyOperacyjne, types.Incomes,
+				types.NewAccount(
+					accounts.PrzychodyZNieodplatnejDPP, types.Incomes,
+					types.NewAccount(accounts.DarowiznyOtrzymane, types.Incomes),
+				),
+				types.NewAccount(
+					accounts.PrzychodyZOdplatnejDPP, types.Incomes,
+					types.NewAccount(accounts.PrzychodyZeSprzedazy, types.Incomes),
+				),
+			),
+		),
+		types.NewAccount(
+			accounts.Koszty, types.Costs,
+			types.NewAccount(
+				accounts.KosztyPodatkowe, types.Costs,
+				types.NewAccount(
+					accounts.KosztyFinansowe, types.Costs,
+					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs),
+				),
+				types.NewAccount(accounts.PodatkoweKosztyOperacyjne, types.Costs),
+			),
+			types.NewAccount(
+				accounts.KosztyNiepodatkowe, types.Costs,
+				types.NewAccount(accounts.NiepodatkoweKosztyOperacyjne, types.Costs),
+			),
+		),
+	),
+	types.NewAccount(accounts.VAT, types.Incomes),
+	types.NewAccount(
+		accounts.NiewydatkowanyDochod, types.Liabilities,
+		types.NewAccount(accounts.NiewydatkowanyDochodWTrakcieRoku, types.Liabilities),
+		types.NewAccount(accounts.NiewydatkowanyDochodZLatUbieglych, types.Liabilities),
+	),
+}
+
 // Rok tworzy rok obrotowy.
 func Rok(
 	nazwaFirmy, adresFirmy string,
@@ -82,54 +130,16 @@ func Rok(
 		End:   end,
 	}
 
+	coa := types.NewChartOfAccounts(period, coaAccounts...)
+	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodZLatUbieglych),
+		types.CreditBalance(bilansOtwarcia.UnspentProfit))
 	return &types.FiscalYear{
-		CompanyName:    nazwaFirmy,
-		CompanyAddress: adresFirmy,
-		ChartOfAccounts: types.NewChartOfAccounts(period,
-			types.NewAccount(
-				accounts.CIT,
-				types.NewAccount(
-					accounts.Przychody,
-					types.NewAccount(
-						accounts.PrzychodyNieoperacyjne,
-						types.NewAccount(
-							accounts.PrzychodyFinansowe,
-							types.NewAccount(accounts.DodatnieRozniceKursowe),
-						),
-					),
-					types.NewAccount(
-						accounts.PrzychodyOperacyjne,
-						types.NewAccount(
-							accounts.PrzychodyZNieodplatnejDPP,
-							types.NewAccount(accounts.DarowiznyOtrzymane),
-						),
-						types.NewAccount(
-							accounts.PrzychodyZOdplatnejDPP,
-							types.NewAccount(accounts.PrzychodyZeSprzedazy),
-						),
-					),
-				),
-				types.NewAccount(
-					accounts.Koszty,
-					types.NewAccount(
-						accounts.KosztyPodatkowe,
-						types.NewAccount(
-							accounts.KosztyFinansowe,
-							types.NewAccount(accounts.UjemneRozniceKursowe),
-						),
-						types.NewAccount(accounts.PodatkoweKosztyOperacyjne),
-					),
-					types.NewAccount(
-						accounts.KosztyNiepodatkowe,
-						types.NewAccount(accounts.NiepodatkoweKosztyOperacyjne),
-					),
-				),
-			),
-			types.NewAccount(accounts.VAT),
-		),
-		Period:     period,
-		Init:       bilansOtwarcia,
-		Operations: Grupa(operacje...),
+		CompanyName:     nazwaFirmy,
+		CompanyAddress:  adresFirmy,
+		ChartOfAccounts: coa,
+		Period:          period,
+		Init:            bilansOtwarcia,
+		Operations:      Grupa(operacje...),
 	}
 }
 
