@@ -22,4 +22,7 @@ const (
 	KosztyNiepodatkowe
 	NiepodatkoweKosztyOperacyjne
 	VAT
+	NiewydatkowanyDochod
+	NiewydatkowanyDochodZLatUbieglych
+	NiewydatkowanyDochodWTrakcieRoku
 )
