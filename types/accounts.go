@@ -106,8 +106,7 @@ func (ch *ChartOfAccounts) Entries(accountID AccountID) []*Entry {
 	sort.Slice(results, func(i, j int) bool {
 		r1 := results[i]
 		r2 := results[j]
-		return r1.Date.Before(r2.Date) || (r1.Date.Equal(r2.Date) && (r1.Index < r2.Index ||
-			(r1.Index == r2.Index && r1.ID < r2.ID)))
+		return r1.Date.Before(r2.Date) || (r1.Date.Equal(r2.Date) && r1.ID < r2.ID)
 	})
 
 	return results
@@ -198,7 +197,6 @@ type EntryID uint64
 // NewEntry creates new entry.
 func NewEntry(
 	date time.Time,
-	index uint64,
 	document Document,
 	contractor Contractor,
 	amount Denom,
@@ -206,7 +204,6 @@ func NewEntry(
 ) *Entry {
 	return &Entry{
 		Date:       date,
-		Index:      index,
 		Document:   document,
 		Contractor: contractor,
 		Amount:     amount,
@@ -218,7 +215,6 @@ func NewEntry(
 type Entry struct {
 	ID         EntryID
 	Date       time.Time
-	Index      uint64
 	Document   Document
 	Contractor Contractor
 	Amount     Denom

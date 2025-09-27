@@ -14,53 +14,53 @@ type Sell struct {
 	Payment    types.Payment
 	CIT        types.CIT
 	VAT        types.VAT
-
-	paymentBankRecord *types.BankRecord
 }
 
 // BankRecords returns bank records for the sell.
-func (s *Sell) BankRecords(period types.Period) []*types.BankRecord {
-	if !period.Contains(s.Payment.Date) {
-		return nil
-	}
-
-	s.paymentBankRecord = &types.BankRecord{
+func (s *Sell) BankRecords() []*types.BankRecord {
+	return []*types.BankRecord{{
 		Date:           s.Payment.Date,
 		Index:          s.Payment.Index,
 		Document:       s.Document,
 		Contractor:     s.Contractor,
 		OriginalAmount: s.Payment.Amount,
-	}
-
-	return []*types.BankRecord{s.paymentBankRecord}
+	}}
 }
 
 // BookRecords returns book records for the sell.
-func (s *Sell) BookRecords(coa *types.ChartOfAccounts, rates types.CurrencyRates) {
+func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.CIT.Date))
 	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
 		accounts.PrzychodyZOdplatnejDPP, accounts.PrzychodyZeSprzedazy),
-		types.NewEntry(s.CIT.Date, 0, s.Document, s.Contractor, incomeBase,
+		types.NewEntry(s.CIT.Date, s.Document, s.Contractor, incomeBase,
 			fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, incomeRate)))
 
-	if s.paymentBankRecord != nil && s.paymentBankRecord.BaseAmount.NEQ(incomeBase) {
-		if incomeBase.GT(s.paymentBankRecord.BaseAmount) {
-			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
-				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
-				types.NewEntry(s.CIT.Date, 0, types.Document{},
-					types.Contractor{}, incomeBase.Sub(s.paymentBankRecord.BaseAmount),
+	if s.Payment.IsPaid() && len(bankRecords) == 0 {
+		panic("brak rekordu walutowego dla płatności")
+	}
+
+	if len(bankRecords) > 0 {
+		br := bankRecords[0]
+
+		if br.BaseAmount.NEQ(incomeBase) {
+			if incomeBase.GT(br.BaseAmount) {
+				coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
+					accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
+					types.NewEntry(s.CIT.Date, types.Document{},
+						types.Contractor{}, incomeBase.Sub(br.BaseAmount),
+						fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
+							br.Rate)))
+			} else {
+				coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
+					accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.CIT.Date, types.Document{},
+					types.Contractor{}, br.BaseAmount.Sub(incomeBase),
 					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
-						s.paymentBankRecord.Rate)))
-		} else {
-			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
-				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.CIT.Date, 0, types.Document{},
-				types.Contractor{}, s.paymentBankRecord.BaseAmount.Sub(incomeBase),
-				fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", s.Payment.Amount, incomeRate,
-					s.paymentBankRecord.Rate)))
+						br.Rate)))
+			}
 		}
 	}
 
 	vatBase, vatRate := rates.ToBase(s.Payment.Amount, types.PreviousDay(s.VAT.Date))
-	coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(s.VAT.Date, 0, s.Document, s.Contractor, vatBase,
+	coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(s.VAT.Date, s.Document, s.Contractor, vatBase,
 		fmt.Sprintf("kwota: %s, kurs: %s", s.Payment.Amount, vatRate)))
 }

@@ -21,22 +21,22 @@ var tmplParsed = template.Must(template.New("").Funcs(template.FuncMap{
 }).Parse(tmpl))
 
 // Save saves the report.
-func Save(year types.FiscalYear) {
-	report := newReport(year)
+func Save(year *types.FiscalYear, currencyRates types.CurrencyRates, years ...*types.FiscalYear) {
+	report := newReport(year, currencyRates, years)
 
 	f := lo.Must(os.OpenFile("uepik-"+time.Now().Format(time.DateOnly)+".fods", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o600))
 	defer f.Close()
 	lo.Must0(tmplParsed.Execute(f, report))
 }
 
-func newReport(year types.FiscalYear) types.Report {
+func newReport(year *types.FiscalYear, currencyRates types.CurrencyRates, years []*types.FiscalYear) types.Report {
 	coa := year.ChartOfAccounts
 	period := year.Period
 	yearCostsNotTaxed := types.BaseZero
 	yearCostsNotTaxed2 := types.BaseZero
 
-	bankRecords := Bank(year)
-	year.BookRecords()
+	bankRecords, opBankRecords := year.BankReports(currencyRates, years)
+	year.BookRecords(currencyRates, opBankRecords)
 
 	report := types.Report{
 		CompanyName:    year.CompanyName,
