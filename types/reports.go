@@ -55,11 +55,6 @@ type Payment struct {
 	Index  uint64
 }
 
-// IsPaid tells if payment has been paid.
-func (p Payment) IsPaid() bool {
-	return !p.Date.IsZero()
-}
-
 // Operation defines operation which might bee accounted.
 type Operation interface {
 	BankRecords() []*BankRecord

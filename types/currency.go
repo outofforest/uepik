@@ -67,7 +67,7 @@ func (d Denom) EQ(denom Denom) bool {
 	if d.Currency != denom.Currency {
 		panic("Currency mismatch.")
 	}
-	return d.Amount.decimal.Equal(denom.Amount.decimal)
+	return d.Amount.EQ(denom.Amount)
 }
 
 // NEQ checks if two denoms are not equal.
@@ -80,7 +80,7 @@ func (d Denom) GT(denom Denom) bool {
 	if d.Currency != denom.Currency {
 		panic("Currency mismatch.")
 	}
-	return d.Amount.decimal.GreaterThan(denom.Amount.decimal)
+	return d.Amount.GT(denom.Amount)
 }
 
 // LT checks if denom is less than the other one.
@@ -88,7 +88,7 @@ func (d Denom) LT(denom Denom) bool {
 	if d.Currency != denom.Currency {
 		panic("Currency mismatch.")
 	}
-	return d.Amount.decimal.LessThan(denom.Amount.decimal)
+	return d.Amount.LT(denom.Amount)
 }
 
 // GTE checks if denom is greater than or equal to the other one.
@@ -108,7 +108,7 @@ func (d Denom) Add(denom Denom) Denom {
 	}
 	return Denom{
 		Currency: d.Currency,
-		Amount:   newNumberFromDecimal(d.Amount.decimal.Add(denom.Amount.decimal), d.Amount.precision),
+		Amount:   d.Amount.Add(denom.Amount),
 	}
 }
 
@@ -119,7 +119,7 @@ func (d Denom) Sub(denom Denom) Denom {
 	}
 	return Denom{
 		Currency: d.Currency,
-		Amount:   newNumberFromDecimal(d.Amount.decimal.Sub(denom.Amount.decimal), d.Amount.precision),
+		Amount:   d.Amount.Sub(denom.Amount),
 	}
 }
 
@@ -127,7 +127,7 @@ func (d Denom) Sub(denom Denom) Denom {
 func (d Denom) Neg() Denom {
 	return Denom{
 		Currency: d.Currency,
-		Amount:   newNumberFromDecimal(d.Amount.decimal.Neg(), d.Amount.precision),
+		Amount:   d.Amount.Neg(),
 	}
 }
 
@@ -193,6 +193,51 @@ type Number struct {
 // IsZero checks if stored value is zero.
 func (n Number) IsZero() bool {
 	return n.decimal.IsZero()
+}
+
+// EQ checks if two numbers are equal.
+func (n Number) EQ(n2 Number) bool {
+	return n.decimal.Equal(n2.decimal)
+}
+
+// NEQ checks if two numbers are not equal.
+func (n Number) NEQ(n2 Number) bool {
+	return !n.EQ(n2)
+}
+
+// GT checks if number is greater than the other one.
+func (n Number) GT(n2 Number) bool {
+	return n.decimal.GreaterThan(n2.decimal)
+}
+
+// LT checks if number is less than the other one.
+func (n Number) LT(n2 Number) bool {
+	return n.decimal.LessThan(n2.decimal)
+}
+
+// GTE checks if number is greater than or equal to the other one.
+func (n Number) GTE(n2 Number) bool {
+	return !n.LT(n2)
+}
+
+// LTE checks if number is less than or equal to the other one.
+func (n Number) LTE(n2 Number) bool {
+	return !n.GT(n2)
+}
+
+// Add adds numbers.
+func (n Number) Add(n2 Number) Number {
+	return newNumberFromDecimal(n.decimal.Add(n2.decimal), n.precision)
+}
+
+// Sub subtracts two numbers.
+func (n Number) Sub(n2 Number) Number {
+	return newNumberFromDecimal(n.decimal.Sub(n2.decimal), n.precision)
+}
+
+// Neg negates number.
+func (n Number) Neg() Number {
+	return newNumberFromDecimal(n.decimal.Neg(), n.precision)
 }
 
 // String returns string representation of the number.
