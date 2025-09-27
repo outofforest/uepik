@@ -57,8 +57,7 @@ type Payment struct {
 // Operation defines operation which might bee accounted.
 type Operation interface {
 	BankRecords(period Period) []*BankRecord
-	BookRecords(period Period, rates CurrencyRates) []BookRecord
-	VATRecords(period Period, rates CurrencyRates) []VATRecord
+	BookRecords(coa *ChartOfAccounts, rates CurrencyRates)
 }
 
 // BookRecord defines the book record.
@@ -75,11 +74,6 @@ type BookRecord struct {
 	IncomeSum       Denom
 	CostTaxed       Denom
 	CostNotTaxed    Denom
-}
-
-// GetDate returns record's date.
-func (r BookRecord) GetDate() time.Time {
-	return r.Date
 }
 
 // NewBookSummary creates new book summary.
@@ -135,11 +129,6 @@ type VATRecord struct {
 	Contractor Contractor
 	Notes      string
 	Income     Denom
-}
-
-// GetDate returns record's date.
-func (r VATRecord) GetDate() time.Time {
-	return r.Date
 }
 
 // NewVATSummary creates new VAT summary.
@@ -280,10 +269,11 @@ func PreviousDay(date time.Time) time.Time {
 
 // FiscalYear defines fiscal year.
 type FiscalYear struct {
-	CompanyName    string
-	CompanyAddress string
-	Period         Period
-	Init           Init
-	CurrencyRates  CurrencyRates
-	Operations     []Operation
+	CompanyName     string
+	CompanyAddress  string
+	ChartOfAccounts *ChartOfAccounts
+	Period          Period
+	Init            Init
+	CurrencyRates   CurrencyRates
+	Operations      []Operation
 }

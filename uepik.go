@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 	"github.com/outofforest/uepik/types/operations"
 )
@@ -77,13 +78,56 @@ func Rok(
 	if end.After(now) {
 		end = now
 	}
+	period := types.Period{
+		Start: dataRozpoczecia,
+		End:   end,
+	}
 	return types.FiscalYear{
 		CompanyName:    nazwaFirmy,
 		CompanyAddress: adresFirmy,
-		Period: types.Period{
-			Start: dataRozpoczecia,
-			End:   end,
-		},
+		ChartOfAccounts: types.NewChartOfAccounts(period,
+			types.NewAccount(
+				accounts.CIT,
+				types.NewAccount(
+					accounts.Przychody,
+					types.NewAccount(
+						accounts.PrzychodyNieoperacyjne,
+						types.NewAccount(
+							accounts.PrzychodyFinansowe,
+							types.NewAccount(accounts.DodatnieRozniceKursowe),
+						),
+					),
+					types.NewAccount(
+						accounts.PrzychodyOperacyjne,
+						types.NewAccount(
+							accounts.PrzychodyZNieodplatnejDPP,
+							types.NewAccount(accounts.DarowiznyOtrzymane),
+						),
+						types.NewAccount(
+							accounts.PrzychodyZOdplatnejDPP,
+							types.NewAccount(accounts.PrzychodyZeSprzedazy),
+						),
+					),
+				),
+				types.NewAccount(
+					accounts.Koszty,
+					types.NewAccount(
+						accounts.KosztyPodatkowe,
+						types.NewAccount(
+							accounts.KosztyFinansowe,
+							types.NewAccount(accounts.UjemneRozniceKursowe),
+						),
+						types.NewAccount(accounts.PodatkoweKosztyOperacyjne),
+					),
+					types.NewAccount(
+						accounts.KosztyNiepodatkowe,
+						types.NewAccount(accounts.NiepodatkoweKosztyOperacyjne),
+					),
+				),
+			),
+			types.NewAccount(accounts.VAT),
+		),
+		Period:        period,
 		Init:          bilansOtwarcia,
 		CurrencyRates: kursy,
 		Operations:    operacje,

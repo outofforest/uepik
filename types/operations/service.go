@@ -20,19 +20,8 @@ func (s Service) BankRecords(period types.Period) []*types.BankRecord {
 }
 
 // BookRecords returns book records for the service.
-func (s Service) BookRecords(period types.Period, rates types.CurrencyRates) []types.BookRecord {
-	records := []types.BookRecord{}
+func (s Service) BookRecords(coa *types.ChartOfAccounts, rates types.CurrencyRates) {
 	for _, o := range s.Operations {
-		records = append(records, o.BookRecords(period, rates)...)
+		o.BookRecords(coa, rates)
 	}
-	return records
-}
-
-// VATRecords returns VAT records for the service.
-func (s Service) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
-	records := []types.VATRecord{}
-	for _, o := range s.Operations {
-		records = append(records, o.VATRecords(period, rates)...)
-	}
-	return records
 }

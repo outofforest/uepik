@@ -3,6 +3,7 @@ package operations
 import (
 	"fmt"
 
+	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
 
@@ -36,66 +37,39 @@ func (p *Purchase) BankRecords(period types.Period) []*types.BankRecord {
 }
 
 // BookRecords returns book records for the purchase.
-func (p *Purchase) BookRecords(period types.Period, rates types.CurrencyRates) []types.BookRecord {
-	if !period.Contains(p.CIT.Date) {
-		return nil
-	}
-
-	result := []types.BookRecord{}
-
+func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, rates types.CurrencyRates) {
 	costBase, costRate := rates.ToBase(p.Payment.Amount, types.PreviousDay(p.CIT.Date))
 
-	record := types.BookRecord{
-		Date:            p.CIT.Date,
-		Document:        p.Document,
-		Contractor:      p.Contractor,
-		Notes:           fmt.Sprintf("kwota: %s, kurs: %s", p.Payment.Amount, costRate),
-		IncomeDonations: types.BaseZero,
-		IncomeTrading:   types.BaseZero,
-		IncomeOthers:    types.BaseZero,
-		IncomeSum:       types.BaseZero,
-		CostTaxed:       types.BaseZero,
-		CostNotTaxed:    types.BaseZero,
-	}
-
-	switch p.CostTaxType {
-	case types.CostTaxTypeTaxable:
-		record.CostTaxed = costBase
-	case types.CostTaxTypeNonTaxable:
-		record.CostNotTaxed = costBase
-	default:
-		panic("invalid cost type")
-	}
-
-	result = append(result, record)
+	coa.AddEntry(costTaxTypeToAccountID(p.CostTaxType), types.NewEntry(p.CIT.Date, 0, p.Document, p.Contractor,
+		costBase, fmt.Sprintf("kwota: %s, kurs: %s", p.Payment.Amount, costRate)))
 
 	if p.paymentBankRecord != nil && p.paymentBankRecord.BaseAmount.NEQ(costBase.Neg()) {
-		rateDiff := types.BookRecord{
-			Date: p.CIT.Date,
-			Notes: fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s",
-				p.Payment.Amount, costRate, p.paymentBankRecord.Rate),
-			IncomeDonations: types.BaseZero,
-			IncomeTrading:   types.BaseZero,
-			IncomeOthers:    types.BaseZero,
-			IncomeSum:       types.BaseZero,
-			CostTaxed:       types.BaseZero,
-			CostNotTaxed:    types.BaseZero,
-		}
 		paymentBase := p.paymentBankRecord.BaseAmount.Neg()
 		if costBase.GT(paymentBase) {
-			rateDiff.IncomeOthers = costBase.Sub(paymentBase)
-			rateDiff.IncomeSum = rateDiff.IncomeOthers
+			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
+				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe),
+				types.NewEntry(p.CIT.Date, 0, types.Document{}, types.Contractor{}, costBase.Sub(paymentBase),
+					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", p.Payment.Amount, costRate,
+						p.paymentBankRecord.Rate)))
 		} else {
-			rateDiff.CostTaxed = paymentBase.Sub(costBase)
+			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
+				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
+				types.NewEntry(p.CIT.Date, 0, types.Document{}, types.Contractor{}, paymentBase.Sub(costBase),
+					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", p.Payment.Amount, costRate,
+						p.paymentBankRecord.Rate)))
 		}
-
-		result = append(result, rateDiff)
 	}
-
-	return result
 }
 
-// VATRecords returns VAT records for the purchase.
-func (p *Purchase) VATRecords(period types.Period, rates types.CurrencyRates) []types.VATRecord {
-	return nil
+func costTaxTypeToAccountID(costTaxType types.CostTaxType) types.AccountID {
+	switch costTaxType {
+	case types.CostTaxTypeTaxable:
+		return types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
+			accounts.PodatkoweKosztyOperacyjne)
+	case types.CostTaxTypeNonTaxable:
+		return types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyNiepodatkowe,
+			accounts.NiepodatkoweKosztyOperacyjne)
+	default:
+		panic("invalid cost tax type")
+	}
 }
