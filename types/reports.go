@@ -277,3 +277,10 @@ type FiscalYear struct {
 	CurrencyRates   CurrencyRates
 	Operations      []Operation
 }
+
+// BookRecords generates book records.
+func (fy FiscalYear) BookRecords() {
+	for _, o := range fy.Operations {
+		o.BookRecords(fy.ChartOfAccounts, fy.CurrencyRates)
+	}
+}

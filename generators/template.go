@@ -35,6 +35,9 @@ func newReport(year types.FiscalYear) types.Report {
 	yearCostsNotTaxed := types.BaseZero
 	yearCostsNotTaxed2 := types.BaseZero
 
+	bankRecords := Bank(year)
+	year.BookRecords()
+
 	report := types.Report{
 		CompanyName:    year.CompanyName,
 		CompanyAddress: year.CompanyAddress,
@@ -43,7 +46,6 @@ func newReport(year types.FiscalYear) types.Report {
 		VAT:            make([]types.VATReport, 0, 12),
 	}
 
-	bankRecords := Bank(year)
 	currencies := lo.Keys(bankRecords)
 	sort.Slice(currencies, func(i, j int) bool {
 		return strings.Compare(string(currencies[i]), string(currencies[j])) < 0
@@ -54,7 +56,6 @@ func newReport(year types.FiscalYear) types.Report {
 		})
 	}
 
-	Book(year)
 	bookEntries := coa.Entries(types.NewAccountID(accounts.CIT))
 	vatEntries := coa.Entries(types.NewAccountID(accounts.VAT))
 
