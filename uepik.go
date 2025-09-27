@@ -232,9 +232,14 @@ func Platnosc(kwota types.Denom, data time.Time, index uint64) types.Payment {
 	}
 }
 
+// Platnosci definiuje płatności.
+func Platnosci(platnosci ...types.Payment) []types.Payment {
+	return platnosci
+}
+
 // Niezaplacono oznacza, że jeszcze nie ma płatnosci.
-func Niezaplacono() types.Payment {
-	return types.Payment{}
+func Niezaplacono() []types.Payment {
+	return nil
 }
 
 // Darowizna definiuje darowiznę.
@@ -254,14 +259,16 @@ func Darowizna(
 func Sprzedaz(
 	dokument types.Document,
 	kontrahent types.Contractor,
-	platnosc types.Payment,
+	kwota types.Denom,
+	platnosci []types.Payment,
 	cit types.CIT,
 	vat types.VAT,
 ) []types.Operation {
 	return []types.Operation{&operations.Sell{
 		Document:   dokument,
 		Contractor: kontrahent,
-		Payment:    platnosc,
+		Amount:     kwota,
+		Payments:   platnosci,
 		CIT:        cit,
 		VAT:        vat,
 	}}
@@ -271,7 +278,8 @@ func Sprzedaz(
 func Zakup(
 	dokument types.Document,
 	kontrahent types.Contractor,
-	platnosc types.Payment,
+	kwota types.Denom,
+	platnosci []types.Payment,
 	typPodatkowy types.CostTaxType,
 	cit types.CIT,
 	vat types.VAT,
@@ -279,7 +287,8 @@ func Zakup(
 	return []types.Operation{&operations.Purchase{
 		Document:    dokument,
 		Contractor:  kontrahent,
-		Payment:     platnosc,
+		Amount:      kwota,
+		Payments:    platnosci,
 		CostTaxType: typPodatkowy,
 		CIT:         cit,
 		VAT:         vat,
