@@ -2,6 +2,7 @@
 package uepik
 
 import (
+	"fmt"
 	"math"
 	"time"
 
@@ -116,7 +117,7 @@ func Kursy(kursy ...types.CurrencyRate) types.CurrencyRates {
 
 // Rok tworzy rok obrotowy.
 func Rok(
-	nazwaFirmy, adresFirmy string,
+	nazwaFirmy, adresFirmy, nipFirmy string,
 	dataRozpoczecia, dataZakonczenia time.Time,
 	bilansOtwarcia types.Init,
 	operacje ...[]types.Operation,
@@ -135,15 +136,25 @@ func Rok(
 	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
 		types.CreditBalance(bilansOtwarcia.UnspentProfit))
 
+	company := types.Contractor{
+		Name:    nazwaFirmy,
+		Address: adresFirmy,
+		TaxID:   nipFirmy,
+	}
 	for date := period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); period.Contains(date); date = date.AddDate(0, 1, 0) {
 		operacje = append(operacje, []types.Operation{&operations.CurrencyDiff{
-			Date: date,
+			Document: types.Document{
+				ID:   fmt.Sprintf("RK/%d/%d/1", date.Year(), date.Month()),
+				Date: date,
+			},
+			Contractor: company,
 		}})
 	}
 
 	return &types.FiscalYear{
 		CompanyName:     nazwaFirmy,
 		CompanyAddress:  adresFirmy,
+		CompanyTaxID:    nipFirmy,
 		ChartOfAccounts: coa,
 		Period:          period,
 		Init:            bilansOtwarcia,
