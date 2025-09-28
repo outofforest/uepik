@@ -2,6 +2,7 @@ package operations
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
@@ -9,12 +10,12 @@ import (
 
 // Purchase defines the cost of purchased goods or service.
 type Purchase struct {
+	Date        time.Time
 	Document    types.Document
 	Contractor  types.Contractor
 	Amount      types.Denom
 	Payments    []types.Payment
 	CostTaxType types.CostTaxType
-	CIT         types.CIT
 }
 
 // BankRecords returns bank records for the purchase.
@@ -34,15 +35,15 @@ func (p *Purchase) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the purchase.
 func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
-	costBase, costRate := rates.ToBase(p.Amount, types.PreviousDay(p.CIT.Date))
+	costBase, costRate := rates.ToBase(p.Amount, types.PreviousDay(p.Date))
 
-	coa.AddEntry(costTaxTypeToAccountID(p.CostTaxType), types.NewEntry(p.CIT.Date, p.Document, p.Contractor,
+	coa.AddEntry(costTaxTypeToAccountID(p.CostTaxType), types.NewEntry(p.Date, p.Document, p.Contractor,
 		types.DebitBalance(costBase), fmt.Sprintf("kwota: %s, kurs: %s", p.Amount, costRate)))
 
 	switch p.CostTaxType {
 	case types.CostTaxTypeTaxable:
 		coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
-			types.NewEntry(p.CIT.Date, p.Document, p.Contractor, types.DebitBalance(costBase), ""))
+			types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(costBase), ""))
 	case types.CostTaxTypeNonTaxable:
 		cost2 := coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod,
 			accounts.NiewydatkowanyDochodZLatUbieglych))
@@ -55,11 +56,11 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 		cost := costBase.Sub(cost2)
 		if cost.GT(types.BaseZero) {
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
-				types.NewEntry(p.CIT.Date, p.Document, p.Contractor, types.DebitBalance(cost), ""))
+				types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(cost), ""))
 		}
 		if cost2.GT(types.BaseZero) {
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodZLatUbieglych),
-				types.NewEntry(p.CIT.Date, p.Document, p.Contractor, types.DebitBalance(cost2), ""))
+				types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(cost2), ""))
 		}
 	default:
 		panic("invalid cost tax type")
@@ -78,21 +79,21 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 			amount := types.CreditBalance(paymentOriginal.ToBase(costRate.Sub(br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
 				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe),
-				types.NewEntry(p.CIT.Date, types.Document{}, types.Contractor{}, amount,
+				types.NewEntry(p.Date, types.Document{}, types.Contractor{}, amount,
 					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
 						costRate, br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(p.CIT.Date, p.Document, p.Contractor,
+				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(p.Date, p.Document, p.Contractor,
 				amount, ""))
 		} else {
 			amount := types.DebitBalance(paymentOriginal.ToBase(br.Rate.Sub(costRate)))
 			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
 				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
-				types.NewEntry(p.CIT.Date, types.Document{}, types.Contractor{}, amount,
+				types.NewEntry(p.Date, types.Document{}, types.Contractor{}, amount,
 					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
 						costRate, br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(p.CIT.Date, p.Document, p.Contractor,
+				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(p.Date, p.Document, p.Contractor,
 				amount, ""))
 		}
 	}
