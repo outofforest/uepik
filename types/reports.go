@@ -263,11 +263,6 @@ type BankReport struct {
 	CurrentPageSummary  BankSummary
 }
 
-// PreviousDay computes the date of the previous day.
-func PreviousDay(date time.Time) time.Time {
-	return date.AddDate(0, 0, -1)
-}
-
 // FiscalYear defines fiscal year.
 type FiscalYear struct {
 	CompanyName     string
@@ -385,4 +380,37 @@ func (fy *FiscalYear) bankReports(
 	}
 
 	return reports
+}
+
+// PreviousDay computes the date of the previous day.
+func PreviousDay(date time.Time) time.Time {
+	return date.AddDate(0, 0, -1)
+}
+
+// MinDate returns the earliest date from set.
+func MinDate(dates ...time.Time) time.Time {
+	if len(dates) == 0 {
+		panic("no dates")
+	}
+	date := dates[0]
+	for _, d := range dates[1:] {
+		if d.Before(date) {
+			date = d
+		}
+	}
+	return date
+}
+
+// MaxDate returns the latest date from set.
+func MaxDate(dates ...time.Time) time.Time {
+	if len(dates) == 0 {
+		panic("no dates")
+	}
+	date := dates[0]
+	for _, d := range dates[1:] {
+		if d.After(date) {
+			date = d
+		}
+	}
+	return date
 }

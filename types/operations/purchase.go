@@ -15,7 +15,6 @@ type Purchase struct {
 	Payments    []types.Payment
 	CostTaxType types.CostTaxType
 	CIT         types.CIT
-	VAT         types.VAT
 }
 
 // BankRecords returns bank records for the purchase.
