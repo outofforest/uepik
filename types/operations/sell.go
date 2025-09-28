@@ -2,6 +2,7 @@ package operations
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
@@ -9,11 +10,11 @@ import (
 
 // Sell defines the income coming from goods or service sell.
 type Sell struct {
+	Date       time.Time
 	Document   types.Document
 	Contractor types.Contractor
 	Amount     types.Denom
 	Payments   []types.Payment
-	CIT        types.CIT
 }
 
 // BankRecords returns bank records for the sell.
@@ -33,13 +34,13 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the sell.
 func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
-	incomeBase, incomeRate := rates.ToBase(s.Amount, types.PreviousDay(s.CIT.Date))
+	incomeBase, incomeRate := rates.ToBase(s.Amount, types.PreviousDay(s.Date))
 	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
 		accounts.PrzychodyZOdplatnejDPP, accounts.PrzychodyZeSprzedazy),
-		types.NewEntry(s.CIT.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase),
+		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase),
 			fmt.Sprintf("kwota: %s, kurs: %s", s.Amount, incomeRate)))
 	coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
-		types.NewEntry(s.CIT.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase), ""))
+		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase), ""))
 
 	if len(s.Payments) > 0 && len(bankRecords) == 0 {
 		panic("brak rekordu walutowego dla płatności")
@@ -53,26 +54,26 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			amount := types.DebitBalance(br.OriginalAmount.ToBase(incomeRate.Sub(br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
 				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
-				types.NewEntry(s.CIT.Date, types.Document{},
+				types.NewEntry(s.Date, types.Document{},
 					types.Contractor{}, amount,
 					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
 						incomeRate, br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.CIT.Date, s.Document, s.Contractor,
+				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.Date, s.Document, s.Contractor,
 				amount, ""))
 		} else {
 			amount := types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
 			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
-				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.CIT.Date,
+				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.Date,
 				types.Document{}, types.Contractor{}, amount,
 				fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
 					incomeRate, br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.CIT.Date, s.Document, s.Contractor,
+				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.Date, s.Document, s.Contractor,
 				amount, ""))
 		}
 
-		vatDate := types.MinDate(s.CIT.Date, br.Date)
+		vatDate := types.MinDate(s.Date, br.Date)
 		vatBase, vatRate := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))
 		coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(vatDate, s.Document, s.Contractor,
 			types.CreditBalance(vatBase), fmt.Sprintf("kwota: %s, kurs: %s", br.OriginalAmount, vatRate)))

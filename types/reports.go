@@ -31,11 +31,6 @@ type Document struct {
 	Date time.Time
 }
 
-// CIT defines CIT properties.
-type CIT struct {
-	Date time.Time
-}
-
 // Contractor defines contractor.
 type Contractor struct {
 	Name    string

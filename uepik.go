@@ -200,13 +200,6 @@ func Dokument(numer string, data time.Time) types.Document {
 	}
 }
 
-// CIT definiuje właściwości dla CIT.
-func CIT(data time.Time) types.CIT {
-	return types.CIT{
-		Date: data,
-	}
-}
-
 // Kontrahent definiuje kontrahenta.
 func Kontrahent(nazwa, adres, nip string) types.Contractor {
 	return types.Contractor{
@@ -250,36 +243,36 @@ func Darowizna(
 
 // Sprzedaz definiuje sprzedaż.
 func Sprzedaz(
+	data time.Time,
 	dokument types.Document,
 	kontrahent types.Contractor,
 	kwota types.Denom,
 	platnosci []types.Payment,
-	cit types.CIT,
 ) []types.Operation {
 	return []types.Operation{&operations.Sell{
+		Date:       data,
 		Document:   dokument,
 		Contractor: kontrahent,
 		Amount:     kwota,
 		Payments:   platnosci,
-		CIT:        cit,
 	}}
 }
 
 // Zakup definiuje zakup.
 func Zakup(
+	data time.Time,
 	dokument types.Document,
 	kontrahent types.Contractor,
 	kwota types.Denom,
 	platnosci []types.Payment,
 	typPodatkowy types.CostTaxType,
-	cit types.CIT,
 ) []types.Operation {
 	return []types.Operation{&operations.Purchase{
+		Date:        data,
 		Document:    dokument,
 		Contractor:  kontrahent,
 		Amount:      kwota,
 		Payments:    platnosci,
 		CostTaxType: typPodatkowy,
-		CIT:         cit,
 	}}
 }
