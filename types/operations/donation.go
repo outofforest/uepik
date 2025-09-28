@@ -1,8 +1,6 @@
 package operations
 
 import (
-	"fmt"
-
 	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
@@ -27,16 +25,17 @@ func (d *Donation) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the donation.
 func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
-	incomeBase, incomeRate := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
+	incomeBase, _ := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
 
-	coa.AddEntry(
-		types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZNieodplatnejDPP,
-			accounts.Darowizny),
-		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase),
-			fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate)),
-	)
-	coa.AddEntry(
-		types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase), ""),
+	coa.AddEntry(d.Payment.Date, d.Document, d.Contractor, "Darowizna",
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZNieodplatnejDPP,
+				accounts.Darowizny),
+			types.CreditBalance(incomeBase),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+			types.CreditBalance(incomeBase),
+		),
 	)
 }
