@@ -1784,15 +1784,6 @@
       </table:table-cell>
      </table:table-row>
      <table:table-row table:style-name="ro7">
-      <table:table-cell table:style-name="ce8"/>
-      <table:table-cell table:style-name="ce14"/>
-      <table:table-cell table:style-name="ce15"/>
-      <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string">
-       <text:p>Nazwa</text:p>
-      </table:table-cell>
-      <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     </table:table-row>
-     <table:table-row table:style-name="ro7">
       <table:table-cell table:style-name="ce66" office:value-type="float" office:value="1" calcext:value-type="float">
        <text:p>1</text:p>
       </table:table-cell>
