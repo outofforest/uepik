@@ -14,7 +14,6 @@ type Sell struct {
 	Amount     types.Denom
 	Payments   []types.Payment
 	CIT        types.CIT
-	VAT        types.VAT
 }
 
 // BankRecords returns bank records for the sell.
@@ -73,8 +72,9 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 				amount, ""))
 		}
 
-		vatBase, vatRate := rates.ToBase(br.OriginalAmount, types.PreviousDay(s.VAT.Date))
-		coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(s.VAT.Date, s.Document, s.Contractor,
+		vatDate := types.MinDate(s.CIT.Date, br.Date)
+		vatBase, vatRate := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))
+		coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(vatDate, s.Document, s.Contractor,
 			types.CreditBalance(vatBase), fmt.Sprintf("kwota: %s, kurs: %s", br.OriginalAmount, vatRate)))
 	}
 }

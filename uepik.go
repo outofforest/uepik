@@ -207,13 +207,6 @@ func CIT(data time.Time) types.CIT {
 	}
 }
 
-// VAT definiuje właściwości dla VAT.
-func VAT(data time.Time) types.VAT {
-	return types.VAT{
-		Date: data,
-	}
-}
-
 // Kontrahent definiuje kontrahenta.
 func Kontrahent(nazwa, adres, nip string) types.Contractor {
 	return types.Contractor{
@@ -262,7 +255,6 @@ func Sprzedaz(
 	kwota types.Denom,
 	platnosci []types.Payment,
 	cit types.CIT,
-	vat types.VAT,
 ) []types.Operation {
 	return []types.Operation{&operations.Sell{
 		Document:   dokument,
@@ -270,7 +262,6 @@ func Sprzedaz(
 		Amount:     kwota,
 		Payments:   platnosci,
 		CIT:        cit,
-		VAT:        vat,
 	}}
 }
 
@@ -282,7 +273,6 @@ func Zakup(
 	platnosci []types.Payment,
 	typPodatkowy types.CostTaxType,
 	cit types.CIT,
-	vat types.VAT,
 ) []types.Operation {
 	return []types.Operation{&operations.Purchase{
 		Document:    dokument,
@@ -291,6 +281,5 @@ func Zakup(
 		Payments:    platnosci,
 		CostTaxType: typPodatkowy,
 		CIT:         cit,
-		VAT:         vat,
 	}}
 }
