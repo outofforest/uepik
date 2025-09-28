@@ -257,6 +257,7 @@ type BankReport struct {
 type FiscalYear struct {
 	CompanyName     string
 	CompanyAddress  string
+	CompanyTaxID    string
 	ChartOfAccounts *ChartOfAccounts
 	Period          Period
 	Init            Init

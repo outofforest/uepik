@@ -1,15 +1,14 @@
 package operations
 
 import (
-	"time"
-
 	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
 
 // CurrencyDiff defines the currency diff.
 type CurrencyDiff struct {
-	Date time.Time
+	Document   types.Document
+	Contractor types.Contractor
 }
 
 // BankRecords returns bank records for currency diff.
@@ -24,7 +23,7 @@ func (cd *CurrencyDiff) BookRecords(
 	rates types.CurrencyRates,
 ) {
 	records := []types.EntryRecord{}
-	debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Date)
+	debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
 	if debit.NEQ(types.BaseZero) {
 		records = append(records,
 			types.NewEntryRecord(
@@ -39,7 +38,7 @@ func (cd *CurrencyDiff) BookRecords(
 		)
 	}
 
-	credit := coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Date)
+	credit := coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
 	if credit.NEQ(types.BaseZero) {
 		records = append(records,
 			types.NewEntryRecord(
@@ -54,5 +53,5 @@ func (cd *CurrencyDiff) BookRecords(
 		)
 	}
 
-	coa.AddEntry(cd.Date, types.Document{}, types.Contractor{}, "Różnice kursowe", records...)
+	coa.AddEntry(cd.Document.Date, cd.Document, cd.Contractor, "Różnice kursowe", records...)
 }
