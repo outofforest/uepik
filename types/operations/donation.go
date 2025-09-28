@@ -29,10 +29,14 @@ func (d *Donation) BankRecords() []*types.BankRecord {
 func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
 
-	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
-		accounts.PrzychodyZNieodplatnejDPP, accounts.DarowiznyOtrzymane),
+	coa.AddEntry(
+		types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZNieodplatnejDPP,
+			accounts.Darowizny),
 		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase),
-			fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate)))
-	coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
-		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase), ""))
+			fmt.Sprintf("kwota: %s, kurs: %s", d.Payment.Amount, incomeRate)),
+	)
+	coa.AddEntry(
+		types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+		types.NewEntry(d.Payment.Date, d.Document, d.Contractor, types.CreditBalance(incomeBase), ""),
+	)
 }

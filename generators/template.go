@@ -85,16 +85,16 @@ func newReport(year *types.FiscalYear, currencyRates types.CurrencyRates, years 
 					Contractor: e.Contractor,
 					Notes:      e.Notes,
 					IncomeDonations: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
-						accounts.PrzychodyOperacyjne, accounts.PrzychodyZNieodplatnejDPP), e.ID).Credit,
+						accounts.Operacyjne, accounts.ZNieodplatnejDPP), e.ID).Credit,
 					IncomeTrading: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
-						accounts.PrzychodyOperacyjne, accounts.PrzychodyZOdplatnejDPP), e.ID).Credit,
+						accounts.Operacyjne, accounts.ZOdplatnejDPP), e.ID).Credit,
 					IncomeOthers: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
-						accounts.PrzychodyNieoperacyjne), e.ID).Credit,
+						accounts.Nieoperacyjne), e.ID).Credit,
 					IncomeSum: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody), e.ID).Credit,
 					CostTaxed: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Koszty,
-						accounts.KosztyPodatkowe), e.ID).Debit,
+						accounts.Podatkowe), e.ID).Debit,
 					CostNotTaxed: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Koszty,
-						accounts.KosztyNiepodatkowe), e.ID).Debit,
+						accounts.Niepodatkowe), e.ID).Debit,
 				}
 				records = append(records, r)
 				bookCurrentPage = bookCurrentPage.AddRecord(r)
@@ -117,11 +117,11 @@ func newReport(year *types.FiscalYear, currencyRates types.CurrencyRates, years 
 		}
 
 		monthIncome := coa.BalanceMonth(types.NewAccountID(accounts.CIT, accounts.Przychody), month)
-		monthCostsTaxed := coa.BalanceMonth(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe),
+		monthCostsTaxed := coa.BalanceMonth(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.Podatkowe),
 			month)
 		yearIncome := coa.BalanceIncremental(types.NewAccountID(accounts.CIT, accounts.Przychody), month)
 		yearCostsTaxed := coa.BalanceIncremental(types.NewAccountID(accounts.CIT, accounts.Koszty,
-			accounts.KosztyPodatkowe), month)
+			accounts.Podatkowe), month)
 
 		report.Flow = append(report.Flow, types.FlowReport{
 			Year:  yearNumber,
@@ -131,18 +131,18 @@ func newReport(year *types.FiscalYear, currencyRates types.CurrencyRates, years 
 			MonthCostsTaxed: monthCostsTaxed,
 			MonthProfit:     monthIncome.Sub(monthCostsTaxed),
 			MonthCostsNotTaxedCurrent: coa.DebitMonth(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), month),
+				accounts.WTrakcieRoku), month),
 			MonthCostsNotTaxedPrevious: coa.DebitMonth(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodZLatUbieglych), month),
+				accounts.ZLatUbieglych), month),
 
 			TotalIncome:     yearIncome,
 			TotalCostsTaxed: yearCostsTaxed,
 			TotalProfitYear: yearIncome.Sub(yearCostsTaxed),
 			TotalCostsNotTaxedCurrent: coa.DebitIncremental(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), month),
+				accounts.WTrakcieRoku), month),
 			TotalProfitPrevious: unspentProfit,
 			TotalCostsNotTaxedPrevious: coa.DebitIncremental(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodZLatUbieglych), month),
+				accounts.ZLatUbieglych), month),
 			TotalProfit: coa.BalanceIncremental(types.NewAccountID(accounts.NiewydatkowanyDochod), month),
 		})
 

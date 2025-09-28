@@ -35,12 +35,15 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 // BookRecords returns book records for the sell.
 func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(s.Amount, types.PreviousDay(s.Date))
-	coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyOperacyjne,
-		accounts.PrzychodyZOdplatnejDPP, accounts.PrzychodyZeSprzedazy),
+	coa.AddEntry(
+		types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP,
+			accounts.ZeSprzedazy),
 		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase),
 			fmt.Sprintf("kwota: %s, kurs: %s", s.Amount, incomeRate)))
-	coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodWTrakcieRoku),
-		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase), ""))
+	coa.AddEntry(
+		types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase), ""),
+	)
 
 	if len(s.Payments) > 0 && len(bankRecords) == 0 {
 		panic("brak rekordu walutowego dla płatności")
@@ -51,29 +54,17 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			continue
 		}
 
-		diffDate := types.MaxDate(s.Date, br.Date)
+		var amount types.AccountBalance
 		if incomeRate.GT(br.Rate) {
-			amount := types.DebitBalance(br.OriginalAmount.ToBase(incomeRate.Sub(br.Rate)))
-			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
-				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
-				types.NewEntry(diffDate, types.Document{},
-					types.Contractor{}, amount,
-					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
-						incomeRate, br.Rate)))
-			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(diffDate, s.Document, s.Contractor,
-				amount, ""))
+			amount = types.DebitBalance(br.OriginalAmount.ToBase(incomeRate.Sub(br.Rate)))
 		} else {
-			amount := types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
-			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
-				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(diffDate,
-				types.Document{}, types.Contractor{}, amount,
-				fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
-					incomeRate, br.Rate)))
-			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(diffDate, s.Document, s.Contractor,
-				amount, ""))
+			amount = types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
 		}
+
+		coa.AddEntry(
+			types.NewAccountID(accounts.RozniceKursowe),
+			types.NewEntry(types.MaxDate(s.Date, br.Date), s.Document, s.Contractor, amount, ""),
+		)
 
 		vatDate := types.MinDate(s.Date, br.Date)
 		vatBase, vatRate := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))

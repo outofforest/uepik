@@ -6,23 +6,21 @@ import "github.com/outofforest/uepik/types"
 const (
 	CIT types.AccountIDPart = iota
 	Przychody
-	PrzychodyNieoperacyjne
-	PrzychodyFinansowe
+	Nieoperacyjne
+	Finansowe
 	DodatnieRozniceKursowe
-	PrzychodyOperacyjne
-	PrzychodyZNieodplatnejDPP
-	DarowiznyOtrzymane
-	PrzychodyZOdplatnejDPP
-	PrzychodyZeSprzedazy
+	Operacyjne
+	ZNieodplatnejDPP
+	Darowizny
+	ZOdplatnejDPP
+	ZeSprzedazy
 	Koszty
-	KosztyPodatkowe
-	KosztyFinansowe
+	Podatkowe
 	UjemneRozniceKursowe
-	PodatkoweKosztyOperacyjne
-	KosztyNiepodatkowe
-	NiepodatkoweKosztyOperacyjne
+	Niepodatkowe
 	VAT
 	NiewydatkowanyDochod
-	NiewydatkowanyDochodZLatUbieglych
-	NiewydatkowanyDochodWTrakcieRoku
+	ZLatUbieglych
+	WTrakcieRoku
+	RozniceKursowe
 )
