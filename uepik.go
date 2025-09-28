@@ -207,13 +207,6 @@ func CIT(data time.Time) types.CIT {
 	}
 }
 
-// VAT definiuje właściwości dla VAT.
-func VAT(data time.Time) types.VAT {
-	return types.VAT{
-		Date: data,
-	}
-}
-
 // Kontrahent definiuje kontrahenta.
 func Kontrahent(nazwa, adres, nip string) types.Contractor {
 	return types.Contractor{

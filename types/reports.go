@@ -36,11 +36,6 @@ type CIT struct {
 	Date time.Time
 }
 
-// VAT defines VAT properties.
-type VAT struct {
-	Date time.Time
-}
-
 // Contractor defines contractor.
 type Contractor struct {
 	Name    string
