@@ -1,0 +1,265 @@
+{{- $companyName := .CompanyName -}}
+{{- $companyAddress := .CompanyAddress -}}
+<table:table table:name="PiK" table:style-name="ta1">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce67"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="ce71"/>
+    <table:table-column table:style-name="co3" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co4" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co5" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="ce90"/>
+    <table:table-column table:style-name="co7" table:number-columns-repeated="6" table:default-cell-style-name="ce94"/>
+    <table:table-header-rows>
+        <table:table-row table:style-name="ro1">
+            <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="12" table:number-rows-spanned="1">
+                <text:p>ZESTAWIENIE PRZYCHODÓW I KOSZTÓW</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro2">
+            <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro3">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+                <text:p>Nazwa podatnika:</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="ce6"/>
+            <table:covered-table-cell table:style-name="ce73"/>
+            <table:table-cell table:style-name="ce79" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+                <text:p>{{ $companyName }}</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="ce84"/>
+            <table:table-cell table:style-name="ce60" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+                <text:p>Adres podatnika:</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="Default"/>
+            <table:table-cell table:style-name="ce79" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>{{ $companyAddress }}</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="ce84"/>
+            <table:covered-table-cell table:number-columns-repeated="3" table:style-name="Default"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro4">
+            <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro5">
+            <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
+                <text:p>Lp.</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
+                <text:p>Data zdarzenia lub operacji</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce20" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
+                <text:p>Nr dowodu księgowego</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+                <text:p>Kontrahent lub inny podmiot</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="ce14"/>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
+                <text:p>Opis zdarzenia</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1"><text:p>Przychody określone w art. 10a ust. 1 pkt 4 lit. a-d ustawy o działalności</text:p><text:p>pożytku publicznego i o wolontariacie</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:number-columns-repeated="3" table:style-name="ce14"/>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+                <text:p>Koszty</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="ce14"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro6">
+            <table:covered-table-cell table:style-name="ce8"/>
+            <table:covered-table-cell table:style-name="ce14"/>
+            <table:covered-table-cell table:style-name="ce20"/>
+            <table:table-cell table:style-name="ce65" office:value-type="string" calcext:value-type="string">
+                <text:p>Nazwa</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce65" office:value-type="string" calcext:value-type="string">
+                <text:p>Adres</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:style-name="ce14"/>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Przychody z</text:p><text:p>działalności</text:p><text:p>nieodpłatnej</text:p><text:p>pożytku</text:p><text:p>publicznego</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Przychody z</text:p><text:p>działalności</text:p><text:p>odpłatnej pożytku</text:p><text:p>publicznego z</text:p><text:p>tytułu sprzedaży</text:p><text:p>towarów i usług</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Pozostałe</text:p><text:p>przychody</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Razem przychody</text:p><text:p>(suma z kolumn</text:p><text:p>7 - 9)</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Koszty uzyskania</text:p><text:p>przychodów</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Koszty niestanowiące</text:p><text:p>kosztów uzyskania</text:p><text:p>przychodów</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro7">
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="1" calcext:value-type="float">
+                <text:p>1</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="2" calcext:value-type="float">
+                <text:p>2</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce76" office:value-type="float" office:value="3" calcext:value-type="float">
+                <text:p>3</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="4" calcext:value-type="float">
+                <text:p>4</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="5" calcext:value-type="float">
+                <text:p>5</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce89" office:value-type="float" office:value="6" calcext:value-type="float">
+                <text:p>6</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="7" calcext:value-type="float">
+                <text:p>7</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="8" calcext:value-type="float">
+                <text:p>8</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="9" calcext:value-type="float">
+                <text:p>9</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="10" calcext:value-type="float">
+                <text:p>10</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="11" calcext:value-type="float">
+                <text:p>11</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="12" calcext:value-type="float">
+                <text:p>12</text:p>
+            </table:table-cell>
+        </table:table-row>
+    </table:table-header-rows>
+{{ range .Pages }}
+{{ range .Records }}
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" />
+        <table:table-cell office:value-type="float" office:value="{{ .DayOfMonth }}" calcext:value-type="float" />
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Document.ID }}</text:p>
+        </table:table-cell>
+        <table:table-cell table:style-name="ce80" office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Contractor.Name }}</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Contractor.Address }}</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Notes }}</text:p>
+        </table:table-cell>
+{{ if notZero .IncomeDonations.Amount }}
+        <table:table-cell office:value-type="float" office:value="{{ .IncomeDonations.Amount }}" calcext:value-type="float" />
+{{ else }}
+        <table:table-cell />
+{{ end }}
+{{ if notZero .IncomeTrading.Amount }}
+        <table:table-cell office:value-type="float" office:value="{{ .IncomeTrading.Amount }}" calcext:value-type="float" />
+{{ else }}
+        <table:table-cell />
+{{ end }}
+{{ if notZero .IncomeOthers.Amount }}
+        <table:table-cell office:value-type="float" office:value="{{ .IncomeOthers.Amount }}" calcext:value-type="float" />
+{{ else }}
+        <table:table-cell />
+{{ end }}
+{{ if notZero .IncomeSum.Amount }}
+        <table:table-cell office:value-type="float" office:value="{{ .IncomeSum.Amount }}" calcext:value-type="float" />
+{{ else }}
+        <table:table-cell />
+{{ end }}
+{{ if notZero .CostTaxed.Amount }}
+        <table:table-cell office:value-type="float" office:value="{{ .CostTaxed.Amount }}" calcext:value-type="float" />
+{{ else }}
+        <table:table-cell />
+{{ end }}
+{{ if notZero .CostNotTaxed.Amount }}
+        <table:table-cell office:value-type="float" office:value="{{ .CostNotTaxed.Amount }}" calcext:value-type="float" />
+{{ else }}
+        <table:table-cell />
+{{ end }}
+    </table:table-row>
+{{ end }}
+    <table:table-row table:style-name="ro9">
+        <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
+        <table:table-cell table:style-name="ce78"/>
+        <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+            <text:p>Suma strony:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="ce29"/>
+        <table:covered-table-cell table:style-name="ce91"/>
+        <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce95" office:value-type="float" office:value="{{ .CurrentPageSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+        <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
+        <table:table-cell table:style-name="ce78"/>
+        <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+            <text:p>Przeniesienie z poprzedniej strony:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="Default"/>
+        <table:covered-table-cell table:style-name="ce91"/>
+        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .PreviousPageSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+        <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
+        <table:table-cell table:style-name="ce78"/>
+        <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+            <text:p>Razem w okresie sprawozdawczym:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="ce11"/>
+        <table:covered-table-cell table:style-name="ce91"/>
+        <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro9">
+        <table:table-cell table:style-name="ce11" table:number-columns-repeated="2"/>
+        <table:table-cell table:style-name="ce78"/>
+        <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+            <text:p>Razem od początku roku:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="ce11"/>
+        <table:covered-table-cell table:style-name="ce91"/>
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeDonations.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeTrading.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeOthers.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.IncomeSum.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .YearSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro10">
+        <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro3">
+        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+            <text:p>Okres sprawozdawczy:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="ce6"/>
+        <table:covered-table-cell table:style-name="Default"/>
+        <table:table-cell table:style-name="ce82" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+            <text:p>{{ .Month }} {{ .Year }}</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="ce40"/>
+        <table:table-cell table:style-name="Default" table:number-columns-repeated="4"/>
+        <table:table-cell table:style-name="ce60" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+            <text:p>Numer karty:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:style-name="Default"/>
+        <table:table-cell table:style-name="ce102" table:content-validation-name="val1" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro11">
+        <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
+    </table:table-row>
+{{ end }}
+</table:table>
