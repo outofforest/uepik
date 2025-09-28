@@ -50,6 +50,7 @@ type Payment struct {
 type Operation interface {
 	BankRecords() []*BankRecord
 	BookRecords(coa *ChartOfAccounts, bankRecords []*BankRecord, rates CurrencyRates)
+	Documents(coa *ChartOfAccounts) []ReportDocument
 }
 
 // ReportDocument represents a document in the report.

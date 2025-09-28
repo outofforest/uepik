@@ -80,3 +80,8 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 		)
 	}
 }
+
+// Documents generate documents for operation.
+func (s *Sell) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
+	return nil
+}

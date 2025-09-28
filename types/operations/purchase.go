@@ -108,6 +108,11 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 	}
 }
 
+// Documents generate documents for operation.
+func (p *Purchase) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
+	return nil
+}
+
 func costTaxTypeToAccountID(costTaxType types.CostTaxType) types.AccountID {
 	switch costTaxType {
 	case types.CostTaxTypeTaxable:

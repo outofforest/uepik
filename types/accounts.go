@@ -230,6 +230,26 @@ func (ch *ChartOfAccounts) Entries(accountID AccountID) []*Entry {
 	return results
 }
 
+// EntriesMonth returns entries on the account on month.
+func (ch *ChartOfAccounts) EntriesMonth(accountID AccountID, date time.Time) []*Entry {
+	entries, exists := ch.getAccount(accountID).entriesMonth[newMonthKey(date)]
+	if !exists {
+		return nil
+	}
+	results := make([]*Entry, 0, len(entries))
+	for _, e := range entries {
+		results = append(results, e)
+	}
+
+	sort.Slice(results, func(i, j int) bool {
+		r1 := results[i]
+		r2 := results[j]
+		return r1.Date.Before(r2.Date) || (r1.Date.Equal(r2.Date) && r1.ID < r2.ID)
+	})
+
+	return results
+}
+
 func (ch *ChartOfAccounts) getAccount(accountID AccountID) *Account {
 	if len(accountID) == 0 {
 		panic("empty account ID")
@@ -282,6 +302,7 @@ func NewAccount(idPart AccountIDPart, accountType AccountType, children ...*Acco
 		accountType:    accountTypeDef,
 		children:       map[AccountIDPart]*Account{},
 		entries:        map[EntryID]*Entry{},
+		entriesMonth:   map[monthKey]map[EntryID]*Entry{},
 		openingBalance: zeroAccountBalance,
 		balances:       map[monthKey]AccountBalance{},
 	}
@@ -394,6 +415,7 @@ type Account struct {
 	idPart         AccountIDPart
 	accountType    AccountTypeDefinition
 	entries        map[EntryID]*Entry
+	entriesMonth   map[monthKey]map[EntryID]*Entry
 	openingBalance AccountBalance
 	balances       map[monthKey]AccountBalance
 }
@@ -412,6 +434,10 @@ func (a *Account) addEntry(data *EntryData, amount AccountBalance) {
 
 	a.entries[data.ID] = entry
 	mKey := newMonthKey(entry.Date)
+	if _, exists := a.entriesMonth[mKey]; !exists {
+		a.entriesMonth[mKey] = map[EntryID]*Entry{}
+	}
+	a.entriesMonth[mKey][data.ID] = entry
 	sumMonth, exists := a.balances[mKey]
 	if !exists {
 		sumMonth = zeroAccountBalance
