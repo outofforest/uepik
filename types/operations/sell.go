@@ -50,26 +50,28 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 		if br.Rate.EQ(incomeRate) {
 			continue
 		}
+
+		diffDate := types.MaxDate(s.Date, br.Date)
 		if incomeRate.GT(br.Rate) {
 			amount := types.DebitBalance(br.OriginalAmount.ToBase(incomeRate.Sub(br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.KosztyPodatkowe,
 				accounts.KosztyFinansowe, accounts.UjemneRozniceKursowe),
-				types.NewEntry(s.Date, types.Document{},
+				types.NewEntry(diffDate, types.Document{},
 					types.Contractor{}, amount,
 					fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
 						incomeRate, br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.Date, s.Document, s.Contractor,
+				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(diffDate, s.Document, s.Contractor,
 				amount, ""))
 		} else {
 			amount := types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
 			coa.AddEntry(types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.PrzychodyNieoperacyjne,
-				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(s.Date,
+				accounts.PrzychodyFinansowe, accounts.DodatnieRozniceKursowe), types.NewEntry(diffDate,
 				types.Document{}, types.Contractor{}, amount,
 				fmt.Sprintf("Różnice kursowe. Kwota: %s, kurs CIT: %s, kurs wpłaty: %s", br.OriginalAmount,
 					incomeRate, br.Rate)))
 			coa.AddEntry(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(s.Date, s.Document, s.Contractor,
+				accounts.NiewydatkowanyDochodWTrakcieRoku), types.NewEntry(diffDate, s.Document, s.Contractor,
 				amount, ""))
 		}
 
