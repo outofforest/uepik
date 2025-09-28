@@ -10,6 +10,55 @@ import (
 	"github.com/outofforest/uepik/types/operations"
 )
 
+var coaAccounts = []*types.Account{
+	types.NewAccount(
+		accounts.CIT, types.Liabilities,
+		types.NewAccount(
+			accounts.Przychody, types.Incomes,
+			types.NewAccount(
+				accounts.Nieoperacyjne, types.Incomes,
+				types.NewAccount(
+					accounts.Finansowe, types.Incomes,
+					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes),
+				),
+			),
+			types.NewAccount(
+				accounts.Operacyjne, types.Incomes,
+				types.NewAccount(
+					accounts.ZNieodplatnejDPP, types.Incomes,
+					types.NewAccount(accounts.Darowizny, types.Incomes),
+				),
+				types.NewAccount(
+					accounts.ZOdplatnejDPP, types.Incomes,
+					types.NewAccount(accounts.ZeSprzedazy, types.Incomes),
+				),
+			),
+		),
+		types.NewAccount(
+			accounts.Koszty, types.Costs,
+			types.NewAccount(
+				accounts.Podatkowe, types.Costs,
+				types.NewAccount(
+					accounts.Finansowe, types.Costs,
+					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs),
+				),
+				types.NewAccount(accounts.Operacyjne, types.Costs),
+			),
+			types.NewAccount(
+				accounts.Niepodatkowe, types.Costs,
+				types.NewAccount(accounts.Operacyjne, types.Costs),
+			),
+		),
+	),
+	types.NewAccount(accounts.VAT, types.Incomes),
+	types.NewAccount(
+		accounts.NiewydatkowanyDochod, types.Liabilities,
+		types.NewAccount(accounts.WTrakcieRoku, types.Liabilities),
+		types.NewAccount(accounts.ZLatUbieglych, types.Liabilities),
+	),
+	types.NewAccount(accounts.RozniceKursowe, types.Liabilities),
+}
+
 // Dostępne waluty.
 const (
 	PLN = types.PLN
@@ -65,54 +114,6 @@ func Kursy(kursy ...types.CurrencyRate) types.CurrencyRates {
 	return rates
 }
 
-var coaAccounts = []*types.Account{
-	types.NewAccount(
-		accounts.CIT, types.Liabilities,
-		types.NewAccount(
-			accounts.Przychody, types.Incomes,
-			types.NewAccount(
-				accounts.PrzychodyNieoperacyjne, types.Incomes,
-				types.NewAccount(
-					accounts.PrzychodyFinansowe, types.Incomes,
-					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes),
-				),
-			),
-			types.NewAccount(
-				accounts.PrzychodyOperacyjne, types.Incomes,
-				types.NewAccount(
-					accounts.PrzychodyZNieodplatnejDPP, types.Incomes,
-					types.NewAccount(accounts.DarowiznyOtrzymane, types.Incomes),
-				),
-				types.NewAccount(
-					accounts.PrzychodyZOdplatnejDPP, types.Incomes,
-					types.NewAccount(accounts.PrzychodyZeSprzedazy, types.Incomes),
-				),
-			),
-		),
-		types.NewAccount(
-			accounts.Koszty, types.Costs,
-			types.NewAccount(
-				accounts.KosztyPodatkowe, types.Costs,
-				types.NewAccount(
-					accounts.KosztyFinansowe, types.Costs,
-					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs),
-				),
-				types.NewAccount(accounts.PodatkoweKosztyOperacyjne, types.Costs),
-			),
-			types.NewAccount(
-				accounts.KosztyNiepodatkowe, types.Costs,
-				types.NewAccount(accounts.NiepodatkoweKosztyOperacyjne, types.Costs),
-			),
-		),
-	),
-	types.NewAccount(accounts.VAT, types.Incomes),
-	types.NewAccount(
-		accounts.NiewydatkowanyDochod, types.Liabilities,
-		types.NewAccount(accounts.NiewydatkowanyDochodWTrakcieRoku, types.Liabilities),
-		types.NewAccount(accounts.NiewydatkowanyDochodZLatUbieglych, types.Liabilities),
-	),
-}
-
 // Rok tworzy rok obrotowy.
 func Rok(
 	nazwaFirmy, adresFirmy string,
@@ -131,8 +132,15 @@ func Rok(
 	}
 
 	coa := types.NewChartOfAccounts(period, coaAccounts...)
-	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.NiewydatkowanyDochodZLatUbieglych),
+	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
 		types.CreditBalance(bilansOtwarcia.UnspentProfit))
+
+	for date := period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); period.Contains(date); date = date.AddDate(0, 1, 0) {
+		operacje = append(operacje, []types.Operation{&operations.CurrencyDiff{
+			Date: date,
+		}})
+	}
+
 	return &types.FiscalYear{
 		CompanyName:     nazwaFirmy,
 		CompanyAddress:  adresFirmy,
