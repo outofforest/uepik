@@ -2,6 +2,7 @@ package operations
 
 import (
 	"github.com/outofforest/uepik/accounts"
+	"github.com/outofforest/uepik/report/documents"
 	"github.com/outofforest/uepik/types"
 )
 
@@ -54,4 +55,14 @@ func (cd *CurrencyDiff) BookRecords(
 	}
 
 	coa.AddEntry(cd.Document.Date, cd.Document, cd.Contractor, "Różnice kursowe", records...)
+}
+
+// Documents generate documents for operation.
+func (cd *CurrencyDiff) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
+	entries := coa.EntriesMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
+	if len(entries) == 0 {
+		return nil
+	}
+
+	return []types.ReportDocument{documents.GenerateCurrencyDiffDocument(cd.Document, cd.Contractor, entries)}
 }

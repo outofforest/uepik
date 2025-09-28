@@ -40,6 +40,9 @@ func newReport(year *types.FiscalYear, currencyRates types.CurrencyRates, years 
 		documents.GenerateBankReport(period, coa, year.CompanyName, year.CompanyAddress, year.Init.Currencies,
 			bankRecords),
 	}
+	for _, op := range year.Operations {
+		docs = append(docs, op.Documents(coa)...)
+	}
 
 	report := types.Report{
 		Currencies: lo.Values(types.Currencies),

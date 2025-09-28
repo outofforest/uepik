@@ -144,7 +144,7 @@ func Rok(
 	for date := period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); period.Contains(date); date = date.AddDate(0, 1, 0) {
 		operacje = append(operacje, []types.Operation{&operations.CurrencyDiff{
 			Document: types.Document{
-				ID:   fmt.Sprintf("RK/%d/%d/1", date.Year(), date.Month()),
+				ID:   fmt.Sprintf("RK.%d.%d.1", date.Year(), date.Month()),
 				Date: date,
 			},
 			Contractor: company,

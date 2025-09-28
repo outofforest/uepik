@@ -39,3 +39,8 @@ func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 		),
 	)
 }
+
+// Documents generate documents for operation.
+func (d *Donation) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
+	return nil
+}
