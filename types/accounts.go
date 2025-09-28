@@ -57,31 +57,45 @@ func (ch *ChartOfAccounts) OpenAccount(accountID AccountID, balance AccountBalan
 }
 
 // AddEntry adds entry to the account.
-func (ch *ChartOfAccounts) AddEntry(accountID AccountID, entry *Entry) {
-	if len(accountID) == 0 {
-		panic("empty account ID")
-	}
-
-	if !ch.period.Contains(entry.Date) {
+func (ch *ChartOfAccounts) AddEntry(
+	date time.Time,
+	document Document,
+	contractor Contractor,
+	notes string,
+	records ...EntryRecord,
+) {
+	if !ch.period.Contains(date) {
 		return
 	}
 
-	entry.ID = ch.entryID
+	entryData := &EntryData{
+		ID:         ch.entryID,
+		Date:       date,
+		Document:   document,
+		Contractor: contractor,
+		Notes:      notes,
+	}
 	ch.entryID++
 
-	accounts := ch.accounts
-	var account *Account
-	for _, idPart := range accountID {
-		var exists bool
-		account, exists = accounts[idPart]
-		if !exists {
-			panic("account does not exist")
+	for _, r := range records {
+		if len(r.AccountID) == 0 {
+			panic("empty account ID")
 		}
-		account.addEntry(entry)
-		accounts = account.children
-	}
-	if len(account.children) > 0 {
-		panic("entry must be added to a leaf account")
+
+		accounts := ch.accounts
+		var account *Account
+		for _, idPart := range r.AccountID {
+			var exists bool
+			account, exists = accounts[idPart]
+			if !exists {
+				panic("account does not exist")
+			}
+			account.addEntry(entryData, r.Amount)
+			accounts = account.children
+		}
+		if len(account.children) > 0 {
+			panic("entry must be added to a leaf account")
+		}
 	}
 }
 
@@ -384,13 +398,19 @@ type Account struct {
 	balances       map[monthKey]AccountBalance
 }
 
-func (a *Account) addEntry(entry *Entry) {
-	if _, exists := a.entries[entry.ID]; exists {
-		panic("entry already exists")
-	}
-	verifyBalanceAndType(entry.Amount, a.accountType)
+func (a *Account) addEntry(data *EntryData, amount AccountBalance) {
+	verifyBalanceAndType(amount, a.accountType)
 
-	a.entries[entry.ID] = entry
+	entry, exists := a.entries[data.ID]
+	if !exists {
+		entry = &Entry{
+			EntryData: data,
+			Amount:    zeroAccountBalance,
+		}
+	}
+	entry.Amount = entry.Amount.Add(amount)
+
+	a.entries[data.ID] = entry
 	mKey := newMonthKey(entry.Date)
 	sumMonth, exists := a.balances[mKey]
 	if !exists {
@@ -402,36 +422,38 @@ func (a *Account) addEntry(entry *Entry) {
 // EntryID represents entry ID.
 type EntryID uint64
 
-// NewEntry creates new entry.
-func NewEntry(
-	date time.Time,
-	document Document,
-	contractor Contractor,
-	amount AccountBalance,
-	notes string,
-) *Entry {
-	return &Entry{
-		Date:       date,
-		Document:   document,
-		Contractor: contractor,
-		Amount:     amount,
-		Notes:      notes,
-	}
-}
-
-// Entry represents entry on the account.
-type Entry struct {
+// EntryData stores entry data.
+type EntryData struct {
 	ID         EntryID
 	Date       time.Time
 	Document   Document
 	Contractor Contractor
 	Notes      string
-	Amount     AccountBalance
+}
+
+// Entry represents entry on the account.
+type Entry struct {
+	*EntryData
+	Amount AccountBalance
 }
 
 // GetDate returns date of the entry.
 func (e *Entry) GetDate() time.Time {
 	return e.Date
+}
+
+// NewEntryRecord creates new entry record.
+func NewEntryRecord(accountID AccountID, amount AccountBalance) EntryRecord {
+	return EntryRecord{
+		AccountID: accountID,
+		Amount:    amount,
+	}
+}
+
+// EntryRecord stores information about amount to add to the account.
+type EntryRecord struct {
+	AccountID AccountID
+	Amount    AccountBalance
 }
 
 func verifyBalanceAndType(balance AccountBalance, accountType AccountTypeDefinition) {

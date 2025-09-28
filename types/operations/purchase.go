@@ -1,7 +1,6 @@
 package operations
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/outofforest/uepik/accounts"
@@ -37,17 +36,20 @@ func (p *Purchase) BankRecords() []*types.BankRecord {
 func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	costBase, costRate := rates.ToBase(p.Amount, types.PreviousDay(p.Date))
 
-	coa.AddEntry(
-		costTaxTypeToAccountID(p.CostTaxType),
-		types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(costBase),
-			fmt.Sprintf("kwota: %s, kurs: %s", p.Amount, costRate)),
-	)
+	records := []types.EntryRecord{
+		types.NewEntryRecord(
+			costTaxTypeToAccountID(p.CostTaxType),
+			types.DebitBalance(costBase),
+		),
+	}
 
 	switch p.CostTaxType {
 	case types.CostTaxTypeTaxable:
-		coa.AddEntry(
-			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-			types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(costBase), ""),
+		records = append(records,
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+				types.DebitBalance(costBase),
+			),
 		)
 	case types.CostTaxTypeNonTaxable:
 		cost2 := coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych))
@@ -59,20 +61,26 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 		}
 		cost := costBase.Sub(cost2)
 		if cost.GT(types.BaseZero) {
-			coa.AddEntry(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-				types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(cost), ""),
+			records = append(records,
+				types.NewEntryRecord(
+					types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+					types.DebitBalance(cost),
+				),
 			)
 		}
 		if cost2.GT(types.BaseZero) {
-			coa.AddEntry(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
-				types.NewEntry(p.Date, p.Document, p.Contractor, types.DebitBalance(cost2), ""),
+			records = append(records,
+				types.NewEntryRecord(
+					types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
+					types.DebitBalance(cost2),
+				),
 			)
 		}
 	default:
 		panic("invalid cost tax type")
 	}
+
+	coa.AddEntry(p.Date, p.Document, p.Contractor, "Opis", records...)
 
 	if len(p.Payments) > 0 && len(bankRecords) == 0 {
 		panic("brak rekordu walutowego dla płatności")
@@ -91,9 +99,11 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 			amount = types.DebitBalance(paymentOriginal.ToBase(br.Rate.Sub(costRate)))
 		}
 
-		coa.AddEntry(
-			types.NewAccountID(accounts.RozniceKursowe),
-			types.NewEntry(types.MaxDate(p.Date, br.Date), p.Document, p.Contractor, amount, ""),
+		coa.AddEntry(types.MaxDate(p.Date, br.Date), p.Document, p.Contractor, "Opis",
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.RozniceKursowe),
+				amount,
+			),
 		)
 	}
 }

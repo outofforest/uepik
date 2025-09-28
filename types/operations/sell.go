@@ -1,7 +1,6 @@
 package operations
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/outofforest/uepik/accounts"
@@ -35,14 +34,17 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 // BookRecords returns book records for the sell.
 func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(s.Amount, types.PreviousDay(s.Date))
-	coa.AddEntry(
-		types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP,
-			accounts.ZeSprzedazy),
-		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase),
-			fmt.Sprintf("kwota: %s, kurs: %s", s.Amount, incomeRate)))
-	coa.AddEntry(
-		types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-		types.NewEntry(s.Date, s.Document, s.Contractor, types.CreditBalance(incomeBase), ""),
+
+	coa.AddEntry(s.Date, s.Document, s.Contractor, "Opis",
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP,
+				accounts.ZeSprzedazy),
+			types.CreditBalance(incomeBase),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+			types.CreditBalance(incomeBase),
+		),
 	)
 
 	if len(s.Payments) > 0 && len(bankRecords) == 0 {
@@ -61,14 +63,20 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			amount = types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
 		}
 
-		coa.AddEntry(
-			types.NewAccountID(accounts.RozniceKursowe),
-			types.NewEntry(types.MaxDate(s.Date, br.Date), s.Document, s.Contractor, amount, ""),
+		coa.AddEntry(types.MaxDate(s.Date, br.Date), s.Document, s.Contractor, "Opis",
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.RozniceKursowe),
+				amount,
+			),
 		)
 
 		vatDate := types.MinDate(s.Date, br.Date)
-		vatBase, vatRate := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))
-		coa.AddEntry(types.NewAccountID(accounts.VAT), types.NewEntry(vatDate, s.Document, s.Contractor,
-			types.CreditBalance(vatBase), fmt.Sprintf("kwota: %s, kurs: %s", br.OriginalAmount, vatRate)))
+		vatBase, _ := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))
+		coa.AddEntry(vatDate, s.Document, s.Contractor, "Opis",
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.VAT),
+				types.CreditBalance(vatBase),
+			),
+		)
 	}
 }
