@@ -16,6 +16,26 @@ type Sell struct {
 	Payments   []types.Payment
 }
 
+// GetDate returns date of sell.
+func (s *Sell) GetDate() time.Time {
+	return s.Date
+}
+
+// GetDocument returns document.
+func (s *Sell) GetDocument() types.Document {
+	return s.Document
+}
+
+// GetContractor returns contractor.
+func (s *Sell) GetContractor() types.Contractor {
+	return s.Contractor
+}
+
+// GetNotes returns notes.
+func (s *Sell) GetNotes() string {
+	return "Opis"
+}
+
 // BankRecords returns bank records for the sell.
 func (s *Sell) BankRecords() []*types.BankRecord {
 	records := []*types.BankRecord{}
@@ -35,7 +55,7 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	incomeBase, incomeRate := rates.ToBase(s.Amount, types.PreviousDay(s.Date))
 
-	coa.AddEntry(s.Date, s.Document, s.Contractor, "Opis",
+	coa.AddEntry(s,
 		types.NewEntryRecord(
 			types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP,
 				accounts.ZeSprzedazy),
@@ -63,7 +83,7 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			amount = types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
 		}
 
-		coa.AddEntry(types.MaxDate(s.Date, br.Date), s.Document, s.Contractor, "Opis",
+		coa.AddEntry(types.NewCurrencyDiff(s, br),
 			types.NewEntryRecord(
 				types.NewAccountID(accounts.RozniceKursowe),
 				amount,
@@ -72,7 +92,7 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 
 		vatDate := types.MinDate(s.Date, br.Date)
 		vatBase, _ := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))
-		coa.AddEntry(vatDate, s.Document, s.Contractor, "Opis",
+		coa.AddEntry(types.NewVAT(vatDate, s),
 			types.NewEntryRecord(
 				types.NewAccountID(accounts.VAT),
 				types.CreditBalance(vatBase),

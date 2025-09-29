@@ -1,6 +1,8 @@
 package operations
 
 import (
+	"time"
+
 	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/types"
 )
@@ -10,6 +12,26 @@ type Donation struct {
 	Document   types.Document
 	Contractor types.Contractor
 	Payment    types.Payment
+}
+
+// GetDate returns date of donation.
+func (d *Donation) GetDate() time.Time {
+	return d.Payment.Date
+}
+
+// GetDocument returns document.
+func (d *Donation) GetDocument() types.Document {
+	return d.Document
+}
+
+// GetContractor returns contractor.
+func (d *Donation) GetContractor() types.Contractor {
+	return d.Contractor
+}
+
+// GetNotes returns notes.
+func (d *Donation) GetNotes() string {
+	return "Darowizna"
 }
 
 // BankRecords returns bank records for the donation.
@@ -27,7 +49,7 @@ func (d *Donation) BankRecords() []*types.BankRecord {
 func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
 	incomeBase, _ := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
 
-	coa.AddEntry(d.Payment.Date, d.Document, d.Contractor, "Darowizna",
+	coa.AddEntry(d,
 		types.NewEntryRecord(
 			types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Operacyjne, accounts.ZNieodplatnejDPP,
 				accounts.Darowizny),

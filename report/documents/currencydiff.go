@@ -83,12 +83,12 @@ func GenerateCurrencyDiffDocument(
 		for _, e := range entriesPage {
 			index++
 			r := CurrencyDiffRecord{
-				Date:       e.Date,
+				Date:       e.GetDate(),
 				Index:      index,
-				DayOfMonth: uint8(e.Date.Day()),
-				Document:   e.Document,
-				Contractor: e.Contractor,
-				Notes:      e.Notes,
+				DayOfMonth: uint8(e.GetDate().Day()),
+				Document:   e.GetDocument(),
+				Contractor: e.GetContractor(),
+				Notes:      e.GetNotes(),
 				Income:     e.Amount.Credit,
 			}
 			records = append(records, r)
