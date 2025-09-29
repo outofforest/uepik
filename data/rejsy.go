@@ -10,14 +10,14 @@ var (
 			Dokument("FV/01/2024", Data(2025, 1, 1)),
 			Kontrahent("INVINI sp. z o. o.", "", ""),
 			Kwota(1, 23, EUR),
-			Platnosci(Platnosc(Kwota(1, 23, EUR), Data(2025, 1, 1), 1)),
+			Platnosci(Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR))),
 		),
 		Zakup(
 			Data(2025, 1, 8),
 			Dokument("FV/01/2024", Data(2025, 1, 5)),
 			Kontrahent("INVINI sp. z o. o.", "", ""),
 			Kwota(10, 11, EUR),
-			Platnosci(Platnosc(Kwota(10, 11, EUR), Data(2025, 1, 6), 1)),
+			Platnosci(Platnosc("WB/EUR/2025/01/24", Data(2025, 1, 6), 1, Kwota(10, 11, EUR))),
 			KUP,
 		),
 		Zakup(
@@ -25,7 +25,7 @@ var (
 			Dokument("FV/02/2024", Data(2025, 1, 5)),
 			Kontrahent("INVINI sp. z o. o.", "", ""),
 			Kwota(10, 11, EUR),
-			Platnosci(Platnosc(Kwota(10, 11, EUR), Data(2024, 1, 6), 1)),
+			Platnosci(Platnosc("WB/EUR/2025/01/25", Data(2024, 1, 6), 1, Kwota(10, 11, EUR))),
 			NKUP,
 		),
 	)

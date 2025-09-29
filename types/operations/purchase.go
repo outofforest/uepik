@@ -44,7 +44,8 @@ func (p *Purchase) BankRecords() []*types.BankRecord {
 		records = append(records, &types.BankRecord{
 			Date:           payment.Date,
 			Index:          payment.Index,
-			Document:       p.Document,
+			Document:       payment.DocumentID,
+			PaidDocument:   p.Document,
 			Contractor:     p.Contractor,
 			OriginalAmount: payment.Amount.Neg(),
 		})
@@ -119,7 +120,7 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 			amount = types.DebitBalance(paymentOriginal.ToBase(br.Rate.Sub(costRate)))
 		}
 
-		coa.AddEntry(types.NewCurrencyDiff(p, br),
+		coa.AddEntry(types.NewCurrencyDiff(p, costRate, br),
 			types.NewEntryRecord(
 				types.NewAccountID(accounts.RozniceKursowe),
 				amount,

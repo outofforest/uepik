@@ -151,7 +151,7 @@ func Rok(
 	for date := period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); period.Contains(date); date = date.AddDate(0, 1, 0) {
 		operacje = append(operacje, []types.Operation{&operations.CurrencyDiff{
 			Document: types.Document{
-				ID:   fmt.Sprintf("RK.%d.%d.1", date.Year(), date.Month()),
+				ID:   types.DocumentID(fmt.Sprintf("RK.%d.%d.1", date.Year(), date.Month())),
 				Date: date,
 			},
 			Contractor: company,
@@ -219,7 +219,7 @@ func Grupa(operacje ...[]types.Operation) []types.Operation {
 }
 
 // Dokument tworzy dokument.
-func Dokument(numer string, data time.Time) types.Document {
+func Dokument(numer types.DocumentID, data time.Time) types.Document {
 	return types.Document{
 		ID:   numer,
 		Date: data,
@@ -236,11 +236,12 @@ func Kontrahent(nazwa, adres, nip string) types.Contractor {
 }
 
 // Platnosc definiuje płatność.
-func Platnosc(kwota types.Denom, data time.Time, index uint64) types.Payment {
+func Platnosc(dokument types.DocumentID, data time.Time, index uint64, kwota types.Denom) types.Payment {
 	return types.Payment{
-		Amount: kwota,
-		Date:   data,
-		Index:  index,
+		DocumentID: dokument,
+		Date:       data,
+		Index:      index,
+		Amount:     kwota,
 	}
 }
 
@@ -256,12 +257,10 @@ func Niezaplacono() []types.Payment {
 
 // Darowizna definiuje darowiznę.
 func Darowizna(
-	dokument types.Document,
 	kontrahent types.Contractor,
 	platnosc types.Payment,
 ) []types.Operation {
 	return []types.Operation{&operations.Donation{
-		Document:   dokument,
 		Contractor: kontrahent,
 		Payment:    platnosc,
 	}}

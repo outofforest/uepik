@@ -146,7 +146,7 @@
         <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" />
         <table:table-cell office:value-type="float" office:value="{{ .DayOfMonth }}" calcext:value-type="float" />
         <table:table-cell office:value-type="string" calcext:value-type="string">
-            <text:p>{{ .Document.ID }}</text:p>
+            <text:p>{{ .PaidDocument.ID }}</text:p>
         </table:table-cell>
         <table:table-cell office:value-type="string" calcext:value-type="string">
             <text:p>{{ .Contractor.Name }}</text:p>

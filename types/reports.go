@@ -26,9 +26,12 @@ func (p Period) Contains(date time.Time) bool {
 	return !date.Before(p.Start) && !date.After(p.End)
 }
 
+// DocumentID represents document ID.
+type DocumentID string
+
 // Document defines the document.
 type Document struct {
-	ID   string
+	ID   DocumentID
 	Date time.Time
 }
 
@@ -41,9 +44,10 @@ type Contractor struct {
 
 // Payment defines payment.
 type Payment struct {
-	Amount Denom
-	Date   time.Time
-	Index  uint64
+	DocumentID DocumentID
+	Date       time.Time
+	Index      uint64
+	Amount     Denom
 }
 
 // Operation defines operation which might bee accounted.
@@ -69,8 +73,9 @@ type Report struct {
 type BankRecord struct {
 	Date           time.Time
 	Index          uint64
+	Document       DocumentID
 	DayOfMonth     uint8
-	Document       Document
+	PaidDocument   Document
 	Contractor     Contractor
 	OriginalAmount Denom
 	BaseAmount     Denom
@@ -273,9 +278,10 @@ func (v *VAT) GetNotes() string {
 }
 
 // NewCurrencyDiff creates new currency diff data source.
-func NewCurrencyDiff(data EntryDataSource, bankRecord *BankRecord) *CurrencyDiff {
+func NewCurrencyDiff(data EntryDataSource, dataRate Number, bankRecord *BankRecord) *CurrencyDiff {
 	return &CurrencyDiff{
 		Data:       data,
+		DataRate:   dataRate,
 		BankRecord: bankRecord,
 	}
 }
@@ -283,6 +289,7 @@ func NewCurrencyDiff(data EntryDataSource, bankRecord *BankRecord) *CurrencyDiff
 // CurrencyDiff is the data source of currency diff.
 type CurrencyDiff struct {
 	Data       EntryDataSource
+	DataRate   Number
 	BankRecord *BankRecord
 }
 

@@ -15,8 +15,8 @@ var R2025 = Rok(
 	),
 	// ========================================================
 	Darowizna(
-		Dokument("WB/EUR/2025/01/01", Data(2025, 5, 3)),
 		Kontrahent("INVINI sp. z o. o.", "Felińskiego 2/17", ""),
-		Platnosc(Kwota(500, 0, EUR), Data(2025, 5, 3), 1)),
+		Platnosc("WB/EUR/2025/01/01", Data(2025, 5, 3), 1, Kwota(500, 0, EUR)),
+	),
 	rejs2026HR01,
 )
