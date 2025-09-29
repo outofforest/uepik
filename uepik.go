@@ -211,15 +211,16 @@ func Sprzedaz(
 	data time.Time,
 	dokument types.Document,
 	kontrahent types.Contractor,
-	kwota types.Denom,
 	naleznosci []types.Due,
 	platnosci []types.Payment,
 ) []types.Operation {
+	if len(naleznosci) == 0 {
+		panic("brak zdefiniowanych należności ze sprzedaży")
+	}
 	return []types.Operation{&operations.Sell{
 		Date:       data,
 		Document:   dokument,
 		Contractor: kontrahent,
-		Amount:     kwota,
 		Dues:       naleznosci,
 		Payments:   platnosci,
 	}}

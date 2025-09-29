@@ -9,7 +9,6 @@ var (
 			Data(2025, 1, 2),
 			Dokument("FV/01/2024", Data(2025, 1, 1)),
 			Kontrahent("INVINI sp. z o. o.", "", ""),
-			Kwota(1, 23, EUR),
 			Naleznosci(
 				Naleznosc(Data(2025, 1, 1), Kwota(1, 23, EUR)),
 			),
