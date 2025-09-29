@@ -31,14 +31,8 @@ var coaAccounts = []*types.Account{
 			),
 			types.NewAccount(
 				accounts.Operacyjne, types.Incomes, types.AllValid(),
-				types.NewAccount(
-					accounts.ZNieodplatnejDPP, types.Incomes, types.AllValid(),
-					types.NewAccount(accounts.Darowizny, types.Incomes, types.ValidSources(&operations.Donation{})),
-				),
-				types.NewAccount(
-					accounts.ZOdplatnejDPP, types.Incomes, types.AllValid(),
-					types.NewAccount(accounts.ZeSprzedazy, types.Incomes, types.ValidSources(&operations.Sell{})),
-				),
+				types.NewAccount(accounts.ZNieodplatnejDPP, types.Incomes, types.ValidSources(&operations.Donation{})),
+				types.NewAccount(accounts.ZOdplatnejDPP, types.Incomes, types.ValidSources(&operations.Sell{})),
 			),
 		),
 		types.NewAccount(
