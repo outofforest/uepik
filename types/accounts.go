@@ -1,6 +1,7 @@
 package types
 
 import (
+	"reflect"
 	"sort"
 	"time"
 )
@@ -256,8 +257,32 @@ func NewAccountID(parts ...AccountIDPart) AccountID {
 	return parts
 }
 
+// ValidSources defines valid data sources for an account.
+func ValidSources(sourceTypes ...EntryDataSource) []reflect.Type {
+	result := make([]reflect.Type, 0, len(sourceTypes))
+	for _, sourceType := range sourceTypes {
+		result = append(result, reflect.TypeOf(sourceType))
+	}
+	return result
+}
+
+// AllValid means all the data sources are valid on an account.
+func AllValid() []reflect.Type {
+	return nil
+}
+
+// NoneValid means none of the data sources are valid on an account.
+func NoneValid() []reflect.Type {
+	return []reflect.Type{}
+}
+
 // NewAccount creates new account.
-func NewAccount(idPart AccountIDPart, accountType AccountType, children ...*Account) *Account {
+func NewAccount(
+	idPart AccountIDPart,
+	accountType AccountType,
+	validSourceTypes []reflect.Type,
+	children ...*Account,
+) *Account {
 	accountTypeDef, exists := accountTypes[accountType]
 	if !exists {
 		panic("account type does not exist")
@@ -271,6 +296,13 @@ func NewAccount(idPart AccountIDPart, accountType AccountType, children ...*Acco
 		openingBalance: zeroAccountBalance,
 		balances:       map[monthKey]AccountBalance{},
 	}
+	if validSourceTypes != nil {
+		a.validSourceTypes = map[reflect.Type]struct{}{}
+		for _, sourceType := range validSourceTypes {
+			a.validSourceTypes[sourceType] = struct{}{}
+		}
+	}
+
 	for _, child := range children {
 		if _, exists := a.children[child.idPart]; exists {
 			panic("child account already registered")
@@ -376,17 +408,23 @@ var accountTypes = map[AccountType]AccountTypeDefinition{
 
 // Account represents account in the chart of accounts.
 type Account struct {
-	children       map[AccountIDPart]*Account
-	idPart         AccountIDPart
-	accountType    AccountTypeDefinition
-	entries        map[EntryID]*Entry
-	entriesMonth   map[monthKey]map[EntryID]*Entry
-	openingBalance AccountBalance
-	balances       map[monthKey]AccountBalance
+	children         map[AccountIDPart]*Account
+	idPart           AccountIDPart
+	accountType      AccountTypeDefinition
+	entries          map[EntryID]*Entry
+	entriesMonth     map[monthKey]map[EntryID]*Entry
+	openingBalance   AccountBalance
+	balances         map[monthKey]AccountBalance
+	validSourceTypes map[reflect.Type]struct{}
 }
 
 func (a *Account) addEntry(id EntryID, data EntryDataSource, amount AccountBalance) {
 	verifyBalanceAndType(amount, a.accountType)
+	if a.validSourceTypes != nil {
+		if _, exists := a.validSourceTypes[reflect.TypeOf(data)]; !exists {
+			panic("data source type not allowed")
+		}
+	}
 
 	entry, exists := a.entries[id]
 	if !exists {

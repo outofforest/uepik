@@ -13,51 +13,58 @@ import (
 
 var coaAccounts = []*types.Account{
 	types.NewAccount(
-		accounts.CIT, types.Liabilities,
+		accounts.CIT, types.Liabilities, types.AllValid(),
 		types.NewAccount(
-			accounts.Przychody, types.Incomes,
+			accounts.Przychody, types.Incomes, types.AllValid(),
 			types.NewAccount(
-				accounts.Nieoperacyjne, types.Incomes,
+				accounts.Nieoperacyjne, types.Incomes, types.AllValid(),
 				types.NewAccount(
-					accounts.Finansowe, types.Incomes,
-					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes),
+					accounts.Finansowe, types.Incomes, types.AllValid(),
+					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes,
+						types.ValidSources(&operations.CurrencyDiff{})),
 				),
 			),
 			types.NewAccount(
-				accounts.Operacyjne, types.Incomes,
+				accounts.Operacyjne, types.Incomes, types.AllValid(),
 				types.NewAccount(
-					accounts.ZNieodplatnejDPP, types.Incomes,
-					types.NewAccount(accounts.Darowizny, types.Incomes),
+					accounts.ZNieodplatnejDPP, types.Incomes, types.AllValid(),
+					types.NewAccount(accounts.Darowizny, types.Incomes, types.ValidSources(&operations.Donation{})),
 				),
 				types.NewAccount(
-					accounts.ZOdplatnejDPP, types.Incomes,
-					types.NewAccount(accounts.ZeSprzedazy, types.Incomes),
+					accounts.ZOdplatnejDPP, types.Incomes, types.AllValid(),
+					types.NewAccount(accounts.ZeSprzedazy, types.Incomes, types.ValidSources(&operations.Sell{})),
 				),
 			),
 		),
 		types.NewAccount(
-			accounts.Koszty, types.Costs,
+			accounts.Koszty, types.Costs, types.AllValid(),
 			types.NewAccount(
-				accounts.Podatkowe, types.Costs,
+				accounts.Podatkowe, types.Costs, types.AllValid(),
 				types.NewAccount(
-					accounts.Finansowe, types.Costs,
-					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs),
+					accounts.Finansowe, types.Costs, types.AllValid(),
+					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs,
+						types.ValidSources(&operations.CurrencyDiff{})),
 				),
-				types.NewAccount(accounts.Operacyjne, types.Costs),
+				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(&operations.Purchase{})),
 			),
 			types.NewAccount(
-				accounts.Niepodatkowe, types.Costs,
-				types.NewAccount(accounts.Operacyjne, types.Costs),
+				accounts.Niepodatkowe, types.Costs, types.AllValid(),
+				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(&operations.Purchase{})),
 			),
 		),
 	),
-	types.NewAccount(accounts.VAT, types.Incomes),
+	types.NewAccount(accounts.VAT, types.Incomes, types.ValidSources(&types.VAT{})),
 	types.NewAccount(
-		accounts.NiewydatkowanyDochod, types.Liabilities,
-		types.NewAccount(accounts.WTrakcieRoku, types.Liabilities),
-		types.NewAccount(accounts.ZLatUbieglych, types.Liabilities),
+		accounts.NiewydatkowanyDochod, types.Liabilities, types.AllValid(),
+		types.NewAccount(accounts.WTrakcieRoku, types.Liabilities, types.ValidSources(
+			&operations.CurrencyDiff{},
+			&operations.Donation{},
+			&operations.Purchase{},
+			&operations.Sell{},
+		)),
+		types.NewAccount(accounts.ZLatUbieglych, types.Liabilities, types.ValidSources(&operations.Purchase{})),
 	),
-	types.NewAccount(accounts.RozniceKursowe, types.Liabilities),
+	types.NewAccount(accounts.RozniceKursowe, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 }
 
 // Dostępne waluty.
