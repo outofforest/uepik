@@ -12,7 +12,6 @@ type Sell struct {
 	Date       time.Time
 	Document   types.Document
 	Contractor types.Contractor
-	Amount     types.Denom
 	Dues       []types.Due
 	Payments   []types.Payment
 }
@@ -55,7 +54,15 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the sell.
 func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
-	incomeBase, incomeRate := rates.ToBase(s.Amount, types.PreviousDay(s.Date))
+	if len(s.Dues) == 0 {
+		panic("no dues")
+	}
+	amount := s.Dues[0].Amount
+	for _, due := range s.Dues[1:] {
+		amount = amount.Add(due.Amount)
+	}
+
+	incomeBase, incomeRate := rates.ToBase(amount, types.PreviousDay(s.Date))
 
 	coa.AddEntry(s,
 		types.NewEntryRecord(
