@@ -116,5 +116,9 @@ func GenerateVATReport(
 	return types.ReportDocument{
 		Template: vatTemplate,
 		Data:     report,
+		Config: types.SheetConfig{
+			Name:       "VAT",
+			LockedRows: 8,
+		},
 	}
 }

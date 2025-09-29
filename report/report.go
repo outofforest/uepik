@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"text/template"
 	"time"
@@ -74,9 +75,13 @@ var coaAccounts = []*types.Account{
 	types.NewAccount(accounts.RozniceKursowe, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 }
 
-//go:embed report.tmpl.fods
+//go:embed report.tmpl.xml
 var tmpl string
-var tmplParsed = template.Must(template.New("").Parse(tmpl))
+var tmplParsed = template.Must(template.New("report").Parse(tmpl))
+
+//go:embed config.tmpl.xml
+var configTmpl string
+var configTmplParsed = template.Must(template.New("config").Parse(configTmpl))
 
 // Save saves the report.
 func Save(
@@ -133,8 +138,18 @@ func newReport(
 		documents.GenerateBookReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateFlowReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateVATReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
-		documents.GenerateBankReport(year.Period, coa, year.CompanyName, year.CompanyAddress, year.Init.Currencies,
-			bankRecords),
+	}
+	currencies := lo.Keys(bankRecords)
+	sort.Slice(currencies, func(i, j int) bool {
+		return strings.Compare(string(currencies[i]), string(currencies[j])) < 0
+	})
+	for _, c := range currencies {
+		ci, exists := year.Init.Currencies[c]
+		if !exists {
+			panic("currency not initialized")
+		}
+		docs = append(docs, documents.GenerateBankReport(year.Period, year.CompanyName, year.CompanyAddress,
+			types.Currencies.Currency(c), ci, bankRecords[c]))
 	}
 	for _, op := range year.Operations {
 		docs = append(docs, op.Documents(coa)...)
@@ -142,6 +157,7 @@ func newReport(
 
 	report := types.Report{
 		Currencies: lo.Values(types.Currencies),
+		Configs:    make([]string, 0, len(docs)),
 		Documents:  make([]string, 0, len(docs)),
 	}
 
@@ -150,6 +166,10 @@ func newReport(
 		buf.Reset()
 		lo.Must0(doc.Template.Execute(buf, doc.Data))
 		report.Documents = append(report.Documents, buf.String())
+
+		buf.Reset()
+		lo.Must0(configTmplParsed.Execute(buf, doc.Config))
+		report.Configs = append(report.Configs, buf.String())
 	}
 
 	return report

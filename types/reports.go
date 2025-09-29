@@ -62,11 +62,13 @@ type Operation interface {
 type ReportDocument struct {
 	Template *template.Template
 	Data     any
+	Config   SheetConfig
 }
 
 // Report is the full report.
 type Report struct {
 	Currencies []Currency
+	Configs    []string
 	Documents  []string
 }
 
@@ -105,7 +107,7 @@ type FiscalYear struct {
 func (fy *FiscalYear) BankReports(
 	currencyRates CurrencyRates,
 	years []*FiscalYear,
-) (map[CurrencySymbol]*[]BankRecord, map[Operation][]*BankRecord) {
+) (map[CurrencySymbol][]BankRecord, map[Operation][]*BankRecord) {
 	opBankRecords := make(map[Operation][]*BankRecord, len(fy.Operations))
 	for _, op := range fy.Operations {
 		opBankRecords[op] = nil
@@ -146,7 +148,7 @@ func (fy *FiscalYear) BookRecords(
 func (fy *FiscalYear) bankReports(
 	bankRecords []*BankRecord,
 	currencyRates CurrencyRates,
-) map[CurrencySymbol]*[]BankRecord {
+) map[CurrencySymbol][]BankRecord {
 	currencies := map[CurrencySymbol][]*BankRecord{}
 	for _, br := range bankRecords {
 		currencies[br.OriginalAmount.Currency] = append(currencies[br.OriginalAmount.Currency], br)
@@ -155,7 +157,7 @@ func (fy *FiscalYear) bankReports(
 	var zeroDenom Denom
 	var zeroRate Number
 
-	reports := map[CurrencySymbol]*[]BankRecord{}
+	reports := map[CurrencySymbol][]BankRecord{}
 
 	for currencySymbol, records := range currencies {
 		currency := Currencies.Currency(currencySymbol)
@@ -208,7 +210,7 @@ func (fy *FiscalYear) bankReports(
 			records2 = append(records2, *br)
 		}
 
-		reports[currencySymbol] = &records2
+		reports[currencySymbol] = records2
 	}
 
 	return reports
@@ -315,4 +317,10 @@ func (cd *CurrencyDiff) GetContractor() Contractor {
 // GetNotes returns notes.
 func (cd *CurrencyDiff) GetNotes() string {
 	return cd.Data.GetNotes()
+}
+
+// SheetConfig stores sheet config.
+type SheetConfig struct {
+	Name       string
+	LockedRows uint64
 }

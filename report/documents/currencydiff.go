@@ -124,5 +124,9 @@ func GenerateCurrencyDiffDocument(
 	return types.ReportDocument{
 		Template: currencyDiffTemplate,
 		Data:     report,
+		Config: types.SheetConfig{
+			Name:       document.SheetName,
+			LockedRows: 7,
+		},
 	}
 }

@@ -168,5 +168,9 @@ func GenerateBookReport(
 	return types.ReportDocument{
 		Template: bookTemplate,
 		Data:     report,
+		Config: types.SheetConfig{
+			Name:       "PiK",
+			LockedRows: 7,
+		},
 	}
 }

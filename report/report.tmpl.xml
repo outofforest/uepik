@@ -11,92 +11,9 @@
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
-{{ range .Currencies }}
-      <config:config-item-map-entry config:name="{{ .Symbol }}">
-       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
-       <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
-       <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
-       <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
-       <config:config-item config:name="VerticalSplitPosition" config:type="int">7</config:config-item>
-       <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
-       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">7</config:config-item>
-       <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
-       <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
-       <config:config-item config:name="PageViewZoomValue" config:type="int">120</config:config-item>
-       <config:config-item config:name="ShowGrid" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="LegacySingleLineFontwork" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ConnectorUseSnapRect" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
-      </config:config-item-map-entry>
+{{ range .Configs }}
+      {{ . }}
 {{ end }}
-      <config:config-item-map-entry config:name="PF">
-       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
-       <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
-       <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
-       <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
-       <config:config-item config:name="VerticalSplitPosition" config:type="int">6</config:config-item>
-       <config:config-item config:name="ActiveSplitRange" config:type="short">0</config:config-item>
-       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">6</config:config-item>
-       <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
-       <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
-       <config:config-item config:name="PageViewZoomValue" config:type="int">120</config:config-item>
-       <config:config-item config:name="ShowGrid" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="LegacySingleLineFontwork" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ConnectorUseSnapRect" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
-      </config:config-item-map-entry>
-      <config:config-item-map-entry config:name="PiK">
-       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
-       <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
-       <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
-       <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
-       <config:config-item config:name="VerticalSplitPosition" config:type="int">7</config:config-item>
-       <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
-       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">7</config:config-item>
-       <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
-       <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
-       <config:config-item config:name="PageViewZoomValue" config:type="int">120</config:config-item>
-       <config:config-item config:name="ShowGrid" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="LegacySingleLineFontwork" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ConnectorUseSnapRect" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
-      </config:config-item-map-entry>
-      <config:config-item-map-entry config:name="VAT">
-       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
-       <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
-       <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
-       <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
-       <config:config-item config:name="VerticalSplitPosition" config:type="int">8</config:config-item>
-       <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
-       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">8</config:config-item>
-       <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
-       <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
-       <config:config-item config:name="PageViewZoomValue" config:type="int">120</config:config-item>
-       <config:config-item config:name="ShowGrid" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="LegacySingleLineFontwork" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ConnectorUseSnapRect" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
-      </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">PiK</config:config-item>
      <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1847</config:config-item>
@@ -178,20 +95,6 @@
    <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
    <config:config-item config:name="SyntaxStringRef" config:type="short">7</config:config-item>
    <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
-   <config:config-item-map-named config:name="ScriptConfiguration">
-    <config:config-item-map-entry config:name="PiK">
-     <config:config-item config:name="CodeName" config:type="string">PiK</config:config-item>
-    </config:config-item-map-entry>
-    <config:config-item-map-entry config:name="PF">
-     <config:config-item config:name="CodeName" config:type="string">PF</config:config-item>
-    </config:config-item-map-entry>
-    <config:config-item-map-entry config:name="VAT">
-     <config:config-item config:name="CodeName" config:type="string">VAT</config:config-item>
-    </config:config-item-map-entry>
-    <config:config-item-map-entry config:name="BANK">
-     <config:config-item config:name="CodeName" config:type="string">BANK</config:config-item>
-    </config:config-item-map-entry>
-   </config:config-item-map-named>
   </config:config-item-set>
  </office:settings>
  <office:scripts>
@@ -364,10 +267,10 @@
   <style:style style:name="ro16" style:family="table-row">
    <style:table-row-properties style:row-height="0.841cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
-  <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
+  <style:style style:name="taLandscape" style:family="table" style:master-page-name="Landscape">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
   </style:style>
-  <style:style style:name="ta2" style:family="table" style:master-page-name="Portrait">
+  <style:style style:name="taPortrait" style:family="table" style:master-page-name="Portrait">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
   </style:style>
   <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
@@ -1167,77 +1070,31 @@
    </style:text-properties>
   </style:style>
 {{ end }}
-  <style:page-layout style:name="pm1">
+  <style:page-layout style:name="pmLandscape">
    <style:page-layout-properties fo:page-width="29.7cm" fo:page-height="21.001cm" style:num-format="1" style:print-orientation="landscape" fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="1cm" fo:margin-right="1cm" style:scale-to="100%" style:writing-mode="lr-tb"/>
-   <style:header-style>
-    <style:header-footer-properties fo:min-height="0.75cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-bottom="0.25cm"/>
-   </style:header-style>
-   <style:footer-style>
-    <style:header-footer-properties fo:min-height="0.499cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm"/>
-   </style:footer-style>
   </style:page-layout>
-  <style:page-layout style:name="pm2">
-   <style:page-layout-properties style:writing-mode="lr-tb"/>
-   <style:header-style>
-    <style:header-footer-properties fo:min-height="0.75cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-bottom="0.25cm" fo:border="1.5pt solid #000000" fo:padding="0.018cm" fo:background-color="#c0c0c0">
-     <style:background-image/>
-    </style:header-footer-properties>
-   </style:header-style>
-   <style:footer-style>
-    <style:header-footer-properties fo:min-height="0.75cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.25cm" fo:border="1.5pt solid #000000" fo:padding="0.018cm" fo:background-color="#c0c0c0">
-     <style:background-image/>
-    </style:header-footer-properties>
-   </style:footer-style>
-  </style:page-layout>
-  <style:page-layout style:name="pm3">
+  <style:page-layout style:name="pmPortrait">
    <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="1cm" fo:margin-right="1cm" style:writing-mode="lr-tb"/>
-   <style:header-style>
-    <style:header-footer-properties fo:min-height="0.75cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-bottom="0.25cm"/>
-   </style:header-style>
-   <style:footer-style>
-    <style:header-footer-properties fo:min-height="0.499cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm"/>
-   </style:footer-style>
   </style:page-layout>
  </office:automatic-styles>
  <office:master-styles>
-  <style:master-page style:name="Default" style:page-layout-name="pm1">
+  <style:master-page style:name="Landscape" style:page-layout-name="pmLandscape">
    <style:header style:display="false">
     <text:p><text:sheet-name>???</text:sheet-name></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:header-first style:display="false"/>
-   <style:footer style:display="false">
-    <text:p>Page <text:page-number>1</text:page-number></text:p>
-   </style:footer>
+   <style:footer style:display="false"/>
    <style:footer-left style:display="false"/>
    <style:footer-first style:display="false"/>
   </style:master-page>
-  <style:master-page style:name="Report" style:page-layout-name="pm2">
-   <style:header>
-    <style:region-left>
-     <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
-    </style:region-left>
-    <style:region-right>
-     <text:p><text:date style:data-style-name="NBase" text:date-value="2025-09-25">00.00.0000</text:date>, <text:time style:data-style-name="NBase" text:time-value="15:58:02.618179634">00:00:00</text:time></text:p>
-    </style:region-right>
-   </style:header>
-   <style:header-left style:display="false"/>
-   <style:header-first style:display="false"/>
-   <style:footer>
-    <text:p>Page <text:page-number>1</text:page-number><text:s/>/ <text:page-count>99</text:page-count></text:p>
-   </style:footer>
-   <style:footer-left style:display="false"/>
-   <style:footer-first style:display="false"/>
-  </style:master-page>
-  <style:master-page style:name="Portrait" style:page-layout-name="pm3">
+  <style:master-page style:name="Portrait" style:page-layout-name="pmPortrait">
    <style:header style:display="false">
     <text:p><text:sheet-name>???</text:sheet-name></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:header-first style:display="false"/>
-   <style:footer style:display="false">
-    <text:p>Page <text:page-number>1</text:page-number></text:p>
-   </style:footer>
+   <style:footer style:display="false"/>
    <style:footer-left style:display="false"/>
    <style:footer-first style:display="false"/>
   </style:master-page>
