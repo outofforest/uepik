@@ -6,14 +6,11 @@ import "github.com/outofforest/uepik/types"
 const (
 	PiK types.AccountIDPart = iota
 	Przychody
-	Nieoperacyjne
 	Finansowe
 	DodatnieRozniceKursowe
 	Operacyjne
 	ZNieodplatnejDPP
-	Darowizny
 	ZOdplatnejDPP
-	ZeSprzedazy
 	Koszty
 	Podatkowe
 	UjemneRozniceKursowe

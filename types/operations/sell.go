@@ -58,8 +58,7 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 
 	coa.AddEntry(s,
 		types.NewEntryRecord(
-			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP,
-				accounts.ZeSprzedazy),
+			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP),
 			types.CreditBalance(incomeBase),
 		),
 		types.NewEntryRecord(

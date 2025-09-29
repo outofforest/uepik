@@ -54,8 +54,7 @@ func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 
 	coa.AddEntry(d,
 		types.NewEntryRecord(
-			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.ZNieodplatnejDPP,
-				accounts.Darowizny),
+			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.ZNieodplatnejDPP),
 			types.CreditBalance(incomeBase),
 		),
 		types.NewEntryRecord(
