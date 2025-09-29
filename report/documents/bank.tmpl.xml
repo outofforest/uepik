@@ -1,7 +1,6 @@
-{{ range . }}
 {{- $companyName := .CompanyName -}}
 {{- $companyAddress := .CompanyAddress -}}
-<table:table table:name="{{ .Currency.Symbol }}" table:style-name="ta2">
+<table:table table:name="BANK.{{ .Currency.Symbol }}" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co21" table:default-cell-style-name="ce67"/>
     <table:table-column table:style-name="co22" table:default-cell-style-name="ce71"/>
@@ -194,4 +193,3 @@
     </table:table-row>
 {{ end }}
 </table:table>
-{{ end }}

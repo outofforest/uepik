@@ -92,5 +92,9 @@ func GenerateFlowReport(
 	return types.ReportDocument{
 		Template: flowTemplate,
 		Data:     report,
+		Config: types.SheetConfig{
+			Name:       "PF",
+			LockedRows: 6,
+		},
 	}
 }

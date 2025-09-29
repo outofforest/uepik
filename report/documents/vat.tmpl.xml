@@ -1,6 +1,6 @@
 {{- $companyName := .CompanyName -}}
 {{- $companyAddress := .CompanyAddress -}}
-<table:table table:name="VAT" table:style-name="ta2">
+<table:table table:name="VAT" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
     <table:table-column table:style-name="co16" table:default-cell-style-name="ce71"/>
