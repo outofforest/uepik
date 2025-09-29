@@ -1,72 +1,16 @@
-//nolint:gosmopolitan,misspell
+//nolint:misspell
 package uepik
 
 import (
-	"fmt"
 	"math"
-	"strings"
 	"time"
 
-	"github.com/outofforest/uepik/accounts"
+	"github.com/samber/lo"
+
+	"github.com/outofforest/uepik/report"
 	"github.com/outofforest/uepik/types"
 	"github.com/outofforest/uepik/types/operations"
 )
-
-var coaAccounts = []*types.Account{
-	types.NewAccount(
-		accounts.CIT, types.Liabilities, types.AllValid(),
-		types.NewAccount(
-			accounts.Przychody, types.Incomes, types.AllValid(),
-			types.NewAccount(
-				accounts.Nieoperacyjne, types.Incomes, types.AllValid(),
-				types.NewAccount(
-					accounts.Finansowe, types.Incomes, types.AllValid(),
-					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes,
-						types.ValidSources(&operations.CurrencyDiff{})),
-				),
-			),
-			types.NewAccount(
-				accounts.Operacyjne, types.Incomes, types.AllValid(),
-				types.NewAccount(
-					accounts.ZNieodplatnejDPP, types.Incomes, types.AllValid(),
-					types.NewAccount(accounts.Darowizny, types.Incomes, types.ValidSources(&operations.Donation{})),
-				),
-				types.NewAccount(
-					accounts.ZOdplatnejDPP, types.Incomes, types.AllValid(),
-					types.NewAccount(accounts.ZeSprzedazy, types.Incomes, types.ValidSources(&operations.Sell{})),
-				),
-			),
-		),
-		types.NewAccount(
-			accounts.Koszty, types.Costs, types.AllValid(),
-			types.NewAccount(
-				accounts.Podatkowe, types.Costs, types.AllValid(),
-				types.NewAccount(
-					accounts.Finansowe, types.Costs, types.AllValid(),
-					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs,
-						types.ValidSources(&operations.CurrencyDiff{})),
-				),
-				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(&operations.Purchase{})),
-			),
-			types.NewAccount(
-				accounts.Niepodatkowe, types.Costs, types.AllValid(),
-				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(&operations.Purchase{})),
-			),
-		),
-	),
-	types.NewAccount(accounts.VAT, types.Incomes, types.ValidSources(&types.VAT{})),
-	types.NewAccount(
-		accounts.NiewydatkowanyDochod, types.Liabilities, types.AllValid(),
-		types.NewAccount(accounts.WTrakcieRoku, types.Liabilities, types.ValidSources(
-			&operations.CurrencyDiff{},
-			&operations.Donation{},
-			&operations.Purchase{},
-			&operations.Sell{},
-		)),
-		types.NewAccount(accounts.ZLatUbieglych, types.Liabilities, types.ValidSources(&operations.Purchase{})),
-	),
-	types.NewAccount(accounts.RozniceKursowe, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
-}
 
 // Dostępne waluty.
 const (
@@ -80,9 +24,16 @@ const (
 	NKUP = types.CostTaxTypeNonTaxable
 )
 
+var timeLocation = lo.Must(time.LoadLocation("Europe/Warsaw"))
+
 // Data tworzy datę.
 func Data(rok, miesiac, dzien uint64) time.Time {
-	return time.Date(int(rok), time.Month(miesiac), int(dzien), 0, 0, 0, 0, time.Local)
+	return time.Date(int(rok), time.Month(miesiac), int(dzien), 0, 0, 0, 0, timeLocation)
+}
+
+// Teraz zwraca bieżący czas.
+func Teraz() time.Time {
+	return time.Now().In(timeLocation)
 }
 
 // Kwota tworzy kwotę.
@@ -130,45 +81,18 @@ func Rok(
 	bilansOtwarcia types.Init,
 	operacje ...[]types.Operation,
 ) *types.FiscalYear {
-	end := dataZakonczenia.AddDate(0, 0, 1).Add(-time.Nanosecond)
-	now := time.Now().Local()
-	if end.After(now) {
-		end = now
-	}
 	period := types.Period{
 		Start: dataRozpoczecia,
-		End:   end,
-	}
-
-	coa := types.NewChartOfAccounts(period, coaAccounts...)
-	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
-		types.CreditBalance(bilansOtwarcia.UnspentProfit))
-
-	company := types.Contractor{
-		Name:    nazwaFirmy,
-		Address: adresFirmy,
-		TaxID:   nipFirmy,
-	}
-	for date := period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); period.Contains(date); date = date.AddDate(0, 1, 0) {
-		id := fmt.Sprintf("RK/%d/%d/1", date.Year(), date.Month())
-		operacje = append(operacje, []types.Operation{&operations.CurrencyDiff{
-			Document: types.Document{
-				ID:        types.DocumentID(id),
-				Date:      date,
-				SheetName: strings.ReplaceAll(id, "/", "."),
-			},
-			Contractor: company,
-		}})
+		End:   dataZakonczenia.AddDate(0, 0, 1).Add(-time.Nanosecond),
 	}
 
 	return &types.FiscalYear{
-		CompanyName:     nazwaFirmy,
-		CompanyAddress:  adresFirmy,
-		CompanyTaxID:    nipFirmy,
-		ChartOfAccounts: coa,
-		Period:          period,
-		Init:            bilansOtwarcia,
-		Operations:      Grupa(operacje...),
+		CompanyName:    nazwaFirmy,
+		CompanyAddress: adresFirmy,
+		CompanyTaxID:   nipFirmy,
+		Period:         period,
+		Init:           bilansOtwarcia,
+		Operations:     Grupa(operacje...),
 	}
 }
 
@@ -303,4 +227,14 @@ func Zakup(
 		Payments:    platnosci,
 		CostTaxType: typPodatkowy,
 	}}
+}
+
+// Raport generuje raport.
+func Raport(
+	naDzien time.Time,
+	biezacyRok *types.FiscalYear,
+	kursyWalutowe types.CurrencyRates,
+	lata ...*types.FiscalYear,
+) {
+	report.Save(naDzien, biezacyRok, kursyWalutowe, lata)
 }

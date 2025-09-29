@@ -93,13 +93,12 @@ func (r BankRecord) GetDate() time.Time {
 
 // FiscalYear defines fiscal year.
 type FiscalYear struct {
-	CompanyName     string
-	CompanyAddress  string
-	CompanyTaxID    string
-	ChartOfAccounts *ChartOfAccounts
-	Period          Period
-	Init            Init
-	Operations      []Operation
+	CompanyName    string
+	CompanyAddress string
+	CompanyTaxID   string
+	Period         Period
+	Init           Init
+	Operations     []Operation
 }
 
 // BankReports returns bank reports.
@@ -134,9 +133,13 @@ func (fy *FiscalYear) BankReports(
 }
 
 // BookRecords generates book records.
-func (fy *FiscalYear) BookRecords(currencyRates CurrencyRates, bankRecords map[Operation][]*BankRecord) {
+func (fy *FiscalYear) BookRecords(
+	coa *ChartOfAccounts,
+	currencyRates CurrencyRates,
+	bankRecords map[Operation][]*BankRecord,
+) {
 	for _, o := range fy.Operations {
-		o.BookRecords(fy.ChartOfAccounts, bankRecords[o], currencyRates)
+		o.BookRecords(coa, bankRecords[o], currencyRates)
 	}
 }
 
