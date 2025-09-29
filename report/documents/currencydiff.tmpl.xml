@@ -1,5 +1,5 @@
 {{ $summary := .Summary }}
-<table:table table:name="{{ .Document.ID }}" table:style-name="ta2">
+<table:table table:name="{{ .Document.SheetName }}" table:style-name="ta2">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
     <table:table-column table:style-name="co16" table:default-cell-style-name="ce71"/>

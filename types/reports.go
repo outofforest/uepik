@@ -31,8 +31,9 @@ type DocumentID string
 
 // Document defines the document.
 type Document struct {
-	ID   DocumentID
-	Date time.Time
+	ID        DocumentID
+	Date      time.Time
+	SheetName string
 }
 
 // Contractor defines contractor.

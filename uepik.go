@@ -4,6 +4,7 @@ package uepik
 import (
 	"fmt"
 	"math"
+	"strings"
 	"time"
 
 	"github.com/outofforest/uepik/accounts"
@@ -149,10 +150,12 @@ func Rok(
 		TaxID:   nipFirmy,
 	}
 	for date := period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); period.Contains(date); date = date.AddDate(0, 1, 0) {
+		id := fmt.Sprintf("RK/%d/%d/1", date.Year(), date.Month())
 		operacje = append(operacje, []types.Operation{&operations.CurrencyDiff{
 			Document: types.Document{
-				ID:   types.DocumentID(fmt.Sprintf("RK.%d.%d.1", date.Year(), date.Month())),
-				Date: date,
+				ID:        types.DocumentID(id),
+				Date:      date,
+				SheetName: strings.ReplaceAll(id, "/", "."),
 			},
 			Contractor: company,
 		}})
