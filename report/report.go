@@ -21,16 +21,13 @@ import (
 
 var coaAccounts = []*types.Account{
 	types.NewAccount(
-		accounts.CIT, types.Liabilities, types.AllValid(),
+		accounts.PiK, types.Liabilities, types.AllValid(),
 		types.NewAccount(
 			accounts.Przychody, types.Incomes, types.AllValid(),
 			types.NewAccount(
-				accounts.Nieoperacyjne, types.Incomes, types.AllValid(),
-				types.NewAccount(
-					accounts.Finansowe, types.Incomes, types.AllValid(),
-					types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes,
-						types.ValidSources(&operations.CurrencyDiff{})),
-				),
+				accounts.Finansowe, types.Incomes, types.AllValid(),
+				types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes,
+					types.ValidSources(&operations.CurrencyDiff{})),
 			),
 			types.NewAccount(
 				accounts.Operacyjne, types.Incomes, types.AllValid(),
@@ -138,6 +135,7 @@ func newReport(
 		documents.GenerateBookReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateFlowReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateVATReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
+		documents.GenerateCIT8Report(coa),
 	}
 	currencies := lo.Keys(bankRecords)
 	sort.Slice(currencies, func(i, j int) bool {

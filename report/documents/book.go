@@ -106,7 +106,7 @@ func GenerateBookReport(
 		CompanyName:    companyName,
 		CompanyAddress: companyAddress,
 	}
-	entries := coa.Entries(types.NewAccountID(accounts.CIT))
+	entries := coa.Entries(types.NewAccountID(accounts.PiK))
 	var index uint64
 	summaryYear := NewBookSummary()
 	for month := period.Start; period.Contains(month); month = month.AddDate(0, 1, 0) {
@@ -132,16 +132,16 @@ func GenerateBookReport(
 					Document:   e.GetDocument(),
 					Contractor: e.GetContractor(),
 					Notes:      e.GetNotes(),
-					IncomeDonations: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
+					IncomeDonations: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody,
 						accounts.Operacyjne, accounts.ZNieodplatnejDPP), e.ID).Credit,
-					IncomeTrading: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
+					IncomeTrading: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody,
 						accounts.Operacyjne, accounts.ZOdplatnejDPP), e.ID).Credit,
-					IncomeOthers: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
-						accounts.Nieoperacyjne), e.ID).Credit,
-					IncomeSum: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody), e.ID).Credit,
-					CostTaxed: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Koszty,
+					IncomeOthers: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody,
+						accounts.Finansowe), e.ID).Credit,
+					IncomeSum: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody), e.ID).Credit,
+					CostTaxed: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Koszty,
 						accounts.Podatkowe), e.ID).Debit,
-					CostNotTaxed: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Koszty,
+					CostNotTaxed: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Koszty,
 						accounts.Niepodatkowe), e.ID).Debit,
 				}
 				records = append(records, r)

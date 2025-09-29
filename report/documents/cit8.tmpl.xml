@@ -1,0 +1,47 @@
+<table:table table:name="CIT-8" table:style-name="taPortrait">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co20" table:default-cell-style-name="ce94"/>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(52) Przychody z zysków kapitałowych</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .IncomesFinancial.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(53) Przychody z innych źródeł przychodów</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .IncomesOthers.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(62) Koszty uzyskania przychodów z zysków kapitałowych</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .CostsOthers.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(63) Koszty uzyskania przychodów z innych źródeł przychodów</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .CostsOthers.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(O.13) Dochody z zysków kapitałowych przeznaczone na cele statutowe</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .NonTaxableProfitFinancial.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(O.14) Dochody z innych źródeł przychodów przeznaczone na cele statutowe</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .NonTaxableProfitOthers.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(O.192) Niewydatkowany dochód</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .UnspentProfit.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+</table:table>

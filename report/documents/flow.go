@@ -58,11 +58,11 @@ func GenerateFlowReport(
 		yearNumber := uint64(month.Year())
 		monthName := monthName(month.Month())
 
-		monthIncome := coa.BalanceMonth(types.NewAccountID(accounts.CIT, accounts.Przychody), month)
-		monthCostsTaxed := coa.BalanceMonth(types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.Podatkowe),
+		monthIncome := coa.BalanceMonth(types.NewAccountID(accounts.PiK, accounts.Przychody), month)
+		monthCostsTaxed := coa.BalanceMonth(types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe),
 			month)
-		yearIncome := coa.BalanceIncremental(types.NewAccountID(accounts.CIT, accounts.Przychody), month)
-		yearCostsTaxed := coa.BalanceIncremental(types.NewAccountID(accounts.CIT, accounts.Koszty,
+		yearIncome := coa.BalanceIncremental(types.NewAccountID(accounts.PiK, accounts.Przychody), month)
+		yearCostsTaxed := coa.BalanceIncremental(types.NewAccountID(accounts.PiK, accounts.Koszty,
 			accounts.Podatkowe), month)
 
 		report.Records = append(report.Records, FlowRecord{

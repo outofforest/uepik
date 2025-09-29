@@ -50,7 +50,7 @@ func (cd *CurrencyDiff) BookRecords(
 	if debit.NEQ(types.BaseZero) {
 		records = append(records,
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
+				types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
 					accounts.UjemneRozniceKursowe),
 				types.DebitBalance(debit),
 			),
@@ -65,7 +65,7 @@ func (cd *CurrencyDiff) BookRecords(
 	if credit.NEQ(types.BaseZero) {
 		records = append(records,
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.CIT, accounts.Przychody, accounts.Nieoperacyjne, accounts.Finansowe,
+				types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Finansowe,
 					accounts.DodatnieRozniceKursowe),
 				types.CreditBalance(credit),
 			),

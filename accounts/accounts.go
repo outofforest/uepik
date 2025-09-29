@@ -4,7 +4,7 @@ import "github.com/outofforest/uepik/types"
 
 // Accounts.
 const (
-	CIT types.AccountIDPart = iota
+	PiK types.AccountIDPart = iota
 	Przychody
 	Nieoperacyjne
 	Finansowe
