@@ -44,4 +44,10 @@
         </table:table-cell>
         <table:table-cell office:value-type="float" office:value="{{ .UnspentProfit.Amount }}" calcext:value-type="float" />
     </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>(D.21) Kwota otrzymanych darowizn</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .ReceivedDonations.Amount }}" calcext:value-type="float" />
+    </table:table-row>
 </table:table>
