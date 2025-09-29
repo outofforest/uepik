@@ -43,6 +43,12 @@ type Contractor struct {
 	TaxID   string
 }
 
+// Due represents due.
+type Due struct {
+	Date   time.Time
+	Amount Denom
+}
+
 // Payment defines payment.
 type Payment struct {
 	DocumentID DocumentID
