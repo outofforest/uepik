@@ -131,6 +131,14 @@ func (d Denom) Neg() Denom {
 	}
 }
 
+// Abs returns absolute value of denom.
+func (d Denom) Abs() Denom {
+	return Denom{
+		Currency: d.Currency,
+		Amount:   d.Amount.Abs(),
+	}
+}
+
 // ToBase converts denom to the base currency.
 func (d Denom) ToBase(rate Number) Denom {
 	currency := Currencies.Currency(d.Currency)
@@ -238,6 +246,11 @@ func (n Number) Sub(n2 Number) Number {
 // Neg negates number.
 func (n Number) Neg() Number {
 	return newNumberFromDecimal(n.decimal.Neg(), n.precision)
+}
+
+// Abs returns absolute value of number.
+func (n Number) Abs() Number {
+	return newNumberFromDecimal(n.decimal.Abs(), n.precision)
 }
 
 // String returns string representation of the number.

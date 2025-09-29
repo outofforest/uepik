@@ -9,7 +9,6 @@ import (
 
 // Donation defines the income coming from donation.
 type Donation struct {
-	Document   types.Document
 	Contractor types.Contractor
 	Payment    types.Payment
 }
@@ -21,7 +20,10 @@ func (d *Donation) GetDate() time.Time {
 
 // GetDocument returns document.
 func (d *Donation) GetDocument() types.Document {
-	return d.Document
+	return types.Document{
+		ID:   d.Payment.DocumentID,
+		Date: d.Payment.Date,
+	}
 }
 
 // GetContractor returns contractor.
@@ -39,7 +41,8 @@ func (d *Donation) BankRecords() []*types.BankRecord {
 	return []*types.BankRecord{{
 		Date:           d.Payment.Date,
 		Index:          d.Payment.Index,
-		Document:       d.Document,
+		Document:       d.Payment.DocumentID,
+		PaidDocument:   d.GetDocument(),
 		Contractor:     d.Contractor,
 		OriginalAmount: d.Payment.Amount,
 	}}

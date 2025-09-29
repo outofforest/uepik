@@ -43,7 +43,8 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 		records = append(records, &types.BankRecord{
 			Date:           payment.Date,
 			Index:          payment.Index,
-			Document:       s.Document,
+			Document:       payment.DocumentID,
+			PaidDocument:   s.Document,
 			Contractor:     s.Contractor,
 			OriginalAmount: payment.Amount,
 		})
@@ -83,7 +84,7 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			amount = types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
 		}
 
-		coa.AddEntry(types.NewCurrencyDiff(s, br),
+		coa.AddEntry(types.NewCurrencyDiff(s, incomeRate, br),
 			types.NewEntryRecord(
 				types.NewAccountID(accounts.RozniceKursowe),
 				amount,

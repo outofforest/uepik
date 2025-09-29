@@ -26,34 +26,42 @@ type CurrencyDiffDocument struct {
 type CurrencyDiffPage struct {
 	Page    uint64
 	Records []CurrencyDiffRecord
+	IsLast  bool
 }
 
 // CurrencyDiffRecord represents currency diff record.
 type CurrencyDiffRecord struct {
-	Date       time.Time
-	Index      uint64
-	DayOfMonth uint8
-	Document   types.Document
-	Contractor types.Contractor
-	Notes      string
-	Income     types.Denom
+	Date            time.Time
+	Index           uint64
+	DayOfMonth      uint8
+	Document        types.Document
+	PaymentDocument types.DocumentID
+	Contractor      types.Contractor
+	Amount          types.Denom
+	DocumentRate    types.Number
+	PaymentRate     types.Number
+	Income          types.Denom
+	Cost            types.Denom
 }
 
 // NewCurrencyDiffSummary returns new summary of currency diff.
 func NewCurrencyDiffSummary() CurrencyDiffSummary {
 	return CurrencyDiffSummary{
 		Income: types.BaseZero,
+		Cost:   types.BaseZero,
 	}
 }
 
 // CurrencyDiffSummary is the summary of currency diff document.
 type CurrencyDiffSummary struct {
 	Income types.Denom
+	Cost   types.Denom
 }
 
 // AddRecord adds record to the summary.
 func (cds CurrencyDiffSummary) AddRecord(r CurrencyDiffRecord) CurrencyDiffSummary {
 	cds.Income = cds.Income.Add(r.Income)
+	cds.Cost = cds.Cost.Add(r.Cost)
 	return cds
 }
 
@@ -63,7 +71,7 @@ func GenerateCurrencyDiffDocument(
 	contractor types.Contractor,
 	entries []*types.Entry,
 ) types.ReportDocument {
-	const perPage = 25
+	const perPage = 12
 
 	report := &CurrencyDiffDocument{
 		Document:   document,
@@ -81,15 +89,24 @@ func GenerateCurrencyDiffDocument(
 
 		records := make([]CurrencyDiffRecord, 0, len(entriesPage))
 		for _, e := range entriesPage {
+			data, ok := e.Data.(*types.CurrencyDiff)
+			if !ok {
+				panic("currency diff data source required")
+			}
+
 			index++
 			r := CurrencyDiffRecord{
-				Date:       e.GetDate(),
-				Index:      index,
-				DayOfMonth: uint8(e.GetDate().Day()),
-				Document:   e.GetDocument(),
-				Contractor: e.GetContractor(),
-				Notes:      e.GetNotes(),
-				Income:     e.Amount.Credit,
+				Date:            data.GetDate(),
+				Index:           index,
+				DayOfMonth:      uint8(data.GetDate().Day()),
+				Document:        data.GetDocument(),
+				PaymentDocument: data.BankRecord.Document,
+				Contractor:      data.GetContractor(),
+				Amount:          data.BankRecord.OriginalAmount.Abs(),
+				DocumentRate:    data.DataRate,
+				PaymentRate:     data.BankRecord.Rate,
+				Income:          e.Amount.Credit,
+				Cost:            e.Amount.Debit,
 			}
 			records = append(records, r)
 			report.Summary = report.Summary.AddRecord(r)
@@ -99,6 +116,9 @@ func GenerateCurrencyDiffDocument(
 			Page:    page(report.Pages),
 			Records: records,
 		})
+	}
+	if len(report.Pages) > 0 {
+		report.Pages[len(report.Pages)-1].IsLast = true
 	}
 
 	return types.ReportDocument{
