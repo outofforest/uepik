@@ -1,5 +1,5 @@
 //nolint:dupword
-package data
+package main
 
 import . "github.com/outofforest/uepik" //nolint:staticcheck
 

@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 	"time"
@@ -86,7 +87,9 @@ func Save(
 ) {
 	report := newReport(viewDate, currentYear, currencyRates, years)
 
-	f := lo.Must(os.OpenFile("uepik-"+viewDate.Format(time.DateOnly)+".fods", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o600))
+	file := filepath.Join("reports", "uepik-"+viewDate.Format(time.DateOnly)+".fods")
+	lo.Must0(os.MkdirAll(filepath.Dir(file), 0o700))
+	f := lo.Must(os.OpenFile(file, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o600))
 	defer f.Close()
 	lo.Must0(tmplParsed.Execute(f, report))
 }
