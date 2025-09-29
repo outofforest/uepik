@@ -10,7 +10,12 @@ var (
 			Dokument("FV/01/2024", Data(2025, 1, 1)),
 			Kontrahent("INVINI sp. z o. o.", "", ""),
 			Kwota(1, 23, EUR),
-			Platnosci(Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR))),
+			Naleznosci(
+				Naleznosc(Data(2025, 1, 1), Kwota(1, 23, EUR)),
+			),
+			Platnosci(
+				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
+			),
 		),
 		Zakup(
 			Data(2025, 1, 8),

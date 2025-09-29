@@ -13,6 +13,7 @@ type Sell struct {
 	Document   types.Document
 	Contractor types.Contractor
 	Amount     types.Denom
+	Dues       []types.Due
 	Payments   []types.Payment
 }
 

@@ -162,6 +162,19 @@ func Kontrahent(nazwa, adres, nip string) types.Contractor {
 	}
 }
 
+// Naleznosc definiuje należnosć.
+func Naleznosc(data time.Time, kwota types.Denom) types.Due {
+	return types.Due{
+		Date:   data,
+		Amount: kwota,
+	}
+}
+
+// Naleznosci definiuje należności.
+func Naleznosci(naleznosci ...types.Due) []types.Due {
+	return naleznosci
+}
+
 // Platnosc definiuje płatność.
 func Platnosc(dokument types.DocumentID, data time.Time, index uint64, kwota types.Denom) types.Payment {
 	return types.Payment{
@@ -199,6 +212,7 @@ func Sprzedaz(
 	dokument types.Document,
 	kontrahent types.Contractor,
 	kwota types.Denom,
+	naleznosci []types.Due,
 	platnosci []types.Payment,
 ) []types.Operation {
 	return []types.Operation{&operations.Sell{
@@ -206,6 +220,7 @@ func Sprzedaz(
 		Document:   dokument,
 		Contractor: kontrahent,
 		Amount:     kwota,
+		Dues:       naleznosci,
 		Payments:   platnosci,
 	}}
 }
