@@ -1,6 +1,8 @@
 package operations
 
 import (
+	"time"
+
 	"github.com/outofforest/uepik/accounts"
 	"github.com/outofforest/uepik/report/documents"
 	"github.com/outofforest/uepik/types"
@@ -10,6 +12,26 @@ import (
 type CurrencyDiff struct {
 	Document   types.Document
 	Contractor types.Contractor
+}
+
+// GetDate returns date of currency diff.
+func (cd *CurrencyDiff) GetDate() time.Time {
+	return cd.Document.Date
+}
+
+// GetDocument returns document.
+func (cd *CurrencyDiff) GetDocument() types.Document {
+	return cd.Document
+}
+
+// GetContractor returns contractor.
+func (cd *CurrencyDiff) GetContractor() types.Contractor {
+	return cd.Contractor
+}
+
+// GetNotes returns notes.
+func (cd *CurrencyDiff) GetNotes() string {
+	return "Różnice kursowe"
 }
 
 // BankRecords returns bank records for currency diff.
@@ -54,7 +76,7 @@ func (cd *CurrencyDiff) BookRecords(
 		)
 	}
 
-	coa.AddEntry(cd.Document.Date, cd.Document, cd.Contractor, "Różnice kursowe", records...)
+	coa.AddEntry(cd, records...)
 }
 
 // Documents generate documents for operation.

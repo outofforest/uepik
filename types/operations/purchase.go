@@ -17,6 +17,26 @@ type Purchase struct {
 	CostTaxType types.CostTaxType
 }
 
+// GetDate returns date of purchase.
+func (p *Purchase) GetDate() time.Time {
+	return p.Date
+}
+
+// GetDocument returns document.
+func (p *Purchase) GetDocument() types.Document {
+	return p.Document
+}
+
+// GetContractor returns contractor.
+func (p *Purchase) GetContractor() types.Contractor {
+	return p.Contractor
+}
+
+// GetNotes returns notes.
+func (p *Purchase) GetNotes() string {
+	return "Opis"
+}
+
 // BankRecords returns bank records for the purchase.
 func (p *Purchase) BankRecords() []*types.BankRecord {
 	records := []*types.BankRecord{}
@@ -80,7 +100,7 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 		panic("invalid cost tax type")
 	}
 
-	coa.AddEntry(p.Date, p.Document, p.Contractor, "Opis", records...)
+	coa.AddEntry(p, records...)
 
 	if len(p.Payments) > 0 && len(bankRecords) == 0 {
 		panic("brak rekordu walutowego dla płatności")
@@ -99,7 +119,7 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 			amount = types.DebitBalance(paymentOriginal.ToBase(br.Rate.Sub(costRate)))
 		}
 
-		coa.AddEntry(types.MaxDate(p.Date, br.Date), p.Document, p.Contractor, "Opis",
+		coa.AddEntry(types.NewCurrencyDiff(p, br),
 			types.NewEntryRecord(
 				types.NewAccountID(accounts.RozniceKursowe),
 				amount,

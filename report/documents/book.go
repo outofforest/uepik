@@ -117,7 +117,7 @@ func GenerateBookReport(
 		summaryMonth := NewBookSummary()
 
 		var bookAdded bool
-		for !bookAdded || (len(entries) > 0 && entries[0].Date.Month() == month.Month()) {
+		for !bookAdded || (len(entries) > 0 && entries[0].GetDate().Month() == month.Month()) {
 			bookAdded = true
 
 			summaryCurrentPage := NewBookSummary()
@@ -126,12 +126,12 @@ func GenerateBookReport(
 			for _, e := range entries {
 				index++
 				r := BookRecord{
-					Date:       e.Date,
+					Date:       e.GetDate(),
 					Index:      index,
-					DayOfMonth: uint8(e.Date.Day()),
-					Document:   e.Document,
-					Contractor: e.Contractor,
-					Notes:      e.Notes,
+					DayOfMonth: uint8(e.GetDate().Day()),
+					Document:   e.GetDocument(),
+					Contractor: e.GetContractor(),
+					Notes:      e.GetNotes(),
 					IncomeDonations: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,
 						accounts.Operacyjne, accounts.ZNieodplatnejDPP), e.ID).Credit,
 					IncomeTrading: coa.Amount(types.NewAccountID(accounts.CIT, accounts.Przychody,

@@ -57,24 +57,12 @@ func (ch *ChartOfAccounts) OpenAccount(accountID AccountID, balance AccountBalan
 }
 
 // AddEntry adds entry to the account.
-func (ch *ChartOfAccounts) AddEntry(
-	date time.Time,
-	document Document,
-	contractor Contractor,
-	notes string,
-	records ...EntryRecord,
-) {
-	if !ch.period.Contains(date) {
+func (ch *ChartOfAccounts) AddEntry(data EntryDataSource, records ...EntryRecord) {
+	if !ch.period.Contains(data.GetDate()) {
 		return
 	}
 
-	entryData := &EntryData{
-		ID:         ch.entryID,
-		Date:       date,
-		Document:   document,
-		Contractor: contractor,
-		Notes:      notes,
-	}
+	entryID := ch.entryID
 	ch.entryID++
 
 	for _, r := range records {
@@ -90,7 +78,7 @@ func (ch *ChartOfAccounts) AddEntry(
 			if !exists {
 				panic("account does not exist")
 			}
-			account.addEntry(entryData, r.Amount)
+			account.addEntry(entryID, data, r.Amount)
 			accounts = account.children
 		}
 		if len(account.children) > 0 {
@@ -215,19 +203,7 @@ func (ch *ChartOfAccounts) Amount(accountID AccountID, entryID EntryID) AccountB
 
 // Entries returns entries on the account.
 func (ch *ChartOfAccounts) Entries(accountID AccountID) []*Entry {
-	entries := ch.getAccount(accountID).entries
-	results := make([]*Entry, 0, len(entries))
-	for _, e := range entries {
-		results = append(results, e)
-	}
-
-	sort.Slice(results, func(i, j int) bool {
-		r1 := results[i]
-		r2 := results[j]
-		return r1.Date.Before(r2.Date) || (r1.Date.Equal(r2.Date) && r1.ID < r2.ID)
-	})
-
-	return results
+	return sortEntries(ch.getAccount(accountID).entries)
 }
 
 // EntriesMonth returns entries on the account on month.
@@ -236,18 +212,7 @@ func (ch *ChartOfAccounts) EntriesMonth(accountID AccountID, date time.Time) []*
 	if !exists {
 		return nil
 	}
-	results := make([]*Entry, 0, len(entries))
-	for _, e := range entries {
-		results = append(results, e)
-	}
-
-	sort.Slice(results, func(i, j int) bool {
-		r1 := results[i]
-		r2 := results[j]
-		return r1.Date.Before(r2.Date) || (r1.Date.Equal(r2.Date) && r1.ID < r2.ID)
-	})
-
-	return results
+	return sortEntries(entries)
 }
 
 func (ch *ChartOfAccounts) getAccount(accountID AccountID) *Account {
@@ -420,24 +385,25 @@ type Account struct {
 	balances       map[monthKey]AccountBalance
 }
 
-func (a *Account) addEntry(data *EntryData, amount AccountBalance) {
+func (a *Account) addEntry(id EntryID, data EntryDataSource, amount AccountBalance) {
 	verifyBalanceAndType(amount, a.accountType)
 
-	entry, exists := a.entries[data.ID]
+	entry, exists := a.entries[id]
 	if !exists {
 		entry = &Entry{
-			EntryData: data,
-			Amount:    zeroAccountBalance,
+			ID:     id,
+			Data:   data,
+			Amount: zeroAccountBalance,
 		}
 	}
 	entry.Amount = entry.Amount.Add(amount)
 
-	a.entries[data.ID] = entry
-	mKey := newMonthKey(entry.Date)
+	a.entries[id] = entry
+	mKey := newMonthKey(data.GetDate())
 	if _, exists := a.entriesMonth[mKey]; !exists {
 		a.entriesMonth[mKey] = map[EntryID]*Entry{}
 	}
-	a.entriesMonth[mKey][data.ID] = entry
+	a.entriesMonth[mKey][id] = entry
 	sumMonth, exists := a.balances[mKey]
 	if !exists {
 		sumMonth = zeroAccountBalance
@@ -448,24 +414,39 @@ func (a *Account) addEntry(data *EntryData, amount AccountBalance) {
 // EntryID represents entry ID.
 type EntryID uint64
 
-// EntryData stores entry data.
-type EntryData struct {
-	ID         EntryID
-	Date       time.Time
-	Document   Document
-	Contractor Contractor
-	Notes      string
+// EntryDataSource returns entry data.
+type EntryDataSource interface {
+	GetDate() time.Time
+	GetDocument() Document
+	GetContractor() Contractor
+	GetNotes() string
 }
 
 // Entry represents entry on the account.
 type Entry struct {
-	*EntryData
+	ID     EntryID
+	Data   EntryDataSource
 	Amount AccountBalance
 }
 
 // GetDate returns date of the entry.
 func (e *Entry) GetDate() time.Time {
-	return e.Date
+	return e.Data.GetDate()
+}
+
+// GetDocument returns document.
+func (e *Entry) GetDocument() Document {
+	return e.Data.GetDocument()
+}
+
+// GetContractor returns contractor.
+func (e *Entry) GetContractor() Contractor {
+	return e.Data.GetContractor()
+}
+
+// GetNotes returns notes.
+func (e *Entry) GetNotes() string {
+	return e.Data.GetNotes()
 }
 
 // NewEntryRecord creates new entry record.
@@ -489,4 +470,19 @@ func verifyBalanceAndType(balance AccountBalance, accountType AccountTypeDefinit
 	if balance.Credit.NEQ(BaseZero) && !accountType.allowCredit {
 		panic("debit not allowed on account")
 	}
+}
+
+func sortEntries(entries map[EntryID]*Entry) []*Entry {
+	results := make([]*Entry, 0, len(entries))
+	for _, e := range entries {
+		results = append(results, e)
+	}
+
+	sort.Slice(results, func(i, j int) bool {
+		r1 := results[i]
+		r2 := results[j]
+		return r1.GetDate().Before(r2.GetDate()) || (r1.GetDate().Equal(r2.GetDate()) && r1.ID < r2.ID)
+	})
+
+	return results
 }

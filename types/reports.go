@@ -237,3 +237,71 @@ func MaxDate(dates ...time.Time) time.Time {
 	}
 	return date
 }
+
+// NewVAT returns new VAT data source.
+func NewVAT(date time.Time, data EntryDataSource) *VAT {
+	return &VAT{
+		Date: date,
+		Data: data,
+	}
+}
+
+// VAT is the data source related to VAT.
+type VAT struct {
+	Date time.Time
+	Data EntryDataSource
+}
+
+// GetDate returns date.
+func (v *VAT) GetDate() time.Time {
+	return v.Date
+}
+
+// GetDocument returns document.
+func (v *VAT) GetDocument() Document {
+	return v.Data.GetDocument()
+}
+
+// GetContractor returns contractor.
+func (v *VAT) GetContractor() Contractor {
+	return v.Data.GetContractor()
+}
+
+// GetNotes returns notes.
+func (v *VAT) GetNotes() string {
+	return v.Data.GetNotes()
+}
+
+// NewCurrencyDiff creates new currency diff data source.
+func NewCurrencyDiff(data EntryDataSource, bankRecord *BankRecord) *CurrencyDiff {
+	return &CurrencyDiff{
+		Data:       data,
+		BankRecord: bankRecord,
+	}
+}
+
+// CurrencyDiff is the data source of currency diff.
+type CurrencyDiff struct {
+	Data       EntryDataSource
+	BankRecord *BankRecord
+}
+
+// GetDate returns date.
+func (cd *CurrencyDiff) GetDate() time.Time {
+	return MaxDate(cd.Data.GetDate(), cd.BankRecord.Date)
+}
+
+// GetDocument returns document.
+func (cd *CurrencyDiff) GetDocument() Document {
+	return cd.Data.GetDocument()
+}
+
+// GetContractor returns contractor.
+func (cd *CurrencyDiff) GetContractor() Contractor {
+	return cd.Data.GetContractor()
+}
+
+// GetNotes returns notes.
+func (cd *CurrencyDiff) GetNotes() string {
+	return cd.Data.GetNotes()
+}

@@ -79,7 +79,7 @@ func GenerateVATReport(
 		monthName := monthName(month.Month())
 
 		var added bool
-		for !added || (len(entries) > 0 && entries[0].Date.Month() == month.Month()) {
+		for !added || (len(entries) > 0 && entries[0].GetDate().Month() == month.Month()) {
 			added = true
 
 			vatCurrentPage := previousPage
@@ -88,12 +88,12 @@ func GenerateVATReport(
 			for _, e := range entries {
 				index++
 				r := VATRecord{
-					Date:       e.Date,
+					Date:       e.GetDate(),
 					Index:      index,
-					DayOfMonth: uint8(e.Date.Day()),
-					Document:   e.Document,
-					Contractor: e.Contractor,
-					Notes:      e.Notes,
+					DayOfMonth: uint8(e.GetDate().Day()),
+					Document:   e.GetDocument(),
+					Contractor: e.GetContractor(),
+					Notes:      e.GetNotes(),
 					Income:     e.Amount.Credit,
 				}
 				records = append(records, r)
