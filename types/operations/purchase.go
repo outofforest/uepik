@@ -137,10 +137,10 @@ func (p *Purchase) Documents(coa *types.ChartOfAccounts) []types.ReportDocument 
 func costTaxTypeToAccountID(costTaxType types.CostTaxType) types.AccountID {
 	switch costTaxType {
 	case types.CostTaxTypeTaxable:
-		return types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.Podatkowe,
+		return types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe,
 			accounts.Operacyjne)
 	case types.CostTaxTypeNonTaxable:
-		return types.NewAccountID(accounts.CIT, accounts.Koszty, accounts.Niepodatkowe,
+		return types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Niepodatkowe,
 			accounts.Operacyjne)
 	default:
 		panic("invalid cost tax type")
