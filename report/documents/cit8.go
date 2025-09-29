@@ -23,6 +23,7 @@ type CIT8Report struct {
 	NonTaxableProfitFinancial types.Denom
 	NonTaxableProfitOthers    types.Denom
 	UnspentProfit             types.Denom
+	ReceivedDonations         types.Denom
 }
 
 // GenerateCIT8Report generates CIT-8 report.
@@ -50,6 +51,8 @@ func GenerateCIT8Report(coa *types.ChartOfAccounts) types.ReportDocument {
 			NonTaxableProfitFinancial: nonTaxableProfitFinancial,
 			NonTaxableProfitOthers:    nonTaxableProfitOthers,
 			UnspentProfit:             coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+			ReceivedDonations: coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody,
+				accounts.Operacyjne, accounts.ZNieodplatnejDPP)),
 		},
 		Template: cit8Template,
 		Config: types.SheetConfig{
