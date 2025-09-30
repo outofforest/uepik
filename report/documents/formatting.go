@@ -11,6 +11,10 @@ func notZero(n types.Number) bool {
 	return !n.IsZero()
 }
 
+func date(date time.Time) string {
+	return date.Format(time.DateOnly)
+}
+
 func monthName(month time.Month) string {
 	switch month {
 	case time.January:
