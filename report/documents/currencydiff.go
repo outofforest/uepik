@@ -11,7 +11,9 @@ import (
 var (
 	//go:embed currencydiff.tmpl.xml
 	currencyDiffTmpl     string
-	currencyDiffTemplate = template.Must(template.New("currencyDiff").Parse(currencyDiffTmpl))
+	currencyDiffTemplate = template.Must(template.New("currencyDiff").Funcs(template.FuncMap{
+		"date": date,
+	}).Parse(currencyDiffTmpl))
 )
 
 // CurrencyDiffDocument represents currency diff documents.

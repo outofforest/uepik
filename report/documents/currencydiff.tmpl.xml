@@ -20,6 +20,16 @@
         </table:table-row>
         <table:table-row table:style-name="ro3">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+                <text:p>Data:</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:number-columns-repeated="2" table:style-name="Default"/>
+            <table:table-cell table:style-name="ce79" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="6" table:number-rows-spanned="1">
+                <text:p>{{ date .Document.Date }}</text:p>
+            </table:table-cell>
+            <table:covered-table-cell table:number-columns-repeated="5" table:style-name="Default"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro3">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
                 <text:p>Nazwa podatnika:</text:p>
             </table:table-cell>
             <table:covered-table-cell table:number-columns-repeated="2" table:style-name="Default"/>
@@ -138,12 +148,18 @@
         <table:table-cell office:value-type="float" office:value="{{ $summary.Income.Amount }}" calcext:value-type="float" />
         <table:table-cell office:value-type="float" office:value="{{ $summary.Cost.Amount }}" calcext:value-type="float" />
     </table:table-row>
+    <table:table-row table:style-name="ro3">
+        <table:table-cell table:style-name="Default" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
+            <text:p>Podpis:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
 {{ end }}
     <table:table-row table:style-name="ro2">
         <table:table-cell table:style-name="Default" table:number-columns-repeated="8"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-        <table:covered-table-cell table:number-columns-repeated="7" table:style-name="Default"/>
+        <table:table-cell table:number-columns-repeated="7" table:style-name="Default"/>
         <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string">
             <text:p>Numer karty:</text:p>
         </table:table-cell>
