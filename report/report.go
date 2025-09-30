@@ -143,6 +143,7 @@ func newReport(
 		docs = append(docs, documents.GenerateBankReport(year.Period, year.CompanyName, year.CompanyAddress,
 			types.Currencies.Currency(c), ci, bankRecords[c]))
 	}
+	docs = append(docs, documents.GenerateOverDueReport(year.Period, year.Operations))
 	for _, op := range year.Operations {
 		docs = append(docs, op.Documents(coa)...)
 	}

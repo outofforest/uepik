@@ -18,10 +18,7 @@ const (
 var BaseCurrency = Currency{Symbol: PLN, AmountPrecision: 2, RatePrecision: 0}
 
 // BaseZero is the zero value of base currency.
-var BaseZero = Denom{
-	Currency: BaseCurrency.Symbol,
-	Amount:   NewNumber(0, 0, BaseCurrency.AmountPrecision),
-}
+var BaseZero = NewDenom(BaseCurrency.Symbol)
 
 // Currencies is the dictionary of defined currencies.
 var Currencies = CurrencyMap{
@@ -49,6 +46,15 @@ type Currency struct {
 	Symbol          CurrencySymbol
 	AmountPrecision uint64
 	RatePrecision   uint64
+}
+
+// NewDenom returns new denom with zero amount.
+func NewDenom(currency CurrencySymbol) Denom {
+	c := Currencies.Currency(currency)
+	return Denom{
+		Currency: currency,
+		Amount:   NewNumber(0, 0, c.AmountPrecision),
+	}
 }
 
 // Denom is the amount of currency.

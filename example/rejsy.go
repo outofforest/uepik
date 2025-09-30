@@ -11,6 +11,7 @@ var (
 			Kontrahent("INVINI sp. z o. o.", "", ""),
 			Naleznosci(
 				Naleznosc(Data(2025, 1, 1), Kwota(1, 23, EUR)),
+				Naleznosc(Data(2025, 1, 2), Kwota(4, 23, EUR)),
 			),
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),

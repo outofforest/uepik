@@ -36,6 +36,16 @@ func (s *Sell) GetNotes() string {
 	return "Opis"
 }
 
+// GetDues returns dues.
+func (s *Sell) GetDues() []types.Due {
+	return s.Dues
+}
+
+// GetPayments returns payments.
+func (s *Sell) GetPayments() []types.Payment {
+	return s.Payments
+}
+
 // BankRecords returns bank records for the sell.
 func (s *Sell) BankRecords() []*types.BankRecord {
 	records := []*types.BankRecord{}

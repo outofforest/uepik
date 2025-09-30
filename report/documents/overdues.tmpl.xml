@@ -1,0 +1,38 @@
+<table:table table:name="Zaległości" table:style-name="taPortrait">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co18" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce90"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co20"/>
+    <table:table-header-rows>
+        <table:table-row table:style-name="ro16">
+            <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+                <text:p>Dokument</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Kontrahent</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Zaległość</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Waluta</text:p>
+            </table:table-cell>
+        </table:table-row>
+    </table:table-header-rows>
+{{ range . }}
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Document.ID }}</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Contractor.Name }}</text:p>
+        </table:table-cell>
+        <table:table-cell table:style-name="ce{{ .Amount.Currency }}" office:value-type="float" office:value="{{ .Amount.Amount }}" calcext:value-type="float" />
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Amount.Currency }}</text:p>
+        </table:table-cell>
+    </table:table-row>
+{{ end }}
+</table:table>
