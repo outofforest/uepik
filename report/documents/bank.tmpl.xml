@@ -65,7 +65,7 @@
                 <text:p>Data</text:p>
             </table:table-cell>
             <table:table-cell table:style-name="ce20" office:value-type="string" calcext:value-type="string">
-                <text:p>Nr dowodu księgowego</text:p>
+                <text:p>Płatność</text:p>
             </table:table-cell>
             <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
                 <text:p>Kontrahent</text:p>
@@ -138,7 +138,7 @@
         <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" />
         <table:table-cell office:value-type="float" office:value="{{ .DayOfMonth }}" calcext:value-type="float" />
         <table:table-cell office:value-type="string" calcext:value-type="string">
-            <text:p>{{ .PaidDocument.ID }}</text:p>
+            <text:p>{{ .Document }}</text:p>
         </table:table-cell>
         <table:table-cell office:value-type="string" calcext:value-type="string">
             <text:p>{{ .Contractor.Name }}</text:p>

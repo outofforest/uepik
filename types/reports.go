@@ -130,12 +130,10 @@ func (fy *FiscalYear) BankReports(
 	for _, y := range years {
 		bankRecords := []*BankRecord{}
 		for _, op := range y.Operations {
-			brs := op.BankRecords()
-			bankRecords = append(bankRecords, brs...)
-
-			if _, exists := opBankRecords[op]; exists {
-				for _, br := range brs {
-					if y.Period.Contains(br.Date) {
+			for _, br := range op.BankRecords() {
+				if y.Period.Contains(br.Date) {
+					bankRecords = append(bankRecords, br)
+					if _, exists := opBankRecords[op]; exists {
 						opBankRecords[op] = append(opBankRecords[op], br)
 					}
 				}
