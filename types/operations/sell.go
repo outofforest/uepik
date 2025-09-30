@@ -14,6 +14,7 @@ type Sell struct {
 	Contractor types.Contractor
 	Dues       []types.Due
 	Payments   []types.Payment
+	Type       types.SellType
 }
 
 // GetDate returns date of sell.
@@ -63,7 +64,12 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 }
 
 // BookRecords returns book records for the sell.
-func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
+func (s *Sell) BookRecords(
+	period types.Period,
+	coa *types.ChartOfAccounts,
+	bankRecords []*types.BankRecord,
+	rates types.CurrencyRates,
+) []types.ReportDocument {
 	if len(s.Dues) == 0 {
 		panic("no dues")
 	}
@@ -76,7 +82,7 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 
 	coa.AddEntry(s,
 		types.NewEntryRecord(
-			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.Odplatna),
+			sellTypeToAccountID(s.Type),
 			types.CreditBalance(incomeBase),
 		),
 		types.NewEntryRecord(
@@ -88,10 +94,6 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			types.CreditBalance(incomeBase),
 		),
 	)
-
-	if len(s.Payments) > 0 && len(bankRecords) == 0 {
-		panic("brak rekordu walutowego dla płatności")
-	}
 
 	for _, br := range bankRecords {
 		if br.Rate.EQ(incomeRate) {
@@ -121,9 +123,17 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 			),
 		)
 	}
+
+	return nil
 }
 
-// Documents generate documents for operation.
-func (s *Sell) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
-	return nil
+func sellTypeToAccountID(sellType types.SellType) types.AccountID {
+	switch sellType {
+	case types.SellTypeRecorded:
+		return types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.Odplatna)
+	case types.SellTypeUnrecorded:
+		return types.NewAccountID(accounts.SprzedazNieewidencjonowana)
+	default:
+		panic("invalid sell type")
+	}
 }

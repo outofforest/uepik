@@ -30,6 +30,12 @@ const (
 	Odplatna    = types.CostCategoryTypePaid
 )
 
+// Rodzaje sprzedaży.
+const (
+	Ewidencjonowana    = types.SellTypeRecorded
+	Nieewidencjonowana = types.SellTypeUnrecorded
+)
+
 var timeLocation = lo.Must(time.LoadLocation("Europe/Warsaw"))
 
 // Data tworzy datę.
@@ -219,6 +225,7 @@ func Sprzedaz(
 	kontrahent types.Contractor,
 	naleznosci []types.Due,
 	platnosci []types.Payment,
+	rodzaj types.SellType,
 ) []types.Operation {
 	if len(naleznosci) == 0 {
 		panic("brak zdefiniowanych należności ze sprzedaży")
@@ -229,6 +236,7 @@ func Sprzedaz(
 		Contractor: kontrahent,
 		Dues:       naleznosci,
 		Payments:   platnosci,
+		Type:       rodzaj,
 	}}
 }
 

@@ -20,4 +20,5 @@ const (
 	ZLatUbieglych
 	WTrakcieRoku
 	RozniceKursowe
+	SprzedazNieewidencjonowana
 )

@@ -124,6 +124,7 @@ func GenerateCurrencyDiffDocument(
 	}
 
 	return types.ReportDocument{
+		Date:     document.Date,
 		Template: currencyDiffTemplate,
 		Data:     report,
 		Config: types.SheetConfig{

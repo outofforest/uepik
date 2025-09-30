@@ -3,7 +3,6 @@ package report
 import (
 	"bytes"
 	_ "embed"
-	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -27,12 +26,15 @@ var coaAccounts = []*types.Account{
 			types.NewAccount(
 				accounts.Finansowe, types.Incomes, types.AllValid(),
 				types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes,
-					types.ValidSources(&operations.CurrencyDiff{})),
+					types.ValidSources(&operations.CurrencyDiffSource{})),
 			),
 			types.NewAccount(
 				accounts.Operacyjne, types.Incomes, types.AllValid(),
 				types.NewAccount(accounts.Nieodplatna, types.Incomes, types.ValidSources(&operations.Donation{})),
-				types.NewAccount(accounts.Odplatna, types.Incomes, types.ValidSources(&operations.Sell{})),
+				types.NewAccount(accounts.Odplatna, types.Incomes, types.ValidSources(
+					&operations.Sell{},
+					&operations.UnrecordedSellSource{},
+				)),
 			),
 		),
 		types.NewAccount(
@@ -42,7 +44,7 @@ var coaAccounts = []*types.Account{
 				types.NewAccount(
 					accounts.Finansowe, types.Costs, types.AllValid(),
 					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs,
-						types.ValidSources(&operations.CurrencyDiff{})),
+						types.ValidSources(&operations.CurrencyDiffSource{})),
 				),
 				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(&operations.Purchase{})),
 			),
@@ -56,7 +58,7 @@ var coaAccounts = []*types.Account{
 	types.NewAccount(
 		accounts.NiewydatkowanyDochod, types.Liabilities, types.AllValid(),
 		types.NewAccount(accounts.WTrakcieRoku, types.Liabilities, types.ValidSources(
-			&operations.CurrencyDiff{},
+			&operations.CurrencyDiffSource{},
 			&operations.Donation{},
 			&operations.Purchase{},
 			&operations.Sell{},
@@ -68,13 +70,14 @@ var coaAccounts = []*types.Account{
 		types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 		types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 	),
+	types.NewAccount(accounts.SprzedazNieewidencjonowana, types.Incomes, types.ValidSources(&operations.Sell{})),
 	types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(
-		&operations.CurrencyDiff{},
+		&operations.CurrencyDiffSource{},
 		&operations.Donation{},
 		&operations.Purchase{},
 	)),
 	types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(
-		&operations.CurrencyDiff{},
+		&operations.CurrencyDiffSource{},
 		&operations.Sell{},
 		&operations.Purchase{},
 	)),
@@ -123,21 +126,19 @@ func newReport(
 		Address: year.CompanyAddress,
 		TaxID:   year.CompanyTaxID,
 	}
-	//nolint:lll
-	for date := year.Period.Start.AddDate(0, 1, 0).Add(-time.Nanosecond); year.Period.Contains(date); date = date.AddDate(0, 1, 0) {
-		id := fmt.Sprintf("RK/%d/%d/1", date.Year(), date.Month())
-		year.Operations = append(year.Operations, &operations.CurrencyDiff{
-			Document: types.Document{
-				ID:        types.DocumentID(id),
-				Date:      date,
-				SheetName: strings.ReplaceAll(id, "/", "."),
-			},
+	year.Operations = append(
+		year.Operations,
+		&operations.UnrecordedSell{
 			Contractor: company,
-		})
-	}
+		},
+		&operations.CurrencyDiff{
+			Contractor: company,
+		},
+	)
 
 	bankRecords, opBankRecords := year.BankReports(currencyRates, years)
-	year.BookRecords(coa, currencyRates, opBankRecords)
+
+	opDocs := year.BookRecords(coa, currencyRates, opBankRecords)
 
 	docs := []types.ReportDocument{
 		documents.GenerateBookReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
@@ -166,9 +167,7 @@ func newReport(
 			types.Currencies.Currency(c), ci, bankRecords[c]))
 	}
 	docs = append(docs, documents.GenerateOverDueReport(year.Period, year.Operations))
-	for _, op := range year.Operations {
-		docs = append(docs, op.Documents(coa)...)
-	}
+	docs = append(docs, opDocs...)
 
 	report := types.Report{
 		Currencies: lo.Values(types.Currencies),
