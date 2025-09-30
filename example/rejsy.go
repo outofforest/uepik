@@ -24,6 +24,7 @@ var (
 			Kwota(10, 11, EUR),
 			Platnosci(Platnosc("WB/EUR/2025/01/24", Data(2025, 1, 6), 1, Kwota(10, 11, EUR))),
 			KUP,
+			Odplatna,
 		),
 		Zakup(
 			Data(2025, 1, 8),
@@ -32,6 +33,7 @@ var (
 			Kwota(10, 11, EUR),
 			Platnosci(Platnosc("WB/EUR/2025/01/25", Data(2024, 1, 6), 1, Kwota(10, 11, EUR))),
 			NKUP,
+			Nieodplatna,
 		),
 	)
 )

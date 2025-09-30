@@ -24,6 +24,12 @@ const (
 	NKUP = types.CostTaxTypeNonTaxable
 )
 
+// Rodzaje działalności.
+const (
+	Nieodplatna = types.CostCategoryTypeFreeOfCharge
+	Odplatna    = types.CostCategoryTypePaid
+)
+
 var timeLocation = lo.Must(time.LoadLocation("Europe/Warsaw"))
 
 // Data tworzy datę.
@@ -234,14 +240,16 @@ func Zakup(
 	kwota types.Denom,
 	platnosci []types.Payment,
 	typPodatkowy types.CostTaxType,
+	typPozytku types.CostCategoryType,
 ) []types.Operation {
 	return []types.Operation{&operations.Purchase{
-		Date:        data,
-		Document:    dokument,
-		Contractor:  kontrahent,
-		Amount:      kwota,
-		Payments:    platnosci,
-		CostTaxType: typPodatkowy,
+		Date:             data,
+		Document:         dokument,
+		Contractor:       kontrahent,
+		Amount:           kwota,
+		Payments:         platnosci,
+		CostTaxType:      typPodatkowy,
+		CostCategoryType: typPozytku,
 	}}
 }
 

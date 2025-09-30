@@ -25,14 +25,11 @@
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
                 <text:p>Nazwa podatnika:</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:style-name="ce6"/>
-            <table:covered-table-cell table:style-name="ce125"/>
-            <table:table-cell table:style-name="ce54" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+            <table:covered-table-cell table:number-columns-repeated="2"/>
+            <table:table-cell table:style-name="ce54" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
                 <text:p>{{ $companyName }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:style-name="ce54"/>
-            <table:table-cell table:style-name="ce6"/>
-            <table:table-cell table:style-name="ce56"/>
+            <table:covered-table-cell table:number-columns-repeated="3"/>
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string">
                 <text:p>Waluta:</text:p>
             </table:table-cell>
@@ -40,7 +37,6 @@
                 <text:p>{{ .Currency.Symbol }}</text:p>
             </table:table-cell>
             <table:covered-table-cell table:style-name="ce54"/>
-            <table:table-cell/>
         </table:table-row>
         <table:table-row table:style-name="ro3">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
@@ -57,7 +53,6 @@
             <table:table-cell table:style-name="Default"/>
             <table:table-cell table:style-name="ce55"/>
             <table:table-cell table:style-name="ce125"/>
-            <table:table-cell/>
         </table:table-row>
         <table:table-row table:style-name="ro10">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="10"/>
@@ -93,7 +88,6 @@
             <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
                 <text:p>Kurs średni</text:p>
             </table:table-cell>
-            <table:table-cell/>
         </table:table-row>
         <table:table-row table:style-name="ro7">
             <table:table-cell table:style-name="ce66" office:value-type="float" office:value="1" calcext:value-type="float">
@@ -126,7 +120,6 @@
             <table:table-cell table:style-name="ce66" office:value-type="float" office:value="10" calcext:value-type="float">
                 <text:p>10</text:p>
             </table:table-cell>
-            <table:table-cell/>
         </table:table-row>
     </table:table-header-rows>
 {{ range .Pages }}

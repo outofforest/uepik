@@ -15,6 +15,15 @@ const (
 	CostTaxTypeNonTaxable CostTaxType = "nonTaxable"
 )
 
+// CostCategoryType defines the category type of the cost.
+type CostCategoryType string
+
+// Cost category types.
+const (
+	CostCategoryTypeFreeOfCharge CostCategoryType = "freeOfCharge"
+	CostCategoryTypePaid         CostCategoryType = "paid"
+)
+
 // Period defines date range for fiscal year.
 type Period struct {
 	Start time.Time

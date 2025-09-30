@@ -52,7 +52,7 @@ func GenerateCIT8Report(coa *types.ChartOfAccounts) types.ReportDocument {
 			NonTaxableProfitOthers:    nonTaxableProfitOthers,
 			UnspentProfit:             coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
 			ReceivedDonations: coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody,
-				accounts.Operacyjne, accounts.ZNieodplatnejDPP)),
+				accounts.Operacyjne, accounts.Nieodplatna)),
 		},
 		Template: cit8Template,
 		Config: types.SheetConfig{
