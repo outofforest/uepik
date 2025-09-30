@@ -70,6 +70,9 @@ func (ch *ChartOfAccounts) AddEntry(data EntryDataSource, records ...EntryRecord
 		if len(r.AccountID) == 0 {
 			panic("empty account ID")
 		}
+		if r.Amount.IsZero() {
+			continue
+		}
 
 		accounts := ch.accounts
 		var account *Account

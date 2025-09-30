@@ -76,7 +76,11 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 
 	coa.AddEntry(s,
 		types.NewEntryRecord(
-			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.ZOdplatnejDPP),
+			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.Odplatna),
+			types.CreditBalance(incomeBase),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.Odplatna),
 			types.CreditBalance(incomeBase),
 		),
 		types.NewEntryRecord(
@@ -103,7 +107,7 @@ func (s *Sell) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.Bank
 
 		coa.AddEntry(types.NewCurrencyDiff(s, incomeRate, br),
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.RozniceKursowe),
+				types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
 				amount,
 			),
 		)

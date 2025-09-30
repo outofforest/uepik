@@ -9,8 +9,8 @@ const (
 	Finansowe
 	DodatnieRozniceKursowe
 	Operacyjne
-	ZNieodplatnejDPP
-	ZOdplatnejDPP
+	Nieodplatna
+	Odplatna
 	Koszty
 	Podatkowe
 	UjemneRozniceKursowe

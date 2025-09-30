@@ -45,38 +45,50 @@ func (cd *CurrencyDiff) BookRecords(
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
 ) {
-	records := []types.EntryRecord{}
 	debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
-	if debit.NEQ(types.BaseZero) {
-		records = append(records,
-			types.NewEntryRecord(
-				types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
-					accounts.UjemneRozniceKursowe),
-				types.DebitBalance(debit),
-			),
-			types.NewEntryRecord(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-				types.DebitBalance(debit),
-			),
-		)
-	}
-
 	credit := coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
-	if credit.NEQ(types.BaseZero) {
-		records = append(records,
-			types.NewEntryRecord(
-				types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Finansowe,
-					accounts.DodatnieRozniceKursowe),
-				types.CreditBalance(credit),
-			),
-			types.NewEntryRecord(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-				types.CreditBalance(credit),
-			),
-		)
-	}
 
-	coa.AddEntry(cd, records...)
+	coa.AddEntry(
+		cd,
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
+				accounts.UjemneRozniceKursowe),
+			types.DebitBalance(debit),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+			types.DebitBalance(debit),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.Nieodplatna),
+			types.DebitBalance(coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Nieodplatna),
+				cd.Document.Date)),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.Odplatna),
+			types.DebitBalance(coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
+				cd.Document.Date)),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Finansowe,
+				accounts.DodatnieRozniceKursowe),
+			types.CreditBalance(credit),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+			types.CreditBalance(credit),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.Nieodplatna),
+			types.CreditBalance(coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Nieodplatna),
+				cd.Document.Date)),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.Odplatna),
+			types.CreditBalance(coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
+				cd.Document.Date)),
+		),
+	)
 }
 
 // Documents generate documents for operation.

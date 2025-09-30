@@ -9,12 +9,13 @@ import (
 
 // Purchase defines the cost of purchased goods or service.
 type Purchase struct {
-	Date        time.Time
-	Document    types.Document
-	Contractor  types.Contractor
-	Amount      types.Denom
-	Payments    []types.Payment
-	CostTaxType types.CostTaxType
+	Date             time.Time
+	Document         types.Document
+	Contractor       types.Contractor
+	Amount           types.Denom
+	Payments         []types.Payment
+	CostTaxType      types.CostTaxType
+	CostCategoryType types.CostCategoryType
 }
 
 // GetDate returns date of purchase.
@@ -60,6 +61,10 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 	records := []types.EntryRecord{
 		types.NewEntryRecord(
 			costTaxTypeToAccountID(p.CostTaxType),
+			types.DebitBalance(costBase),
+		),
+		types.NewEntryRecord(
+			types.NewAccountID(costCategoryTypeToAccountPart(p.CostCategoryType)),
 			types.DebitBalance(costBase),
 		),
 	}
@@ -122,7 +127,7 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 
 		coa.AddEntry(types.NewCurrencyDiff(p, costRate, br),
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.RozniceKursowe),
+				types.NewAccountID(accounts.RozniceKursowe, costCategoryTypeToAccountPart(p.CostCategoryType)),
 				amount,
 			),
 		)
@@ -144,5 +149,16 @@ func costTaxTypeToAccountID(costTaxType types.CostTaxType) types.AccountID {
 			accounts.Operacyjne)
 	default:
 		panic("invalid cost tax type")
+	}
+}
+
+func costCategoryTypeToAccountPart(costCategoryType types.CostCategoryType) types.AccountIDPart {
+	switch costCategoryType {
+	case types.CostCategoryTypeFreeOfCharge:
+		return accounts.Nieodplatna
+	case types.CostCategoryTypePaid:
+		return accounts.Odplatna
+	default:
+		panic("invalid cost category type")
 	}
 }

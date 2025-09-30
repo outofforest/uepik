@@ -116,9 +116,9 @@ func GenerateBookReport(
 		summaryPreviousPage := NewBookSummary()
 		summaryMonth := NewBookSummary()
 
-		var bookAdded bool
-		for !bookAdded || (len(entries) > 0 && entries[0].GetDate().Month() == month.Month()) {
-			bookAdded = true
+		var added bool
+		for !added || (len(entries) > 0 && entries[0].GetDate().Month() == month.Month()) {
+			added = true
 
 			summaryCurrentPage := NewBookSummary()
 			entries := findRecords(&entries, month, 10)
@@ -133,9 +133,9 @@ func GenerateBookReport(
 					Contractor: e.GetContractor(),
 					Notes:      e.GetNotes(),
 					IncomeDonations: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody,
-						accounts.Operacyjne, accounts.ZNieodplatnejDPP), e.ID).Credit,
+						accounts.Operacyjne, accounts.Nieodplatna), e.ID).Credit,
 					IncomeTrading: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody,
-						accounts.Operacyjne, accounts.ZOdplatnejDPP), e.ID).Credit,
+						accounts.Operacyjne, accounts.Odplatna), e.ID).Credit,
 					IncomeOthers: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody,
 						accounts.Finansowe), e.ID).Credit,
 					IncomeSum: coa.Amount(types.NewAccountID(accounts.PiK, accounts.Przychody), e.ID).Credit,

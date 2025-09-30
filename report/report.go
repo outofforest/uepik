@@ -31,8 +31,8 @@ var coaAccounts = []*types.Account{
 			),
 			types.NewAccount(
 				accounts.Operacyjne, types.Incomes, types.AllValid(),
-				types.NewAccount(accounts.ZNieodplatnejDPP, types.Incomes, types.ValidSources(&operations.Donation{})),
-				types.NewAccount(accounts.ZOdplatnejDPP, types.Incomes, types.ValidSources(&operations.Sell{})),
+				types.NewAccount(accounts.Nieodplatna, types.Incomes, types.ValidSources(&operations.Donation{})),
+				types.NewAccount(accounts.Odplatna, types.Incomes, types.ValidSources(&operations.Sell{})),
 			),
 		),
 		types.NewAccount(
@@ -63,7 +63,21 @@ var coaAccounts = []*types.Account{
 		)),
 		types.NewAccount(accounts.ZLatUbieglych, types.Liabilities, types.ValidSources(&operations.Purchase{})),
 	),
-	types.NewAccount(accounts.RozniceKursowe, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
+	types.NewAccount(
+		accounts.RozniceKursowe, types.Liabilities, types.AllValid(),
+		types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
+		types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
+	),
+	types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(
+		&operations.CurrencyDiff{},
+		&operations.Donation{},
+		&operations.Purchase{},
+	)),
+	types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(
+		&operations.CurrencyDiff{},
+		&operations.Sell{},
+		&operations.Purchase{},
+	)),
 }
 
 //go:embed report.tmpl.xml
@@ -129,6 +143,14 @@ func newReport(
 		documents.GenerateBookReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateFlowReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateVATReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
+		documents.GenerateCategoryReport(year.Period, coa, year.CompanyName, year.CompanyAddress,
+			"ZESTAWIENIE DZIAŁALNOŚCI NIEODPŁATNEJ",
+			"Nieodpłatna",
+			types.NewAccountID(accounts.Nieodplatna)),
+		documents.GenerateCategoryReport(year.Period, coa, year.CompanyName, year.CompanyAddress,
+			"ZESTAWIENIE DZIAŁALNOŚCI ODPŁATNEJ",
+			"Odpłatna",
+			types.NewAccountID(accounts.Odplatna)),
 		documents.GenerateCIT8Report(coa),
 	}
 	currencies := lo.Keys(bankRecords)
