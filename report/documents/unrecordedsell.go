@@ -62,7 +62,7 @@ func GenerateUnrecordedSellDocument(
 	contractor types.Contractor,
 	entries []*types.Entry,
 ) types.ReportDocument {
-	const perPage = 12
+	const perPage = 9
 
 	report := &UnrecordedSellDocument{
 		Document:   document,
@@ -106,7 +106,7 @@ func GenerateUnrecordedSellDocument(
 		Data:     report,
 		Config: types.SheetConfig{
 			Name:       document.SheetName,
-			LockedRows: 7,
+			LockedRows: 8,
 		},
 	}
 }

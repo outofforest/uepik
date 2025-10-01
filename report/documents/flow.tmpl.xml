@@ -3,14 +3,8 @@
 <table:table table:name="PF" table:style-name="taLandscape">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co6" table:default-cell-style-name="ce8"/>
-    <table:table-column table:style-name="co10" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co5" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co11" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co12" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co13" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co11" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co3" table:default-cell-style-name="ce104"/>
-    <table:table-column table:style-name="co14" table:default-cell-style-name="ce104"/>
+    <table:table-column table:style-name="co10" table:number-columns-repeated="3" table:default-cell-style-name="ce104"/>
+    <table:table-column table:style-name="co13" table:number-columns-repeated="5" table:default-cell-style-name="ce104"/>
     <table:table-header-rows>
         <table:table-row table:style-name="ro1">
             <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
@@ -21,23 +15,14 @@
             <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
         </table:table-row>
         <table:table-row table:style-name="ro3">
-            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-                <text:p>Nazwa podatnika:</text:p>
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
+                <text:p>Nazwa podatnika: {{ $companyName }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:style-name="Default"/>
-            <table:table-cell table:style-name="ce79" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-                <text:p>{{ $companyName }}</text:p>
+            <table:covered-table-cell table:number-columns-repeated="3"/>
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Adres: {{ $companyAddress }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:style-name="ce84"/>
-            <table:table-cell table:style-name="ce109" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-                <text:p>Adres podatnika:</text:p>
-            </table:table-cell>
-            <table:covered-table-cell table:style-name="ce111"/>
-            <table:table-cell table:style-name="ce114" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-                <text:p>{{ $companyAddress }}</text:p>
-            </table:table-cell>
-            <table:covered-table-cell table:style-name="ce114"/>
-            <table:covered-table-cell table:style-name="ce115"/>
+            <table:covered-table-cell table:number-columns-repeated="4"/>
         </table:table-row>
         <table:table-row table:style-name="ro10">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
@@ -47,19 +32,26 @@
             <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
                 <text:p>Przychody</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Koszty uzyskania</text:p><text:p>przychodów</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Koszty uzyskania przychodów</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Dochód w rozumieniu</text:p><text:p>art. 7 ustawy o podatku</text:p><text:p>dochodowym od osób</text:p><text:p>prawnych</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Dochód w rozumieniu art. 7 ustawy o podatku dochodowym od osób prawnych</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Dochód (przychód)</text:p><text:p>wolny od podatku w roku</text:p><text:p>podatkowym</text:p><text:p>przeznaczony na cele</text:p><text:p>określone w art. 17 ust. 1</text:p><text:p>ustawy o podatku</text:p><text:p>dochodowym od osób</text:p><text:p>prawnych</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Dochód (przychód) wolny od podatku w roku podatkowym przeznaczony na cele określone w art. 17 ust. 1 ustawy o podatku dochodowym od osób prawnych</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Wydatki na cele</text:p><text:p>określone w art. 17 ust.</text:p><text:p>1 ustawy o podatku</text:p><text:p>dochodowym od osób</text:p><text:p>prawnych pokryte z</text:p><text:p>dochodu zwolnionego</text:p><text:p>od podatku w roku</text:p><text:p>podatkowym</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Wydatki na cele określone w art. 17 ust. 1 ustawy o podatku dochodowym od osób prawnych pokryte z dochodu zwolnionego od podatku w roku podatkowym</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Dochód wolny od</text:p><text:p>podatku z lat</text:p><text:p>ubiegłych</text:p><text:p>przeznaczony na</text:p><text:p>cele określone w</text:p><text:p>art. 17 ust. 1</text:p><text:p>ustawy o podatku</text:p><text:p>dochodowym od</text:p><text:p>osób prawnych</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Dochód wolny od podatku z lat ubiegłych przeznaczony na cele określone w art. 17 ust. 1 ustawy o podatku dochodowym od osób prawnych</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Wydatki na cele w</text:p><text:p>rozumieniu art. 17</text:p><text:p>ust. 1 ustawy o</text:p><text:p>podatku</text:p><text:p>dochodowym od</text:p><text:p>osób prawnych</text:p><text:p>pokryte z dochodu</text:p><text:p>z lat ubiegłych</text:p><text:p>zwolnionego od</text:p><text:p>podatku</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Wydatki na cele w rozumieniu art. 17 ust. 1 ustawy o podatku dochodowym od osób prawnych pokryte z dochodu z lat ubiegłych zwolnionego od podatku</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string"><text:p>Ogółem dochód</text:p><text:p>wolny od podatku</text:p><text:p>niewydatkowany</text:p><text:p>na cele, o których</text:p><text:p>mowa w art. 17 ust.</text:p><text:p>1 ustawy o podatku</text:p><text:p>dochodowym od</text:p><text:p>osób prawnych</text:p>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Ogółem dochód wolny od podatku niewydatkowany na cele, o których mowa w art. 17 ust. 1 ustawy o podatku dochodowym od osób prawnych</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro7">
@@ -189,15 +181,10 @@
         <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-            <text:p>Okres sprawozdawczy:</text:p>
+        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
+            <text:p>Okres sprawozdawczy: {{ .Month }} {{ .Year }}</text:p>
         </table:table-cell>
-        <table:covered-table-cell table:style-name="Default"/>
-        <table:table-cell table:style-name="ce108" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-            <text:p>{{ .Month }} {{ .Year }}</text:p>
-        </table:table-cell>
-        <table:covered-table-cell table:style-name="Default"/>
-        <table:table-cell table:style-name="Default" table:number-columns-repeated="5"/>
+        <table:covered-table-cell table:number-columns-repeated="8"/>
     </table:table-row>
     <table:table-row table:style-name="ro11">
         <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>

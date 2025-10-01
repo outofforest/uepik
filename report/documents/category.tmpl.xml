@@ -17,24 +17,14 @@
             <table:table-cell table:style-name="Default" table:number-columns-repeated="6"/>
         </table:table-row>
         <table:table-row table:style-name="ro3">
-            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-                <text:p>Nazwa podatnika:</text:p>
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="6" table:number-rows-spanned="1">
+                <text:p>Nazwa podatnika: {{ $companyName }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:number-columns-repeated="2"/>
-            <table:table-cell table:style-name="ce54" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-                <text:p>{{ $companyName }}</text:p>
-            </table:table-cell>
-            <table:covered-table-cell table:number-columns-repeated="2"/>
         </table:table-row>
         <table:table-row table:style-name="ro3">
-            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-                <text:p>Adres podatnika:</text:p>
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="6" table:number-rows-spanned="1">
+                <text:p>Adres: {{ $companyAddress }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:number-columns-repeated="2"/>
-            <table:table-cell table:style-name="ce54" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-                <text:p>{{ $companyAddress }}</text:p>
-            </table:table-cell>
-            <table:covered-table-cell table:number-columns-repeated="2"/>
         </table:table-row>
         <table:table-row table:style-name="ro10">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="6"/>
@@ -115,17 +105,11 @@
         <table:table-cell table:style-name="Default" table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-            <text:p>Okres sprawozdawczy:</text:p>
+        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+            <text:p>Okres sprawozdawczy: {{ .Month }} {{ .Year }}</text:p>
         </table:table-cell>
-        <table:covered-table-cell table:number-columns-repeated="2" table:style-name="Default"/>
-        <table:table-cell table:style-name="ce55" office:value-type="string" calcext:value-type="string">
-            <text:p>{{ .Month }} {{ .Year }}</text:p>
-        </table:table-cell>
-        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string">
-            <text:p>Numer karty:</text:p>
-        </table:table-cell>
-        <table:table-cell table:style-name="ce54" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
+        <table:covered-table-cell table:number-columns-repeated="4"/>
+        <table:table-cell table:style-name="ce102" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro11">
         <table:table-cell table:style-name="Default" table:number-columns-repeated="6"/>

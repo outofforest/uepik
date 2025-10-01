@@ -102,6 +102,8 @@ func GenerateBookReport(
 	coa *types.ChartOfAccounts,
 	companyName, companyAddress string,
 ) types.ReportDocument {
+	const perPage = 9
+
 	report := &BookReport{
 		CompanyName:    companyName,
 		CompanyAddress: companyAddress,
@@ -121,7 +123,7 @@ func GenerateBookReport(
 			added = true
 
 			summaryCurrentPage := NewBookSummary()
-			entries := findRecords(&entries, month, 10)
+			entries := findRecords(&entries, month, perPage)
 			records := make([]BookRecord, 0, len(entries))
 			for _, e := range entries {
 				index++

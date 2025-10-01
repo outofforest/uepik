@@ -19,24 +19,14 @@
             <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
         </table:table-row>
         <table:table-row table:style-name="ro3">
-            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-                <text:p>Nazwa podatnika:</text:p>
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Nazwa podatnika: {{ $companyName }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:style-name="ce6"/>
-            <table:covered-table-cell table:style-name="ce73"/>
-            <table:table-cell table:style-name="ce79" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-                <text:p>{{ $companyName }}</text:p>
+            <table:covered-table-cell table:number-columns-repeated="4"/>
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
+                <text:p>Adres: {{ $companyAddress }}</text:p>
             </table:table-cell>
-            <table:covered-table-cell table:style-name="ce84"/>
-            <table:table-cell table:style-name="ce60" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-                <text:p>Adres podatnika:</text:p>
-            </table:table-cell>
-            <table:covered-table-cell table:style-name="Default"/>
-            <table:table-cell table:style-name="ce79" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
-                <text:p>{{ $companyAddress }}</text:p>
-            </table:table-cell>
-            <table:covered-table-cell table:style-name="ce84"/>
-            <table:covered-table-cell table:number-columns-repeated="3" table:style-name="Default"/>
+            <table:covered-table-cell table:number-columns-repeated="6" />
         </table:table-row>
         <table:table-row table:style-name="ro4">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
@@ -46,7 +36,7 @@
                 <text:p>Lp.</text:p>
             </table:table-cell>
             <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
-                <text:p>Data zdarzenia lub operacji</text:p>
+                <text:p>Data</text:p>
             </table:table-cell>
             <table:table-cell table:style-name="ce20" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
                 <text:p>Nr dowodu księgowego</text:p>
@@ -77,17 +67,17 @@
                 <text:p>Adres</text:p>
             </table:table-cell>
             <table:covered-table-cell table:style-name="ce14"/>
-            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Przychody z</text:p><text:p>działalności</text:p><text:p>nieodpłatnej</text:p><text:p>pożytku</text:p><text:p>publicznego</text:p>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Prz. z dz. nieodpłatnej p. p.</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Przychody z</text:p><text:p>działalności</text:p><text:p>odpłatnej pożytku</text:p><text:p>publicznego z</text:p><text:p>tytułu sprzedaży</text:p><text:p>towarów i usług</text:p>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Prz. z dz. odpłatnej p. p. z tyt. sprz. t. i u.</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Pozostałe</text:p><text:p>przychody</text:p>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Pozostałe przychody</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Razem przychody</text:p><text:p>(suma z kolumn</text:p><text:p>7 - 9)</text:p>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Razem przychody (7+8+9)</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Koszty uzyskania</text:p><text:p>przychodów</text:p>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>KUP</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>Koszty niestanowiące</text:p><text:p>kosztów uzyskania</text:p><text:p>przychodów</text:p>
+            <table:table-cell table:style-name="ce70" office:value-type="string" calcext:value-type="string"><text:p>NKUP</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro7">
@@ -246,21 +236,11 @@
         <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-            <text:p>Okres sprawozdawczy:</text:p>
+        <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="11" table:number-rows-spanned="1">
+            <text:p>Okres sprawozdawczy: {{ .Month }} {{ .Year }}</text:p>
         </table:table-cell>
-        <table:covered-table-cell table:style-name="ce6"/>
-        <table:covered-table-cell table:style-name="Default"/>
-        <table:table-cell table:style-name="ce82" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-            <text:p>{{ .Month }} {{ .Year }}</text:p>
-        </table:table-cell>
-        <table:covered-table-cell table:style-name="ce40"/>
-        <table:table-cell table:style-name="Default" table:number-columns-repeated="4"/>
-        <table:table-cell table:style-name="ce60" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-            <text:p>Numer karty:</text:p>
-        </table:table-cell>
-        <table:covered-table-cell table:style-name="Default"/>
-        <table:table-cell table:style-name="ce102" table:content-validation-name="val1" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
+        <table:covered-table-cell table:number-columns-repeated="10"/>
+        <table:table-cell table:style-name="ce102" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro11">
         <table:table-cell table:style-name="Default" table:number-columns-repeated="12"/>

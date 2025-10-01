@@ -67,6 +67,8 @@ func GenerateVATReport(
 	coa *types.ChartOfAccounts,
 	companyName, companyAddress string,
 ) types.ReportDocument {
+	const perPage = 18
+
 	report := &VATReport{
 		CompanyName:    companyName,
 		CompanyAddress: companyAddress,
@@ -83,7 +85,7 @@ func GenerateVATReport(
 			added = true
 
 			vatCurrentPage := previousPage
-			entries := findRecords(&entries, month, 25)
+			entries := findRecords(&entries, month, perPage)
 			records := make([]VATRecord, 0, len(entries))
 			for _, e := range entries {
 				index++
