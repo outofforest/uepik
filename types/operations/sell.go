@@ -15,6 +15,7 @@ type Sell struct {
 	Dues       []types.Due
 	Payments   []types.Payment
 	Type       types.SellType
+	Notes      string
 }
 
 // GetDate returns date of sell.
@@ -34,7 +35,7 @@ func (s *Sell) GetContractor() types.Contractor {
 
 // GetNotes returns notes.
 func (s *Sell) GetNotes() string {
-	return "Opis"
+	return s.Notes
 }
 
 // GetDues returns dues.
