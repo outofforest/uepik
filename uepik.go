@@ -207,6 +207,19 @@ func Niezaplacono() []types.Payment {
 	return nil
 }
 
+// Wplata definiuje wpłatę niebędącą przychodem.
+func Wplata(
+	kontrahent types.Contractor,
+	platnosc types.Payment,
+	opis string,
+) []types.Operation {
+	return []types.Operation{&operations.Payment{
+		Contractor: kontrahent,
+		Payment:    platnosc,
+		Notes:      opis,
+	}}
+}
+
 // Darowizna definiuje darowiznę.
 func Darowizna(
 	kontrahent types.Contractor,
