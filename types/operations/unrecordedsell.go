@@ -28,8 +28,8 @@ func (us *UnrecordedSell) BookRecords(
 	rates types.CurrencyRates,
 ) []types.ReportDocument {
 	docs := []types.ReportDocument{}
-	for date := period.Start; period.Contains(date); date = date.AddDate(0, 1, 0) {
-		unrecordedEntries := coa.EntriesMonth(types.NewAccountID(accounts.SprzedazNieewidencjonowana), date)
+	for _, month := range period.Months() {
+		unrecordedEntries := coa.EntriesMonth(types.NewAccountID(accounts.SprzedazNieewidencjonowana), month)
 		var docIndex uint64
 		for len(unrecordedEntries) > 0 {
 			docIndex++

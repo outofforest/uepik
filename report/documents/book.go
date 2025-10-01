@@ -111,7 +111,7 @@ func GenerateBookReport(
 	entries := coa.Entries(types.NewAccountID(accounts.PiK))
 	var index uint64
 	summaryYear := NewBookSummary()
-	for month := period.Start; period.Contains(month); month = month.AddDate(0, 1, 0) {
+	for _, month := range period.Months() {
 		yearNumber := uint64(month.Year())
 		monthName := monthName(month.Month())
 

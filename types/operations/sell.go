@@ -74,48 +74,56 @@ func (s *Sell) BookRecords(
 	if len(s.Dues) == 0 {
 		panic("no dues")
 	}
-	amount := s.Dues[0].Amount
-	for _, due := range s.Dues[1:] {
-		amount = amount.Add(due.Amount)
-	}
 
-	incomeBase, incomeRate := rates.ToBase(amount, types.PreviousDay(s.Date))
-
-	coa.AddEntry(s,
-		types.NewEntryRecord(
-			sellTypeToAccountID(s.Type),
-			types.CreditBalance(incomeBase),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.Odplatna),
-			types.CreditBalance(incomeBase),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-			types.CreditBalance(incomeBase),
-		),
-	)
-
-	for _, br := range bankRecords {
-		if br.Rate.EQ(incomeRate) {
-			continue
+	if !period.End.Before(s.Date) {
+		amount := s.Dues[0].Amount
+		for _, due := range s.Dues[1:] {
+			amount = amount.Add(due.Amount)
 		}
 
-		var amount types.AccountBalance
-		if incomeRate.GT(br.Rate) {
-			amount = types.DebitBalance(br.OriginalAmount.ToBase(incomeRate.Sub(br.Rate)))
-		} else {
-			amount = types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
-		}
+		incomeBase, incomeRate := rates.ToBase(amount, types.PreviousDay(s.Date))
 
-		coa.AddEntry(types.NewCurrencyDiff(s, incomeRate, br),
+		coa.AddEntry(s,
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
-				amount,
+				sellTypeToAccountID(s.Type),
+				types.CreditBalance(incomeBase),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.Odplatna),
+				types.CreditBalance(incomeBase),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+				types.CreditBalance(incomeBase),
 			),
 		)
 
+		for _, br := range bankRecords {
+			if br.Rate.EQ(incomeRate) {
+				continue
+			}
+
+			var amount types.AccountBalance
+			if incomeRate.GT(br.Rate) {
+				amount = types.DebitBalance(br.OriginalAmount.ToBase(incomeRate.Sub(br.Rate)))
+			} else {
+				amount = types.CreditBalance(br.OriginalAmount.ToBase(br.Rate.Sub(incomeRate)))
+			}
+
+			coa.AddEntry(types.NewCurrencyDiff(s, incomeRate, br),
+				types.NewEntryRecord(
+					types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
+					amount,
+				),
+			)
+		}
+	}
+
+	for _, br := range bankRecords {
 		vatDate := types.MinDate(s.Date, br.Date)
+		if !period.Contains(vatDate) {
+			continue
+		}
 		vatBase, _ := rates.ToBase(br.OriginalAmount, types.PreviousDay(vatDate))
 		coa.AddEntry(types.NewVAT(vatDate, s),
 			types.NewEntryRecord(
