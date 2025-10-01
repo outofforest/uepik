@@ -1,4 +1,4 @@
-//nolint:dupword
+//nolint:dupword,misspell
 package main
 
 import . "github.com/outofforest/uepik" //nolint:staticcheck
