@@ -1,6 +1,6 @@
 <table:table table:name="CIT-8" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co19" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co20" table:default-cell-style-name="ce94"/>
     <table:table-row table:style-name="ro8">
         <table:table-cell office:value-type="string" calcext:value-type="string">

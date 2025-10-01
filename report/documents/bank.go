@@ -64,6 +64,8 @@ func GenerateBankReport(
 	currencyInit types.InitCurrency,
 	records []types.BankRecord,
 ) types.ReportDocument {
+	const perPage = 18
+
 	report := BankReport{
 		CompanyName:    companyName,
 		CompanyAddress: companyAddress,
@@ -89,7 +91,7 @@ func GenerateBankReport(
 				Year:                yearNumber,
 				Month:               monthName,
 				Page:                page(report.Pages),
-				Records:             findRecords(&records, month, 26),
+				Records:             findRecords(&records, month, perPage),
 				PreviousPageSummary: previous,
 				CurrentPageSummary:  previous,
 			}

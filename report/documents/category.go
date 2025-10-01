@@ -73,6 +73,8 @@ func GenerateCategoryReport(
 	title, sheetName string,
 	accountID types.AccountID,
 ) types.ReportDocument {
+	const perPage = 18
+
 	report := CategoryReport{
 		Title:          title,
 		SheetName:      sheetName,
@@ -92,7 +94,7 @@ func GenerateCategoryReport(
 			added = true
 
 			current := previous
-			entries := findRecords(&entries, month, 26)
+			entries := findRecords(&entries, month, perPage)
 			records := make([]CategoryRecord, 0, len(entries))
 			for _, e := range entries {
 				index++

@@ -73,7 +73,7 @@ func GenerateCurrencyDiffDocument(
 	contractor types.Contractor,
 	entries []*types.Entry,
 ) types.ReportDocument {
-	const perPage = 12
+	const perPage = 9
 
 	report := &CurrencyDiffDocument{
 		Document:   document,
@@ -129,7 +129,7 @@ func GenerateCurrencyDiffDocument(
 		Data:     report,
 		Config: types.SheetConfig{
 			Name:       document.SheetName,
-			LockedRows: 7,
+			LockedRows: 8,
 		},
 	}
 }
