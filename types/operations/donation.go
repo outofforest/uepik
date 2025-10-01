@@ -33,7 +33,7 @@ func (d *Donation) GetContractor() types.Contractor {
 
 // GetNotes returns notes.
 func (d *Donation) GetNotes() string {
-	return "Darowizna"
+	return "Darowizna na cele statutowe"
 }
 
 // BankRecords returns bank records for the donation.

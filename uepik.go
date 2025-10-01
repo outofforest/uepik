@@ -226,6 +226,7 @@ func Sprzedaz(
 	naleznosci []types.Due,
 	platnosci []types.Payment,
 	rodzaj types.SellType,
+	opis string,
 ) []types.Operation {
 	if len(naleznosci) == 0 {
 		panic("brak zdefiniowanych należności ze sprzedaży")
@@ -237,6 +238,7 @@ func Sprzedaz(
 		Dues:       naleznosci,
 		Payments:   platnosci,
 		Type:       rodzaj,
+		Notes:      opis,
 	}}
 }
 
@@ -249,6 +251,7 @@ func Zakup(
 	platnosci []types.Payment,
 	typPodatkowy types.CostTaxType,
 	typPozytku types.CostCategoryType,
+	opis string,
 ) []types.Operation {
 	return []types.Operation{&operations.Purchase{
 		Date:             data,
@@ -258,6 +261,7 @@ func Zakup(
 		Payments:         platnosci,
 		CostTaxType:      typPodatkowy,
 		CostCategoryType: typPozytku,
+		Notes:            opis,
 	}}
 }
 

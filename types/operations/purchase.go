@@ -16,6 +16,7 @@ type Purchase struct {
 	Payments         []types.Payment
 	CostTaxType      types.CostTaxType
 	CostCategoryType types.CostCategoryType
+	Notes            string
 }
 
 // GetDate returns date of purchase.
@@ -35,7 +36,7 @@ func (p *Purchase) GetContractor() types.Contractor {
 
 // GetNotes returns notes.
 func (p *Purchase) GetNotes() string {
-	return "Opis"
+	return p.Notes
 }
 
 // BankRecords returns bank records for the purchase.
