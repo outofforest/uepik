@@ -133,7 +133,7 @@ func (ch *ChartOfAccounts) DebitIncremental(accountID AccountID, date time.Time)
 	debit := account.openingBalance.Debit
 
 	mKey := newMonthKey(date)
-	for month := ch.period.Start; ; month = month.AddDate(0, 1, 0) {
+	for _, month := range ch.period.Months() {
 		mKey2 := newMonthKey(month)
 		if sum2, exists := account.balances[mKey2]; exists {
 			debit = debit.Add(sum2.Debit)
@@ -152,7 +152,7 @@ func (ch *ChartOfAccounts) CreditIncremental(accountID AccountID, date time.Time
 	credit := account.openingBalance.Credit
 
 	mKey := newMonthKey(date)
-	for month := ch.period.Start; ; month = month.AddDate(0, 1, 0) {
+	for _, month := range ch.period.Months() {
 		mKey2 := newMonthKey(month)
 		if sum2, exists := account.balances[mKey2]; exists {
 			credit = credit.Add(sum2.Credit)
@@ -171,7 +171,7 @@ func (ch *ChartOfAccounts) BalanceIncremental(accountID AccountID, date time.Tim
 	balance := account.openingBalance
 
 	mKey := newMonthKey(date)
-	for month := ch.period.Start; ; month = month.AddDate(0, 1, 0) {
+	for _, month := range ch.period.Months() {
 		mKey2 := newMonthKey(month)
 		if sum2, exists := account.balances[mKey2]; exists {
 			balance = balance.Add(sum2)

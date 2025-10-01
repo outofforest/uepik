@@ -28,8 +28,8 @@ func (cd *CurrencyDiff) BookRecords(
 	rates types.CurrencyRates,
 ) []types.ReportDocument {
 	docs := []types.ReportDocument{}
-	for date := period.Start; period.Contains(date); date = date.AddDate(0, 1, 0) {
-		cdDate := date.AddDate(0, 1, 0).Add(-time.Nanosecond)
+	for _, month := range period.Months() {
+		cdDate := month.AddDate(0, 1, 0).Add(-time.Nanosecond)
 		cdID := fmt.Sprintf("RK/%d/%d/1", cdDate.Year(), cdDate.Month())
 		source := &CurrencyDiffSource{
 			Document: types.Document{

@@ -62,6 +62,10 @@ func (p *Purchase) BookRecords(
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
 ) []types.ReportDocument {
+	if period.End.Before(p.Date) {
+		return nil
+	}
+
 	costBase, costRate := rates.ToBase(p.Amount, types.PreviousDay(p.Date))
 
 	records := []types.EntryRecord{

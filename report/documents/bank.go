@@ -71,8 +71,7 @@ func GenerateBankReport(
 		CompanyAddress: companyAddress,
 		Currency:       currency,
 	}
-
-	for month := period.Start; period.Contains(month); month = month.AddDate(0, 1, 0) {
+	for _, month := range period.Months() {
 		yearNumber := uint64(month.Year())
 		monthName := monthName(month.Month())
 

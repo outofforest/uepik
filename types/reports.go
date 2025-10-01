@@ -44,6 +44,16 @@ func (p Period) Contains(date time.Time) bool {
 	return !date.Before(p.Start) && !date.After(p.End)
 }
 
+// Months returns month dates belonging to the period.
+func (p Period) Months() []time.Time {
+	months := make([]time.Time, 0, 12)
+	month := p.Start.AddDate(0, 0, -p.Start.Day()+1)
+	for ; !p.End.Before(month); month = month.AddDate(0, 1, 0) {
+		months = append(months, month)
+	}
+	return months
+}
+
 // DocumentID represents document ID.
 type DocumentID string
 

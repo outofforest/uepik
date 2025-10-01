@@ -55,6 +55,10 @@ func (d *Donation) BookRecords(
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
 ) []types.ReportDocument {
+	if period.End.Before(d.Payment.Date) {
+		return nil
+	}
+
 	incomeBase, _ := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
 
 	coa.AddEntry(d,
