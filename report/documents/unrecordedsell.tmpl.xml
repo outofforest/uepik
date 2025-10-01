@@ -2,17 +2,13 @@
 <table:table table:name="{{ .Document.SheetName }}" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
-    <table:table-column table:style-name="co16" table:default-cell-style-name="ce71"/>
     <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
-    <table:table-column table:style-name="co25"/>
-    <table:table-column table:style-name="co25" table:default-cell-style-name="ce77"/>
-    <table:table-column table:style-name="co25"/>
-    <table:table-column table:style-name="co25" table:number-columns-repeated="2" table:default-cell-style-name="ce94"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce94"/>
     <table:table-header-rows>
         <table:table-row table:style-name="ro1">
             <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
-                <text:p>Różnice kursowe nr {{ .Document.ID }}</text:p>
+                <text:p>Dowód wewnętrzny nr {{ .Document.ID }}</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro10">
@@ -55,9 +51,6 @@
             <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string">
                 <text:p>Lp.</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
-                <text:p>Data</text:p>
-            </table:table-cell>
             <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
                 <text:p>Nr dokumentu</text:p>
             </table:table-cell>
@@ -65,19 +58,7 @@
                 <text:p>Kontrahent</text:p>
             </table:table-cell>
             <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
-                <text:p>Kwota</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
-                <text:p>Waluta</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
-                <text:p>Kurs</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
-                <text:p>Dodatnie różnice</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
-                <text:p>Ujemne różnice</text:p>
+                <text:p>Przychód</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro7">
@@ -93,60 +74,28 @@
             <table:table-cell table:style-name="ce66" office:value-type="float" office:value="4" calcext:value-type="float">
                 <text:p>4</text:p>
             </table:table-cell>
-            <table:table-cell table:style-name="ce89" office:value-type="float" office:value="5" calcext:value-type="float">
-                <text:p>5</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="6" calcext:value-type="float">
-                <text:p>6</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="7" calcext:value-type="float">
-                <text:p>7</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="8" calcext:value-type="float">
-                <text:p>8</text:p>
-            </table:table-cell>
-            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="9" calcext:value-type="float">
-                <text:p>9</text:p>
-            </table:table-cell>
         </table:table-row>
     </table:table-header-rows>
 {{ range .Pages }}
 {{ range .Records }}
     <table:table-row table:style-name="ro8">
-        <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" table:number-columns-spanned="1" table:number-rows-spanned="2" />
-        <table:table-cell office:value-type="float" office:value="{{ .DayOfMonth }}" calcext:value-type="float" table:number-columns-spanned="1" table:number-rows-spanned="2" />
+        <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" />
         <table:table-cell office:value-type="string" calcext:value-type="string">
             <text:p>{{ .Document.ID }}</text:p>
         </table:table-cell>
-        <table:table-cell office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
             <text:p>{{ .Contractor.Name }}</text:p>
         </table:table-cell>
-        <table:table-cell office:value-type="float" office:value="{{ .Amount.Amount }}" calcext:value-type="float" table:number-columns-spanned="1" table:number-rows-spanned="2" table:style-name="ce{{ .Amount.Currency }}" />
-        <table:table-cell office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
-            <text:p>{{ .Amount.Currency }}</text:p>
-        </table:table-cell>
-        <table:table-cell office:value-type="float" office:value="{{ .DocumentRate }}" calcext:value-type="float" table:style-name="ce{{ .Amount.Currency }}Rate" />
-        <table:table-cell office:value-type="float" office:value="{{ .Income.Amount }}" calcext:value-type="float" table:number-columns-spanned="1" table:number-rows-spanned="2" />
-        <table:table-cell office:value-type="float" office:value="{{ .Cost.Amount }}" calcext:value-type="float" table:number-columns-spanned="1" table:number-rows-spanned="2" />
-    </table:table-row>
-    <table:table-row table:style-name="ro8">
-        <table:covered-table-cell table:number-columns-repeated="2"/>
-        <table:table-cell office:value-type="string" calcext:value-type="string">
-            <text:p>{{ .PaymentDocument }}</text:p>
-        </table:table-cell>
-        <table:covered-table-cell table:number-columns-repeated="3"/>
-        <table:table-cell office:value-type="float" office:value="{{ .PaymentRate }}" calcext:value-type="float" table:style-name="ce{{ .Amount.Currency }}Rate" />
-        <table:covered-table-cell table:number-columns-repeated="2"/>
+        <table:table-cell office:value-type="float" office:value="{{ .Income.Amount }}" calcext:value-type="float"/>
     </table:table-row>
 {{ end }}
 {{ if .IsLast }}
     <table:table-row table:style-name="ro7">
-        <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
+        <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
             <text:p>Suma:</text:p>
         </table:table-cell>
-        <table:covered-table-cell table:style-name="Default" table:number-columns-repeated="6"/>
+        <table:covered-table-cell table:style-name="Default" table:number-columns-repeated="2"/>
         <table:table-cell office:value-type="float" office:value="{{ $summary.Income.Amount }}" calcext:value-type="float" />
-        <table:table-cell office:value-type="float" office:value="{{ $summary.Cost.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro3">
         <table:table-cell table:style-name="Default" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">

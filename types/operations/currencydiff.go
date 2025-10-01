@@ -1,6 +1,8 @@
 package operations
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/outofforest/uepik/accounts"
@@ -10,28 +12,7 @@ import (
 
 // CurrencyDiff defines the currency diff.
 type CurrencyDiff struct {
-	Document   types.Document
 	Contractor types.Contractor
-}
-
-// GetDate returns date of currency diff.
-func (cd *CurrencyDiff) GetDate() time.Time {
-	return cd.Document.Date
-}
-
-// GetDocument returns document.
-func (cd *CurrencyDiff) GetDocument() types.Document {
-	return cd.Document
-}
-
-// GetContractor returns contractor.
-func (cd *CurrencyDiff) GetContractor() types.Contractor {
-	return cd.Contractor
-}
-
-// GetNotes returns notes.
-func (cd *CurrencyDiff) GetNotes() string {
-	return "Różnice kursowe"
 }
 
 // BankRecords returns bank records for currency diff.
@@ -41,62 +22,99 @@ func (cd *CurrencyDiff) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for currency diff.
 func (cd *CurrencyDiff) BookRecords(
+	period types.Period,
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
-) {
-	debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
-	credit := coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
+) []types.ReportDocument {
+	docs := []types.ReportDocument{}
+	for date := period.Start; period.Contains(date); date = date.AddDate(0, 1, 0) {
+		cdDate := date.AddDate(0, 1, 0).Add(-time.Nanosecond)
+		cdID := fmt.Sprintf("RK/%d/%d/1", cdDate.Year(), cdDate.Month())
+		source := &CurrencyDiffSource{
+			Document: types.Document{
+				ID:        types.DocumentID(cdID),
+				Date:      cdDate,
+				SheetName: strings.ReplaceAll(cdID, "/", "."),
+			},
+			Contractor: cd.Contractor,
+		}
 
-	coa.AddEntry(
-		cd,
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
-				accounts.UjemneRozniceKursowe),
-			types.DebitBalance(debit),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-			types.DebitBalance(debit),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.Nieodplatna),
-			types.DebitBalance(coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Nieodplatna),
-				cd.Document.Date)),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.Odplatna),
-			types.DebitBalance(coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
-				cd.Document.Date)),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Finansowe,
-				accounts.DodatnieRozniceKursowe),
-			types.CreditBalance(credit),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-			types.CreditBalance(credit),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.Nieodplatna),
-			types.CreditBalance(coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Nieodplatna),
-				cd.Document.Date)),
-		),
-		types.NewEntryRecord(
-			types.NewAccountID(accounts.Odplatna),
-			types.CreditBalance(coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
-				cd.Document.Date)),
-		),
-	)
+		debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
+		credit := coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
+
+		coa.AddEntry(
+			source,
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
+					accounts.UjemneRozniceKursowe),
+				types.DebitBalance(debit),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+				types.DebitBalance(debit),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.Nieodplatna),
+				types.DebitBalance(coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Nieodplatna),
+					cdDate)),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.Odplatna),
+				types.DebitBalance(coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
+					cdDate)),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Finansowe,
+					accounts.DodatnieRozniceKursowe),
+				types.CreditBalance(credit),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+				types.CreditBalance(credit),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.Nieodplatna),
+				types.CreditBalance(coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Nieodplatna),
+					cdDate)),
+			),
+			types.NewEntryRecord(
+				types.NewAccountID(accounts.Odplatna),
+				types.CreditBalance(coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe, accounts.Odplatna),
+					cdDate)),
+			),
+		)
+
+		entries := coa.EntriesMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
+		if len(entries) > 0 {
+			docs = append(docs, documents.GenerateCurrencyDiffDocument(source.Document, cd.Contractor, entries))
+		}
+	}
+	return docs
 }
 
-// Documents generate documents for operation.
-func (cd *CurrencyDiff) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
-	entries := coa.EntriesMonth(types.NewAccountID(accounts.RozniceKursowe), cd.Document.Date)
-	if len(entries) == 0 {
-		return nil
-	}
+// CurrencyDiffSource is the source of currency diff document.
+type CurrencyDiffSource struct {
+	Document   types.Document
+	Contractor types.Contractor
+}
 
-	return []types.ReportDocument{documents.GenerateCurrencyDiffDocument(cd.Document, cd.Contractor, entries)}
+// GetDate returns date of currency diff.
+func (cds *CurrencyDiffSource) GetDate() time.Time {
+	return cds.Document.Date
+}
+
+// GetDocument returns document.
+func (cds *CurrencyDiffSource) GetDocument() types.Document {
+	return cds.Document
+}
+
+// GetContractor returns contractor.
+func (cds *CurrencyDiffSource) GetContractor() types.Contractor {
+	return cds.Contractor
+}
+
+// GetNotes returns notes.
+func (cds *CurrencyDiffSource) GetNotes() string {
+	return "Różnice kursowe"
 }

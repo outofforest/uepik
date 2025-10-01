@@ -24,6 +24,15 @@ const (
 	CostCategoryTypePaid         CostCategoryType = "paid"
 )
 
+// SellType is the sell type.
+type SellType string
+
+// Sell types.
+const (
+	SellTypeRecorded   = "recorded"
+	SellTypeUnrecorded = "unrecorded"
+)
+
 // Period defines date range for fiscal year.
 type Period struct {
 	Start time.Time
@@ -69,12 +78,13 @@ type Payment struct {
 // Operation defines operation which might bee accounted.
 type Operation interface {
 	BankRecords() []*BankRecord
-	BookRecords(coa *ChartOfAccounts, bankRecords []*BankRecord, rates CurrencyRates)
-	Documents(coa *ChartOfAccounts) []ReportDocument
+	BookRecords(period Period, coa *ChartOfAccounts, bankRecords []*BankRecord, rates CurrencyRates) []ReportDocument
 }
 
 // ReportDocument represents a document in the report.
 type ReportDocument struct {
+	Date     time.Time
+	Index    uint64
 	Template *template.Template
 	Data     any
 	Config   SheetConfig
@@ -152,10 +162,21 @@ func (fy *FiscalYear) BookRecords(
 	coa *ChartOfAccounts,
 	currencyRates CurrencyRates,
 	bankRecords map[Operation][]*BankRecord,
-) {
+) []ReportDocument {
+	docs := []ReportDocument{}
 	for _, o := range fy.Operations {
-		o.BookRecords(coa, bankRecords[o], currencyRates)
+		docs = append(docs, o.BookRecords(fy.Period, coa, bankRecords[o], currencyRates)...)
 	}
+	for i := range docs {
+		docs[i].Index = uint64(i)
+	}
+	sort.Slice(docs, func(i, j int) bool {
+		d1 := docs[i]
+		d2 := docs[j]
+		return d1.Date.Before(d2.Date) || (d1.Date.Equal(d2.Date) && d1.Index < d2.Index)
+	})
+
+	return docs
 }
 
 func (fy *FiscalYear) bankReports(

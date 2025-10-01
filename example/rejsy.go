@@ -16,6 +16,20 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
+			Ewidencjonowana,
+		),
+		Sprzedaz(
+			Data(2025, 1, 2),
+			Dokument("U/01/2024", Data(2025, 1, 1)),
+			Kontrahent("INVINI sp. z o. o.", "", ""),
+			Naleznosci(
+				Naleznosc(Data(2025, 1, 1), Kwota(1, 23, EUR)),
+				Naleznosc(Data(2025, 1, 2), Kwota(4, 23, EUR)),
+			),
+			Platnosci(
+				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
+			),
+			Nieewidencjonowana,
 		),
 		Zakup(
 			Data(2025, 1, 8),

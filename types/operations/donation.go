@@ -49,7 +49,12 @@ func (d *Donation) BankRecords() []*types.BankRecord {
 }
 
 // BookRecords returns book records for the donation.
-func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
+func (d *Donation) BookRecords(
+	period types.Period,
+	coa *types.ChartOfAccounts,
+	bankRecords []*types.BankRecord,
+	rates types.CurrencyRates,
+) []types.ReportDocument {
 	incomeBase, _ := rates.ToBase(d.Payment.Amount, types.PreviousDay(d.Payment.Date))
 
 	coa.AddEntry(d,
@@ -66,9 +71,6 @@ func (d *Donation) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 			types.CreditBalance(incomeBase),
 		),
 	)
-}
 
-// Documents generate documents for operation.
-func (d *Donation) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
 	return nil
 }

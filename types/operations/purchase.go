@@ -55,7 +55,12 @@ func (p *Purchase) BankRecords() []*types.BankRecord {
 }
 
 // BookRecords returns book records for the purchase.
-func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.BankRecord, rates types.CurrencyRates) {
+func (p *Purchase) BookRecords(
+	period types.Period,
+	coa *types.ChartOfAccounts,
+	bankRecords []*types.BankRecord,
+	rates types.CurrencyRates,
+) []types.ReportDocument {
 	costBase, costRate := rates.ToBase(p.Amount, types.PreviousDay(p.Date))
 
 	records := []types.EntryRecord{
@@ -108,10 +113,6 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 
 	coa.AddEntry(p, records...)
 
-	if len(p.Payments) > 0 && len(bankRecords) == 0 {
-		panic("brak rekordu walutowego dla płatności")
-	}
-
 	for _, br := range bankRecords {
 		if br.Rate.EQ(costRate) {
 			continue
@@ -132,10 +133,7 @@ func (p *Purchase) BookRecords(coa *types.ChartOfAccounts, bankRecords []*types.
 			),
 		)
 	}
-}
 
-// Documents generate documents for operation.
-func (p *Purchase) Documents(coa *types.ChartOfAccounts) []types.ReportDocument {
 	return nil
 }
 
