@@ -154,7 +154,7 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="0.9cm"/>
   </style:style>
   <style:style style:name="co3" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="3.159cm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="6.0cm"/>
   </style:style>
   <style:style style:name="co4" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="3.0cm"/>
@@ -163,7 +163,7 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="3.9cm"/>
   </style:style>
   <style:style style:name="co6" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="3.8cm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="13.9cm"/>
   </style:style>
   <style:style style:name="co7" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="2cm"/>
@@ -223,7 +223,7 @@
    <style:table-row-properties style:row-height="0.342cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro5" style:family="table-row">
-   <style:table-row-properties style:row-height="1.316cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
+   <style:table-row-properties fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro6" style:family="table-row">
    <style:table-row-properties style:row-height="4.001cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
@@ -232,7 +232,7 @@
    <style:table-row-properties style:row-height="0.452cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro8" style:family="table-row">
-   <style:table-row-properties style:row-height="1.2cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
+   <style:table-row-properties style:row-height="0.8cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro9" style:family="table-row">
    <style:table-row-properties style:row-height="0.45cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
@@ -254,9 +254,6 @@
   </style:style>
   <style:style style:name="ro15" style:family="table-row">
    <style:table-row-properties style:row-height="1.42cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
-  </style:style>
-  <style:style style:name="ro16" style:family="table-row">
-   <style:table-row-properties style:row-height="0.841cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="taLandscape" style:family="table" style:master-page-name="Landscape">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>

@@ -36,7 +36,7 @@
         <table:table-row table:style-name="ro2">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
         </table:table-row>
-        <table:table-row table:style-name="ro16">
+        <table:table-row table:style-name="ro5">
             <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string">
                 <text:p>Lp.</text:p>
             </table:table-cell>
