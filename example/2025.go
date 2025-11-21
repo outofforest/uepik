@@ -1,7 +1,7 @@
 //nolint:dupword,misspell
 package main
 
-import . "github.com/outofforest/uepik" //nolint:staticcheck
+import . "github.com/outofforest/uepik/v2" //nolint:staticcheck
 
 // R2025 to dane księgowe za rok 2025.
 var R2025 = Rok(

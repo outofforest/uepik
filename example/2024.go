@@ -1,7 +1,7 @@
 //nolint:dupword
 package main
 
-import . "github.com/outofforest/uepik" //nolint:staticcheck
+import . "github.com/outofforest/uepik/v2" //nolint:staticcheck
 
 var (
 	rejs2026HR01 = Grupa(

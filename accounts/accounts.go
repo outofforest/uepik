@@ -1,6 +1,6 @@
 package accounts
 
-import "github.com/outofforest/uepik/types"
+import "github.com/outofforest/uepik/v2/types"
 
 // Accounts.
 const (

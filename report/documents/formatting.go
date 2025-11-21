@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/outofforest/uepik/types"
+	"github.com/outofforest/uepik/v2/types"
 )
 
 func notZero(n types.Number) bool {

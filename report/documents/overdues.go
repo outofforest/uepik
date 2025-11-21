@@ -6,7 +6,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/outofforest/uepik/types"
+	"github.com/outofforest/uepik/v2/types"
 )
 
 var (
