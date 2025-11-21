@@ -7,9 +7,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/outofforest/uepik/report"
-	"github.com/outofforest/uepik/types"
-	"github.com/outofforest/uepik/types/operations"
+	"github.com/outofforest/uepik/v2/report"
+	"github.com/outofforest/uepik/v2/types"
+	"github.com/outofforest/uepik/v2/types/operations"
 )
 
 // Dostępne waluty.

@@ -1,6 +1,6 @@
 package main
 
-import . "github.com/outofforest/uepik" //nolint:staticcheck
+import . "github.com/outofforest/uepik/v2" //nolint:staticcheck
 
 // KursyWalutowe przechowuje średnie kursy walutowe NBP.
 var KursyWalutowe = Kursy(

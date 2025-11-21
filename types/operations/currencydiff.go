@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/outofforest/uepik/accounts"
-	"github.com/outofforest/uepik/report/documents"
-	"github.com/outofforest/uepik/types"
+	"github.com/outofforest/uepik/v2/accounts"
+	"github.com/outofforest/uepik/v2/report/documents"
+	"github.com/outofforest/uepik/v2/types"
 )
 
 // CurrencyDiff defines the currency diff.

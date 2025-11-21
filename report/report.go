@@ -12,10 +12,10 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/outofforest/uepik/accounts"
-	"github.com/outofforest/uepik/report/documents"
-	"github.com/outofforest/uepik/types"
-	"github.com/outofforest/uepik/types/operations"
+	"github.com/outofforest/uepik/v2/accounts"
+	"github.com/outofforest/uepik/v2/report/documents"
+	"github.com/outofforest/uepik/v2/types"
+	"github.com/outofforest/uepik/v2/types/operations"
 )
 
 var coaAccounts = []*types.Account{

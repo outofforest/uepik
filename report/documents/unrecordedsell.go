@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"text/template"
 
-	"github.com/outofforest/uepik/types"
+	"github.com/outofforest/uepik/v2/types"
 )
 
 var (

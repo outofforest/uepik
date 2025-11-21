@@ -3,8 +3,8 @@ package operations
 import (
 	"time"
 
-	"github.com/outofforest/uepik/accounts"
-	"github.com/outofforest/uepik/types"
+	"github.com/outofforest/uepik/v2/accounts"
+	"github.com/outofforest/uepik/v2/types"
 )
 
 // Purchase defines the cost of purchased goods or service.
