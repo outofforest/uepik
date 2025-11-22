@@ -17,81 +17,34 @@ var (
 // FlowReport is the financial flow report.
 type FlowReport struct {
 	CompanyName    string
-	CompanyAddress string
-	Records        []FlowRecord
-}
-
-// FlowRecord represents month in the flow report.
-type FlowRecord struct {
-	Year  uint64
-	Month string
-
-	MonthIncome                types.Denom
-	MonthCostsTaxed            types.Denom
-	MonthProfit                types.Denom
-	MonthCostsNotTaxedCurrent  types.Denom
-	MonthCostsNotTaxedPrevious types.Denom
-
-	TotalIncome                types.Denom
-	TotalCostsTaxed            types.Denom
-	TotalProfitYear            types.Denom
-	TotalCostsNotTaxedCurrent  types.Denom
-	TotalProfitPrevious        types.Denom
-	TotalCostsNotTaxedPrevious types.Denom
-	TotalProfit                types.Denom
+	Income         types.Denom
+	CostsTaxed     types.Denom
+	ProfitYear     types.Denom
+	ProfitPrevious types.Denom
+	CostsNotTaxed  types.Denom
+	Profit         types.Denom
 }
 
 // GenerateFlowReport generates flow report.
 func GenerateFlowReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
-	companyName, companyAddress string,
+	companyName string,
 ) types.ReportDocument {
-	report := &FlowReport{
-		CompanyName:    companyName,
-		CompanyAddress: companyAddress,
-	}
-
-	unspentProfit := coa.OpeningBalance(types.NewAccountID(accounts.NiewydatkowanyDochod))
-
-	for _, month := range period.Months() {
-		yearNumber := uint64(month.Year())
-		monthName := monthName(month.Month())
-
-		monthIncome := coa.BalanceMonth(types.NewAccountID(accounts.PiK, accounts.Przychody), month)
-		monthCostsTaxed := coa.BalanceMonth(types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe),
-			month)
-		yearIncome := coa.BalanceIncremental(types.NewAccountID(accounts.PiK, accounts.Przychody), month)
-		yearCostsTaxed := coa.BalanceIncremental(types.NewAccountID(accounts.PiK, accounts.Koszty,
-			accounts.Podatkowe), month)
-
-		report.Records = append(report.Records, FlowRecord{
-			Year:  yearNumber,
-			Month: monthName,
-
-			MonthIncome:     monthIncome,
-			MonthCostsTaxed: monthCostsTaxed,
-			MonthProfit:     monthIncome.Sub(monthCostsTaxed),
-			MonthCostsNotTaxedCurrent: coa.DebitMonth(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.WTrakcieRoku), month),
-			MonthCostsNotTaxedPrevious: coa.DebitMonth(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.ZLatUbieglych), month),
-
-			TotalIncome:     yearIncome,
-			TotalCostsTaxed: yearCostsTaxed,
-			TotalProfitYear: yearIncome.Sub(yearCostsTaxed),
-			TotalCostsNotTaxedCurrent: coa.DebitIncremental(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.WTrakcieRoku), month),
-			TotalProfitPrevious: unspentProfit,
-			TotalCostsNotTaxedPrevious: coa.DebitIncremental(types.NewAccountID(accounts.NiewydatkowanyDochod,
-				accounts.ZLatUbieglych), month),
-			TotalProfit: coa.BalanceIncremental(types.NewAccountID(accounts.NiewydatkowanyDochod), month),
-		})
-	}
+	income := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody))
+	costsTaxed := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe))
 
 	return types.ReportDocument{
 		Template: flowTemplate,
-		Data:     report,
+		Data: &FlowReport{
+			CompanyName:    companyName,
+			Income:         income,
+			CostsTaxed:     costsTaxed,
+			ProfitYear:     income.Sub(costsTaxed),
+			ProfitPrevious: coa.OpeningBalance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+			CostsNotTaxed:  coa.Debit(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+			Profit:         coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+		},
 		Config: types.SheetConfig{
 			Name:       "PF",
 			LockedRows: 6,

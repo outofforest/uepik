@@ -17,8 +17,6 @@ const (
 	Niepodatkowe
 	VAT
 	NiewydatkowanyDochod
-	ZLatUbieglych
-	WTrakcieRoku
 	RozniceKursowe
 	SprzedazNieewidencjonowana
 )

@@ -97,6 +97,30 @@ func (ch *ChartOfAccounts) OpeningBalance(accountID AccountID) Denom {
 	return account.accountType.balanceFn(account.openingBalance)
 }
 
+// Debit returns debit balance on the account.
+func (ch *ChartOfAccounts) Debit(accountID AccountID) Denom {
+	account := ch.getAccount(accountID)
+	debit := account.openingBalance.Debit
+
+	for _, b := range account.balances {
+		debit = debit.Add(b.Debit)
+	}
+
+	return debit
+}
+
+// Credit returns credit balance on the account.
+func (ch *ChartOfAccounts) Credit(accountID AccountID) Denom {
+	account := ch.getAccount(accountID)
+	credit := account.openingBalance.Credit
+
+	for _, b := range account.balances {
+		credit = credit.Add(b.Credit)
+	}
+
+	return credit
+}
+
 // DebitMonth returns debit balance on the account in month.
 func (ch *ChartOfAccounts) DebitMonth(accountID AccountID, date time.Time) Denom {
 	account := ch.getAccount(accountID)

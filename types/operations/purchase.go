@@ -68,7 +68,7 @@ func (p *Purchase) BookRecords(
 
 	costBase, costRate := rates.ToBase(p.Amount, types.PreviousDay(p.Date))
 
-	records := []types.EntryRecord{
+	coa.AddEntry(p,
 		types.NewEntryRecord(
 			costTaxTypeToAccountID(p.CostTaxType),
 			types.DebitBalance(costBase),
@@ -77,46 +77,11 @@ func (p *Purchase) BookRecords(
 			types.NewAccountID(costCategoryTypeToAccountPart(p.CostCategoryType)),
 			types.DebitBalance(costBase),
 		),
-	}
-
-	switch p.CostTaxType {
-	case types.CostTaxTypeTaxable:
-		records = append(records,
-			types.NewEntryRecord(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-				types.DebitBalance(costBase),
-			),
-		)
-	case types.CostTaxTypeNonTaxable:
-		cost2 := coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych))
-		if cost2.LT(types.BaseZero) {
-			cost2 = types.BaseZero
-		}
-		if cost2.GT(costBase) {
-			cost2 = costBase
-		}
-		cost := costBase.Sub(cost2)
-		if cost.GT(types.BaseZero) {
-			records = append(records,
-				types.NewEntryRecord(
-					types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
-					types.DebitBalance(cost),
-				),
-			)
-		}
-		if cost2.GT(types.BaseZero) {
-			records = append(records,
-				types.NewEntryRecord(
-					types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
-					types.DebitBalance(cost2),
-				),
-			)
-		}
-	default:
-		panic("invalid cost tax type")
-	}
-
-	coa.AddEntry(p, records...)
+		types.NewEntryRecord(
+			types.NewAccountID(accounts.NiewydatkowanyDochod),
+			types.DebitBalance(costBase),
+		),
+	)
 
 	for _, br := range bankRecords {
 		if br.Rate.EQ(costRate) {
