@@ -6,7 +6,7 @@
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co20"/>
     <table:table-header-rows>
-        <table:table-row table:style-name="ro16">
+        <table:table-row table:style-name="ro5">
             <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
                 <text:p>Dokument</text:p>
             </table:table-cell>
