@@ -83,7 +83,7 @@ func (bs BookSummary) AddSummary(bs2 BookSummary) BookSummary {
 func GenerateBookReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
-	companyName, companyAddress string,
+	companyName string,
 ) types.ReportDocument {
 	report := &BookReport{
 		CompanyName: companyName,

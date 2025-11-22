@@ -51,7 +51,7 @@ func (cd *CurrencyDiff) BookRecords(
 				types.DebitBalance(debit),
 			),
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+				types.NewAccountID(accounts.NiewydatkowanyDochod),
 				types.DebitBalance(debit),
 			),
 			types.NewEntryRecord(
@@ -70,7 +70,7 @@ func (cd *CurrencyDiff) BookRecords(
 				types.CreditBalance(credit),
 			),
 			types.NewEntryRecord(
-				types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+				types.NewAccountID(accounts.NiewydatkowanyDochod),
 				types.CreditBalance(credit),
 			),
 			types.NewEntryRecord(

@@ -56,14 +56,12 @@ var coaAccounts = []*types.Account{
 	),
 	types.NewAccount(accounts.VAT, types.Incomes, types.ValidSources(&types.VAT{})),
 	types.NewAccount(
-		accounts.NiewydatkowanyDochod, types.Liabilities, types.AllValid(),
-		types.NewAccount(accounts.WTrakcieRoku, types.Liabilities, types.ValidSources(
+		accounts.NiewydatkowanyDochod, types.Liabilities, types.ValidSources(
 			&operations.CurrencyDiffSource{},
 			&operations.Donation{},
 			&operations.Purchase{},
 			&operations.Sell{},
-		)),
-		types.NewAccount(accounts.ZLatUbieglych, types.Liabilities, types.ValidSources(&operations.Purchase{})),
+		),
 	),
 	types.NewAccount(
 		accounts.RozniceKursowe, types.Liabilities, types.AllValid(),
@@ -118,8 +116,7 @@ func newReport(
 	}
 
 	coa := types.NewChartOfAccounts(year.Period, coaAccounts...)
-	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.ZLatUbieglych),
-		types.CreditBalance(year.Init.UnspentProfit))
+	coa.OpenAccount(types.NewAccountID(accounts.NiewydatkowanyDochod), types.CreditBalance(year.Init.UnspentProfit))
 
 	company := types.Contractor{
 		Name:    year.CompanyName,
@@ -141,8 +138,8 @@ func newReport(
 	opDocs := year.BookRecords(coa, currencyRates, opBankRecords)
 
 	docs := []types.ReportDocument{
-		documents.GenerateBookReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
-		documents.GenerateFlowReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
+		documents.GenerateBookReport(year.Period, coa, year.CompanyName),
+		documents.GenerateFlowReport(year.Period, coa, year.CompanyName),
 		documents.GenerateVATReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
 		documents.GenerateCategoryReport(year.Period, coa, year.CompanyName, year.CompanyAddress,
 			"ZESTAWIENIE DZIAŁALNOŚCI NIEODPŁATNEJ",

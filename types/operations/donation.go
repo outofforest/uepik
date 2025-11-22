@@ -71,7 +71,7 @@ func (d *Donation) BookRecords(
 			types.CreditBalance(incomeBase),
 		),
 		types.NewEntryRecord(
-			types.NewAccountID(accounts.NiewydatkowanyDochod, accounts.WTrakcieRoku),
+			types.NewAccountID(accounts.NiewydatkowanyDochod),
 			types.CreditBalance(incomeBase),
 		),
 	)

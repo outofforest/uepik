@@ -171,11 +171,8 @@
   <style:style style:name="co9" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="2.258cm"/>
   </style:style>
-  <style:style style:name="co10" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="2.4cm"/>
-  </style:style>
   <style:style style:name="co13" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="3.3cm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="3.9cm"/>
   </style:style>
   <style:style style:name="co15" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="0.926cm"/>
@@ -242,9 +239,6 @@
   </style:style>
   <style:style style:name="ro11" style:family="table-row">
    <style:table-row-properties style:row-height="0.001cm" fo:break-before="page" style:use-optimal-row-height="false"/>
-  </style:style>
-  <style:style style:name="ro12" style:family="table-row">
-   <style:table-row-properties style:row-height="4.1cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro13" style:family="table-row">
    <style:table-row-properties style:row-height="1.619cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
@@ -758,30 +752,6 @@
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
   </style:style>
-  <style:style style:name="ce103" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="NBase">
-   <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="0.74pt solid #7f7f7f" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto">
-    <loext:border-bottom-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-bottom-complex-color>
-    <loext:border-left-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-left-complex-color>
-    <loext:border-right-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-right-complex-color>
-    <loext:border-top-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-top-complex-color>
-   </style:table-cell-properties>
-   <style:paragraph-properties fo:text-align="end" css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
-    <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
-   </style:text-properties>
-  </style:style>
   <style:style style:name="ce104" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="NBase">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="0.74pt solid #7f7f7f" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto">
     <loext:border-bottom-complex-color loext:theme-type="dark1" loext:color-type="theme">
@@ -810,30 +780,6 @@
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
    <style:paragraph-properties fo:text-align="end" css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal">
-    <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
-   </style:text-properties>
-  </style:style>
-  <style:style style:name="ce106" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="NBase">
-   <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="0.74pt solid #7f7f7f" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto">
-    <loext:border-bottom-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-bottom-complex-color>
-    <loext:border-left-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-left-complex-color>
-    <loext:border-right-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-right-complex-color>
-    <loext:border-top-complex-color loext:theme-type="dark1" loext:color-type="theme">
-     <loext:transformation loext:type="lummod" loext:value="5000"/>
-     <loext:transformation loext:type="lumoff" loext:value="4999"/>
-    </loext:border-top-complex-color>
-   </style:table-cell-properties>
-   <style:paragraph-properties fo:text-align="end" css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold">
     <loext:char-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
    </style:text-properties>
   </style:style>
