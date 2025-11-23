@@ -1,4 +1,4 @@
-<table:table table:name="PiK" table:style-name="taLandscape">
+<table:table table:name="PiK" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co1" table:default-cell-style-name="ce67"/>
     <table:table-column table:style-name="co2" table:default-cell-style-name="ce71"/>
@@ -6,7 +6,7 @@
     <table:table-column table:style-name="co6" table:default-cell-style-name="ce90"/>
     <table:table-column table:style-name="co7" table:number-columns-repeated="3" table:default-cell-style-name="ce94"/>
     <table:table-header-rows>
-        <table:table-row table:style-name="ro1">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
                 <text:p>ZESTAWIENIE PRZYCHODÓW I KOSZTÓW</text:p>
             </table:table-cell>
@@ -14,7 +14,7 @@
         <table:table-row table:style-name="ro2">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="7"/>
         </table:table-row>
-        <table:table-row table:style-name="ro3">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
                 <text:p>Nazwa podatnika: {{ .CompanyName }}</text:p>
             </table:table-cell>
@@ -22,7 +22,7 @@
         <table:table-row table:style-name="ro4">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="7"/>
         </table:table-row>
-        <table:table-row table:style-name="ro5">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string">
                 <text:p>Lp.</text:p>
             </table:table-cell>
@@ -45,7 +45,7 @@
                 <text:p>NKUP</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro7">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce66" office:value-type="float" office:value="1" calcext:value-type="float">
                 <text:p>1</text:p>
             </table:table-cell>
@@ -70,7 +70,7 @@
         </table:table-row>
     </table:table-header-rows>
 {{ range .Months }}
-    <table:table-row table:style-name="ro3">
+    <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
             <text:p>{{ .Month }} {{ .Year }}</text:p>
         </table:table-cell>
@@ -106,7 +106,7 @@
 {{ end }}
     </table:table-row>
 {{ end }}
-    <table:table-row table:style-name="ro9">
+    <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
             <text:p>Razem w okresie sprawozdawczym:</text:p>
         </table:table-cell>
@@ -115,7 +115,7 @@
         <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.CostTaxed.Amount }}" calcext:value-type="float" />
         <table:table-cell table:style-name="ce97" office:value-type="float" office:value="{{ .MonthSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
-    <table:table-row table:style-name="ro9">
+    <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
             <text:p>Razem na koniec poprzedniego okresu sprawozdawczego:</text:p>
         </table:table-cell>
@@ -124,7 +124,7 @@
         <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .AccumulatedPreviousSummary.CostTaxed.Amount }}" calcext:value-type="float" />
         <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .AccumulatedPreviousSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
-    <table:table-row table:style-name="ro9">
+    <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
             <text:p>Razem od początku roku:</text:p>
         </table:table-cell>

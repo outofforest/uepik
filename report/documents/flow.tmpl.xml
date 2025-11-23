@@ -2,7 +2,7 @@
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co13" table:number-columns-repeated="7" table:default-cell-style-name="ce94"/>
     <table:table-header-rows>
-        <table:table-row table:style-name="ro1">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
                 <text:p>ZESTAWIENIE PRZEPŁYWÓW FINANSOWYCH</text:p>
             </table:table-cell>
@@ -10,7 +10,7 @@
         <table:table-row table:style-name="ro10">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="7"/>
         </table:table-row>
-        <table:table-row table:style-name="ro3">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
                 <text:p>Nazwa podatnika: {{ .CompanyName }}</text:p>
             </table:table-cell>
@@ -18,7 +18,7 @@
         <table:table-row table:style-name="ro10">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="7"/>
         </table:table-row>
-        <table:table-row table:style-name="ro5">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
                 <text:p>Przychody</text:p>
             </table:table-cell>
@@ -41,7 +41,7 @@
                 <text:p>Dochód wolny od podatku niewydatkowany na cele, o których mowa w art. 17 ust. 1 ustawy o podatku dochodowym od osób prawnych - na koniec roku</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro7">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce67" office:value-type="float" office:value="1" calcext:value-type="float">
                 <text:p>1</text:p>
             </table:table-cell>
@@ -65,7 +65,7 @@
             </table:table-cell>
         </table:table-row>
     </table:table-header-rows>
-    <table:table-row table:style-name="ro14">
+    <table:table-row table:style-name="ro8">
         <table:table-cell office:value-type="float" office:value="{{ .Income.Amount }}" calcext:value-type="float" />
         <table:table-cell office:value-type="float" office:value="{{ .CostsTaxed.Amount }}" calcext:value-type="float" />
         <table:table-cell office:value-type="float" office:value="{{ .ProfitYear.Amount }}" calcext:value-type="float" />
