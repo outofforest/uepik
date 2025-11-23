@@ -207,6 +207,9 @@
   <style:style style:name="co25" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="1.9cm"/>
   </style:style>
+  <style:style style:name="co26" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="9.6cm"/>
+  </style:style>
   <style:style style:name="ro1" style:family="table-row">
    <style:table-row-properties style:row-height="0.612cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>

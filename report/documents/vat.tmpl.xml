@@ -91,8 +91,7 @@
         <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
             <text:p>Suma:</text:p>
         </table:table-cell>
-        <table:covered-table-cell table:number-columns-repeated="3"/>
-        <table:covered-table-cell table:style-name="ce25"/>
+        <table:covered-table-cell table:number-columns-repeated="4"/>
         <table:table-cell office:value-type="float" office:value="{{ .Summary.Income.Amount }}" calcext:value-type="float" />
     </table:table-row>
 </table:table>
