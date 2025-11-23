@@ -16,21 +16,18 @@ var (
 
 // CategoryReport is the category report.
 type CategoryReport struct {
-	Title          string
-	SheetName      string
-	CompanyName    string
-	CompanyAddress string
-	Pages          []CategoryPage
+	Title       string
+	SheetName   string
+	CompanyName string
+	Months      []CategoryMonth
+	Summary     CategorySummary
 }
 
-// CategoryPage is the page in the category report.
-type CategoryPage struct {
-	Year                uint64
-	Month               string
-	Page                uint64
-	Records             []CategoryRecord
-	PreviousPageSummary CategorySummary
-	CurrentPageSummary  CategorySummary
+// CategoryMonth is the month in the category report.
+type CategoryMonth struct {
+	Year    uint64
+	Month   string
+	Records []CategoryRecord
 }
 
 // NewCategorySummary creates new category summary.
@@ -69,61 +66,43 @@ type CategoryRecord struct {
 func GenerateCategoryReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
-	companyName, companyAddress string,
+	companyName string,
 	title, sheetName string,
 	accountID types.AccountID,
 ) types.ReportDocument {
-	const perPage = 18
-
 	report := CategoryReport{
-		Title:          title,
-		SheetName:      sheetName,
-		CompanyName:    companyName,
-		CompanyAddress: companyAddress,
+		Title:       title,
+		SheetName:   sheetName,
+		CompanyName: companyName,
+		Summary:     NewCategorySummary(),
 	}
 
-	entries := coa.Entries(accountID)
 	var index uint64
-	previous := NewCategorySummary()
 	for _, month := range period.Months() {
-		yearNumber := uint64(month.Year())
-		monthName := monthName(month.Month())
-
-		var added bool
-		for !added || (len(entries) > 0 && entries[0].GetDate().Month() == month.Month()) {
-			added = true
-
-			current := previous
-			entries := findRecords(&entries, month, perPage)
-			records := make([]CategoryRecord, 0, len(entries))
-			for _, e := range entries {
-				index++
-
-				r := CategoryRecord{
-					Date:       e.GetDate(),
-					Index:      index,
-					DayOfMonth: uint8(e.GetDate().Day()),
-					Document:   e.GetDocument(),
-					Contractor: e.GetContractor(),
-					Income:     e.Amount.Credit,
-					Cost:       e.Amount.Debit,
-				}
-				records = append(records, r)
-				current = current.AddRecord(r)
-			}
-
-			page := CategoryPage{
-				Year:                yearNumber,
-				Month:               monthName,
-				Page:                page(report.Pages),
-				Records:             records,
-				PreviousPageSummary: previous,
-				CurrentPageSummary:  current,
-			}
-
-			report.Pages = append(report.Pages, page)
-			previous = current
+		entries := coa.EntriesMonth(accountID, month)
+		monthReport := CategoryMonth{
+			Year:    uint64(month.Year()),
+			Month:   monthName(month.Month()),
+			Records: make([]CategoryRecord, 0, len(entries)),
 		}
+
+		for _, e := range entries {
+			index++
+
+			r := CategoryRecord{
+				Date:       e.GetDate(),
+				Index:      index,
+				DayOfMonth: uint8(e.GetDate().Day()),
+				Document:   e.GetDocument(),
+				Contractor: e.GetContractor(),
+				Income:     e.Amount.Credit,
+				Cost:       e.Amount.Debit,
+			}
+			monthReport.Records = append(monthReport.Records, r)
+			report.Summary = report.Summary.AddRecord(r)
+		}
+
+		report.Months = append(report.Months, monthReport)
 	}
 
 	return types.ReportDocument{
@@ -131,7 +110,7 @@ func GenerateCategoryReport(
 		Data:     report,
 		Config: types.SheetConfig{
 			Name:       sheetName,
-			LockedRows: 7,
+			LockedRows: 6,
 		},
 	}
 }
