@@ -17,19 +17,16 @@ var (
 
 // VATReport is the VAT report.
 type VATReport struct {
-	CompanyName    string
-	CompanyAddress string
-	Pages          []VATPage
+	CompanyName string
+	Months      []VATMonth
+	Summary     VATSummary
 }
 
-// VATPage represents page in the VAT report.
-type VATPage struct {
-	Year                uint64
-	Month               string
-	Page                uint64
-	Records             []VATRecord
-	PreviousPageSummary VATSummary
-	CurrentPageSummary  VATSummary
+// VATMonth represents month in the VAT report.
+type VATMonth struct {
+	Year    uint64
+	Month   string
+	Records []VATRecord
 }
 
 // VATRecord represents VAT record.
@@ -65,54 +62,38 @@ func (vs VATSummary) AddRecord(r VATRecord) VATSummary {
 func GenerateVATReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
-	companyName, companyAddress string,
+	companyName string,
 ) types.ReportDocument {
-	const perPage = 18
-
 	report := &VATReport{
-		CompanyName:    companyName,
-		CompanyAddress: companyAddress,
+		CompanyName: companyName,
+		Summary:     NewVATSummary(),
 	}
-	entries := coa.Entries(types.NewAccountID(accounts.VAT))
+
 	var index uint64
-	previousPage := NewVATSummary()
 	for _, month := range period.Months() {
-		yearNumber := uint64(month.Year())
-		monthName := monthName(month.Month())
-
-		var added bool
-		for !added || (len(entries) > 0 && entries[0].GetDate().Month() == month.Month()) {
-			added = true
-
-			vatCurrentPage := previousPage
-			entries := findRecords(&entries, month, perPage)
-			records := make([]VATRecord, 0, len(entries))
-			for _, e := range entries {
-				index++
-				r := VATRecord{
-					Date:       e.GetDate(),
-					Index:      index,
-					DayOfMonth: uint8(e.GetDate().Day()),
-					Document:   e.GetDocument(),
-					Contractor: e.GetContractor(),
-					Notes:      e.GetNotes(),
-					Income:     e.Amount.Credit,
-				}
-				records = append(records, r)
-				vatCurrentPage = vatCurrentPage.AddRecord(r)
-			}
-
-			report.Pages = append(report.Pages, VATPage{
-				Year:                yearNumber,
-				Month:               monthName,
-				Page:                page(report.Pages),
-				Records:             records,
-				CurrentPageSummary:  vatCurrentPage,
-				PreviousPageSummary: previousPage,
-			})
-
-			previousPage = vatCurrentPage
+		entries := coa.EntriesMonth(types.NewAccountID(accounts.VAT), month)
+		monthReport := VATMonth{
+			Year:    uint64(month.Year()),
+			Month:   monthName(month.Month()),
+			Records: make([]VATRecord, 0, len(entries)),
 		}
+
+		for _, e := range entries {
+			index++
+			r := VATRecord{
+				Date:       e.GetDate(),
+				Index:      index,
+				DayOfMonth: uint8(e.GetDate().Day()),
+				Document:   e.GetDocument(),
+				Contractor: e.GetContractor(),
+				Notes:      e.GetNotes(),
+				Income:     e.Amount.Credit,
+			}
+			monthReport.Records = append(monthReport.Records, r)
+			report.Summary = report.Summary.AddRecord(r)
+		}
+
+		report.Months = append(report.Months, monthReport)
 	}
 
 	return types.ReportDocument{
@@ -120,7 +101,7 @@ func GenerateVATReport(
 		Data:     report,
 		Config: types.SheetConfig{
 			Name:       "VAT",
-			LockedRows: 8,
+			LockedRows: 6,
 		},
 	}
 }

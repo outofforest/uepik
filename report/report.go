@@ -140,7 +140,7 @@ func newReport(
 	docs := []types.ReportDocument{
 		documents.GenerateBookReport(year.Period, coa, year.CompanyName),
 		documents.GenerateFlowReport(year.Period, coa, year.CompanyName),
-		documents.GenerateVATReport(year.Period, coa, year.CompanyName, year.CompanyAddress),
+		documents.GenerateVATReport(year.Period, coa, year.CompanyName),
 		documents.GenerateCategoryReport(year.Period, coa, year.CompanyName, year.CompanyAddress,
 			"ZESTAWIENIE DZIAŁALNOŚCI NIEODPŁATNEJ",
 			"Nieodpłatna",
