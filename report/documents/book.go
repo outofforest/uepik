@@ -91,13 +91,10 @@ func GenerateBookReport(
 	var index uint64
 	summaryAccumulatedCurrent := NewBookSummary()
 	for _, month := range period.Months() {
-		yearNumber := uint64(month.Year())
-		monthName := monthName(month.Month())
-
 		entries := coa.EntriesMonth(types.NewAccountID(accounts.PiK), month)
 		monthReport := BookMonth{
-			Year:                       yearNumber,
-			Month:                      monthName,
+			Year:                       uint64(month.Year()),
+			Month:                      monthName(month.Month()),
 			Records:                    make([]BookRecord, 0, len(entries)),
 			AccumulatedPreviousSummary: summaryAccumulatedCurrent,
 			MonthSummary:               NewBookSummary(),

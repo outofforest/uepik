@@ -184,10 +184,10 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="3.376cm"/>
   </style:style>
   <style:style style:name="co18" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="4.357cm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="5.0cm"/>
   </style:style>
   <style:style style:name="co19" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="5.447cm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="6.6cm"/>
   </style:style>
   <style:style style:name="co20" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="3.704cm"/>
@@ -215,9 +215,6 @@
   </style:style>
   <style:style style:name="ro3" style:family="table-row">
    <style:table-row-properties style:row-height="0.529cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
-  </style:style>
-  <style:style style:name="ro4" style:family="table-row">
-   <style:table-row-properties style:row-height="0.342cm" fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ro5" style:family="table-row">
    <style:table-row-properties fo:break-before="auto" style:use-optimal-row-height="false"/>

@@ -7,7 +7,7 @@
                 <text:p>ZESTAWIENIE PRZEPŁYWÓW FINANSOWYCH</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro10">
+        <table:table-row table:style-name="ro2">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="7"/>
         </table:table-row>
         <table:table-row table:style-name="ro8">
@@ -15,7 +15,7 @@
                 <text:p>Nazwa podatnika: {{ .CompanyName }}</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro10">
+        <table:table-row table:style-name="ro2">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="7"/>
         </table:table-row>
         <table:table-row table:style-name="ro8">
