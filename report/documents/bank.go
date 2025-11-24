@@ -15,20 +15,18 @@ var (
 
 // BankReport is the bank report for currency.
 type BankReport struct {
-	CompanyName    string
-	CompanyAddress string
-	Currency       types.Currency
-	Pages          []BankPage
+	CompanyName     string
+	Currency        types.Currency
+	Months          []BankMonth
+	PreviousSummary BankSummary
+	CurrentSummary  BankSummary
 }
 
-// BankPage is the page in the bank report.
-type BankPage struct {
-	Year                uint64
-	Month               string
-	Page                uint64
-	Records             []types.BankRecord
-	PreviousPageSummary BankSummary
-	CurrentPageSummary  BankSummary
+// BankMonth is the month in the bank report.
+type BankMonth struct {
+	Year    uint64
+	Month   string
+	Records []types.BankRecord
 }
 
 // NewBankSummary creates new bank summary.
@@ -59,47 +57,34 @@ type BankSummary struct {
 // GenerateBankReport generates bank report.
 func GenerateBankReport(
 	period types.Period,
-	companyName, companyAddress string,
+	companyName string,
 	currency types.Currency,
 	currencyInit types.InitCurrency,
 	records []types.BankRecord,
 ) types.ReportDocument {
 	const perPage = 18
 
+	summary := NewBankSummary(currencyInit)
 	report := BankReport{
-		CompanyName:    companyName,
-		CompanyAddress: companyAddress,
-		Currency:       currency,
+		CompanyName:     companyName,
+		Currency:        currency,
+		PreviousSummary: summary,
+		CurrentSummary:  summary,
 	}
 	for _, month := range period.Months() {
-		yearNumber := uint64(month.Year())
-		monthName := monthName(month.Month())
-
-		var added bool
-		for !added || (len(records) > 0 && records[0].Date.Month() == month.Month()) {
-			added = true
-
-			var previous BankSummary
-			if len(report.Pages) == 0 {
-				previous = NewBankSummary(currencyInit)
-			} else {
-				previous = report.Pages[len(report.Pages)-1].CurrentPageSummary
-			}
-
-			page := BankPage{
-				Year:                yearNumber,
-				Month:               monthName,
-				Page:                page(report.Pages),
-				Records:             findRecords(&records, month, perPage),
-				PreviousPageSummary: previous,
-				CurrentPageSummary:  previous,
-			}
-			if len(page.Records) > 0 {
-				page.CurrentPageSummary = NewBankSummaryFromRecord(page.Records[len(page.Records)-1])
-			}
-
-			report.Pages = append(report.Pages, page)
+		var i int
+		for ; i < len(records) && records[i].Date.Month() == month.Month(); i++ {
 		}
+		monthReport := BankMonth{
+			Year:    uint64(month.Year()),
+			Month:   monthName(month.Month()),
+			Records: records[:i],
+		}
+		records = records[i:]
+		if l := len(monthReport.Records); l > 0 {
+			report.CurrentSummary = NewBankSummaryFromRecord(monthReport.Records[l-1])
+		}
+		report.Months = append(report.Months, monthReport)
 	}
 
 	return types.ReportDocument{
@@ -107,7 +92,7 @@ func GenerateBankReport(
 		Data:     report,
 		Config: types.SheetConfig{
 			Name:       "BANK." + string(currency.Symbol),
-			LockedRows: 7,
+			LockedRows: 6,
 		},
 	}
 }

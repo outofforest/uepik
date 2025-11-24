@@ -160,7 +160,7 @@ func newReport(
 		if !exists {
 			panic("currency not initialized")
 		}
-		docs = append(docs, documents.GenerateBankReport(year.Period, year.CompanyName, year.CompanyAddress,
+		docs = append(docs, documents.GenerateBankReport(year.Period, year.CompanyName,
 			types.Currencies.Currency(c), ci, bankRecords[c]))
 	}
 	docs = append(docs, documents.GenerateOverDueReport(year.Period, year.Operations))
