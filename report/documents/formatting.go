@@ -44,7 +44,3 @@ func monthName(month time.Month) string {
 		panic("invalid month")
 	}
 }
-
-func page[T any](slice []T) uint64 {
-	return uint64(len(slice) + 1)
-}
