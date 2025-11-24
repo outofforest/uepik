@@ -13,7 +13,7 @@
     <table:table-header-rows>
         <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="10" table:number-rows-spanned="1">
-                <text:p>EWIDENCJA ŚRODKÓW PIENIĘŻNYCH</text:p>
+                <text:p>EWIDENCJA ŚRODKÓW PIENIĘŻNYCH {{ .Currency.Symbol }}</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro2">
