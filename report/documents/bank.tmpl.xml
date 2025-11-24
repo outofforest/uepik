@@ -1,7 +1,7 @@
 <table:table table:name="BANK.{{ .Currency.Symbol }}" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <table:table-column table:style-name="co21" table:default-cell-style-name="ce67"/>
-    <table:table-column table:style-name="co22" table:default-cell-style-name="ce71"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce67"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="ce71"/>
     <table:table-column table:style-name="co23" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co24" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce{{ .Currency.Symbol }}"/>

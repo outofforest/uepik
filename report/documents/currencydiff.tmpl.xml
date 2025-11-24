@@ -1,7 +1,7 @@
 <table:table table:name="{{ .Document.SheetName }}" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
-    <table:table-column table:style-name="co16" table:default-cell-style-name="ce71"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce67"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="ce71"/>
     <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co25"/>
@@ -130,7 +130,7 @@
         <table:table-cell office:value-type="float" office:value="{{ .Summary.Income.Amount }}" calcext:value-type="float" />
         <table:table-cell office:value-type="float" office:value="{{ .Summary.Cost.Amount }}" calcext:value-type="float" />
     </table:table-row>
-    <table:table-row table:style-name="ro3">
+    <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="Default" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
             <text:p>Podpis:</text:p>
         </table:table-cell>

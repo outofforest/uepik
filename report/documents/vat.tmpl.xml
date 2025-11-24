@@ -1,7 +1,7 @@
 <table:table table:name="VAT" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
-    <table:table-column table:style-name="co16" table:default-cell-style-name="ce71"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce67"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="ce71"/>
     <table:table-column table:style-name="co17" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co18" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co19" table:default-cell-style-name="ce90"/>
