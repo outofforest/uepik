@@ -1,6 +1,6 @@
 <table:table table:name="{{ .Document.SheetName }}" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-    <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce67"/>
     <table:table-column table:style-name="co3" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co18" table:default-cell-style-name="ce77"/>
     <table:table-column table:style-name="co25" table:default-cell-style-name="ce94"/>
