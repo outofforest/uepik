@@ -1,4 +1,3 @@
-{{ $summary := .Summary }}
 <table:table table:name="{{ .Document.SheetName }}" table:style-name="taPortrait">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co15" table:default-cell-style-name="ce67"/>
@@ -10,25 +9,25 @@
     <table:table-column table:style-name="co25"/>
     <table:table-column table:style-name="co25" table:number-columns-repeated="2" table:default-cell-style-name="ce94"/>
     <table:table-header-rows>
-        <table:table-row table:style-name="ro1">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
                 <text:p>Różnice kursowe nr {{ .Document.ID }}</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro10">
+        <table:table-row table:style-name="ro2">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
         </table:table-row>
-        <table:table-row table:style-name="ro3">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
                 <text:p>Data: {{ date .Document.Date }}</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro3">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
                 <text:p>Nazwa podatnika: {{ .Contractor.Name }}</text:p>
             </table:table-cell>
         </table:table-row>
-        <table:table-row table:style-name="ro3">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
                 <text:p>Adres: {{ .Contractor.Address }}</text:p>
             </table:table-cell>
@@ -36,7 +35,7 @@
         <table:table-row table:style-name="ro2">
             <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
         </table:table-row>
-        <table:table-row table:style-name="ro5">
+        <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string">
                 <text:p>Lp.</text:p>
             </table:table-cell>
@@ -95,7 +94,6 @@
             </table:table-cell>
         </table:table-row>
     </table:table-header-rows>
-{{ range .Pages }}
 {{ range .Records }}
     <table:table-row table:style-name="ro8">
         <table:table-cell office:value-type="float" office:value="{{ .Index }}" calcext:value-type="float" table:number-columns-spanned="1" table:number-rows-spanned="2" />
@@ -124,29 +122,17 @@
         <table:covered-table-cell table:number-columns-repeated="2"/>
     </table:table-row>
 {{ end }}
-{{ if .IsLast }}
-    <table:table-row table:style-name="ro7">
+    <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="7" table:number-rows-spanned="1">
             <text:p>Suma:</text:p>
         </table:table-cell>
         <table:covered-table-cell table:number-columns-repeated="6"/>
-        <table:table-cell office:value-type="float" office:value="{{ $summary.Income.Amount }}" calcext:value-type="float" />
-        <table:table-cell office:value-type="float" office:value="{{ $summary.Cost.Amount }}" calcext:value-type="float" />
+        <table:table-cell office:value-type="float" office:value="{{ .Summary.Income.Amount }}" calcext:value-type="float" />
+        <table:table-cell office:value-type="float" office:value="{{ .Summary.Cost.Amount }}" calcext:value-type="float" />
     </table:table-row>
     <table:table-row table:style-name="ro3">
         <table:table-cell table:style-name="Default" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
             <text:p>Podpis:</text:p>
         </table:table-cell>
     </table:table-row>
-{{ end }}
-    <table:table-row table:style-name="ro2">
-        <table:table-cell table:style-name="Default" table:number-columns-repeated="8"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro3">
-        <table:table-cell table:style-name="ce102" office:value-type="float" office:value="{{ .Page }}" calcext:value-type="float" table:number-columns-spanned="9" table:number-rows-spanned="1" />
-    </table:table-row>
-    <table:table-row table:style-name="ro11">
-        <table:table-cell table:style-name="Default" table:number-columns-repeated="9"/>
-    </table:table-row>
-{{ end }}
 </table:table>
