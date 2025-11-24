@@ -62,8 +62,6 @@ func GenerateBankReport(
 	currencyInit types.InitCurrency,
 	records []types.BankRecord,
 ) types.ReportDocument {
-	const perPage = 18
-
 	summary := NewBankSummary(currencyInit)
 	report := BankReport{
 		CompanyName:     companyName,

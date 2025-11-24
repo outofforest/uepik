@@ -1,7 +1,6 @@
 package documents
 
 import (
-	"sort"
 	"time"
 
 	"github.com/outofforest/uepik/v2/types"
@@ -44,23 +43,6 @@ func monthName(month time.Month) string {
 	default:
 		panic("invalid month")
 	}
-}
-
-type withDate interface {
-	GetDate() time.Time
-}
-
-func findRecords[T withDate](records *[]T, month time.Time, count uint64) []T {
-	month = month.AddDate(0, 1, 0)
-	i := uint64(sort.Search(len(*records), func(i int) bool {
-		return !(*records)[i].GetDate().Before(month)
-	}))
-	if i > count {
-		i = count
-	}
-	result := (*records)[:i]
-	*records = (*records)[i:]
-	return result
 }
 
 func page[T any](slice []T) uint64 {
