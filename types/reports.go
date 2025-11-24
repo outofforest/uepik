@@ -79,7 +79,8 @@ type Payment struct {
 // Operation defines operation which might bee accounted.
 type Operation interface {
 	BankRecords() []*BankRecord
-	BookRecords(period Period, coa *ChartOfAccounts, bankRecords []*BankRecord, rates CurrencyRates) []ReportDocument
+	BookRecords(company Contractor, period Period, coa *ChartOfAccounts, bankRecords []*BankRecord,
+		rates CurrencyRates) []ReportDocument
 }
 
 // ReportDocument represents a document in the report.
@@ -121,12 +122,10 @@ func (r BankRecord) GetDate() time.Time {
 
 // FiscalYear defines fiscal year.
 type FiscalYear struct {
-	CompanyName    string
-	CompanyAddress string
-	CompanyTaxID   string
-	Period         Period
-	Init           Init
-	Operations     []Operation
+	Company    Contractor
+	Period     Period
+	Init       Init
+	Operations []Operation
 }
 
 // BankReports returns bank reports.
@@ -166,7 +165,7 @@ func (fy *FiscalYear) BookRecords(
 ) []ReportDocument {
 	docs := []ReportDocument{}
 	for _, o := range fy.Operations {
-		docs = append(docs, o.BookRecords(fy.Period, coa, bankRecords[o], currencyRates)...)
+		docs = append(docs, o.BookRecords(fy.Company, fy.Period, coa, bankRecords[o], currencyRates)...)
 	}
 	for i := range docs {
 		docs[i].Index = uint64(i)

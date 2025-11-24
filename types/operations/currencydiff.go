@@ -11,9 +11,7 @@ import (
 )
 
 // CurrencyDiff defines the currency diff.
-type CurrencyDiff struct {
-	Contractor types.Contractor
-}
+type CurrencyDiff struct{}
 
 // BankRecords returns bank records for currency diff.
 func (cd *CurrencyDiff) BankRecords() []*types.BankRecord {
@@ -22,6 +20,7 @@ func (cd *CurrencyDiff) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for currency diff.
 func (cd *CurrencyDiff) BookRecords(
+	company types.Contractor,
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
@@ -37,7 +36,7 @@ func (cd *CurrencyDiff) BookRecords(
 				Date:      cdDate,
 				SheetName: strings.ReplaceAll(cdID, "/", "."),
 			},
-			Contractor: cd.Contractor,
+			Contractor: company,
 		}
 
 		debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
@@ -87,7 +86,7 @@ func (cd *CurrencyDiff) BookRecords(
 
 		entries := coa.EntriesMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
 		if len(entries) > 0 {
-			docs = append(docs, documents.GenerateCurrencyDiffDocument(source.Document, cd.Contractor, entries))
+			docs = append(docs, documents.GenerateCurrencyDiffDocument(source.Document, company, entries))
 		}
 	}
 	return docs

@@ -3,6 +3,7 @@ package uepik
 
 import (
 	"math"
+	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -35,6 +36,11 @@ var timeLocation = lo.Must(time.LoadLocation("Europe/Warsaw"))
 // Data tworzy datę.
 func Data(rok, miesiac, dzien uint64) time.Time {
 	return time.Date(int(rok), time.Month(miesiac), int(dzien), 0, 0, 0, 0, timeLocation)
+}
+
+// Czas tworzy datę i czas.
+func Czas(rok, miesiac, dzien, godzina, minuta uint64) time.Time {
+	return time.Date(int(rok), time.Month(miesiac), int(dzien), int(godzina), int(minuta), 0, 0, timeLocation)
 }
 
 // Teraz zwraca bieżący czas.
@@ -82,7 +88,7 @@ func Kursy(kursy ...types.CurrencyRate) types.CurrencyRates {
 
 // Rok tworzy rok obrotowy.
 func Rok(
-	nazwaFirmy, adresFirmy, nipFirmy string,
+	firma types.Contractor,
 	dataRozpoczecia, dataZakonczenia time.Time,
 	bilansOtwarcia types.Init,
 	operacje ...[]types.Operation,
@@ -93,12 +99,10 @@ func Rok(
 	}
 
 	return &types.FiscalYear{
-		CompanyName:    nazwaFirmy,
-		CompanyAddress: adresFirmy,
-		CompanyTaxID:   nipFirmy,
-		Period:         period,
-		Init:           bilansOtwarcia,
-		Operations:     Grupa(operacje...),
+		Company:    firma,
+		Period:     period,
+		Init:       bilansOtwarcia,
+		Operations: Grupa(operacje...),
 	}
 }
 
@@ -278,4 +282,61 @@ func Raport(
 	lata ...*types.FiscalYear,
 ) {
 	report.Save(naDzien, biezacyRok, kursyWalutowe, lata)
+}
+
+// KrajDelegacji definiuje kraj dla delegacji.
+func KrajDelegacji(nazwa string, dietaDzienna types.Denom, limitNaNocleg types.Denom) types.DelegationCountry {
+	return types.DelegationCountry{
+		Name:               nazwa,
+		DailyAmount:        dietaDzienna,
+		AccommodationLimit: limitNaNocleg,
+	}
+}
+
+// Dieta tworzy koszt delegacji dla diety.
+func Dieta() types.DelegationCostAlimentation {
+	return types.DelegationCostAlimentation{}
+}
+
+// Dojazd tworzy koszt delegacji dla dojazdu.
+func Dojazd() types.DelegationCostAccess {
+	return types.DelegationCostAccess{}
+}
+
+// KosztDelegacji tworzy udokumentowany koszt delegacji.
+func KosztDelegacji(dokument types.DocumentID, kwota types.Denom, opis string) types.DelegationCostDocumented {
+	return types.DelegationCostDocumented{
+		Document: dokument,
+		Amount:   kwota,
+		Notes:    opis,
+	}
+}
+
+// Delegacja definiuje rozliczenie delegacji.
+func Delegacja(
+	dokument types.Document,
+	osoba types.Contractor,
+	poczatek, koniec time.Time,
+	kraj types.DelegationCountry,
+	waluta types.CurrencySymbol,
+	platnosci []types.Payment,
+	typPodatkowy types.CostTaxType,
+	typPozytku types.CostCategoryType,
+	opis string,
+	koszty ...types.DelegationCost,
+) []types.Operation {
+	dokument.SheetName = strings.ReplaceAll(string(dokument.ID), "/", ".")
+	return []types.Operation{&operations.Delegation{
+		Document:         dokument,
+		Person:           osoba,
+		Start:            poczatek,
+		End:              koniec,
+		Country:          kraj,
+		Currency:         waluta,
+		Payments:         platnosci,
+		CostTaxType:      typPodatkowy,
+		CostCategoryType: typPozytku,
+		Notes:            opis,
+		Costs:            koszty,
+	}}
 }

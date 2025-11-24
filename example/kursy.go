@@ -9,5 +9,8 @@ var KursyWalutowe = Kursy(
 	Kurs(EUR, Data(2025, 1, 1), 4, 5200),
 	Kurs(EUR, Data(2025, 1, 2), 4, 4300),
 	Kurs(EUR, Data(2025, 1, 7), 4, 4800),
+	Kurs(EUR, Data(2025, 2, 4), 4, 4600),
+	Kurs(EUR, Data(2025, 2, 5), 4, 4800),
+	Kurs(EUR, Data(2025, 2, 6), 4, 4900),
 	Kurs(EUR, Data(2025, 5, 2), 4, 4300),
 )

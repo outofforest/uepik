@@ -65,6 +65,7 @@ func (s *Sell) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the sell.
 func (s *Sell) BookRecords(
+	company types.Contractor,
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,

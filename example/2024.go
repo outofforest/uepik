@@ -290,7 +290,7 @@ var (
 
 // R2024 to dane księgowe za rok 2024.
 var R2024 = Rok(
-	"NazwaFirmy", "Al. Jerozolimskie 1, 00-199 Warszawa", "1111111111",
+	Kontrahent("INVINI sp. z o. o.", "", ""),
 	Data(2024, 1, 1), Data(2024, 12, 31),
 	BilansOtwarcia(
 		Kwota(0, 0, PLN),
