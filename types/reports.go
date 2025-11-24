@@ -24,15 +24,6 @@ const (
 	CostCategoryTypePaid         CostCategoryType = "paid"
 )
 
-// SellType is the sell type.
-type SellType string
-
-// Sell types.
-const (
-	SellTypeRecorded   = "recorded"
-	SellTypeUnrecorded = "unrecorded"
-)
-
 // Period defines date range for fiscal year.
 type Period struct {
 	Start time.Time

@@ -14,7 +14,6 @@ type Sell struct {
 	Contractor types.Contractor
 	Dues       []types.Due
 	Payments   []types.Payment
-	Type       types.SellType
 	Notes      string
 }
 
@@ -85,7 +84,7 @@ func (s *Sell) BookRecords(
 
 		coa.AddEntry(s,
 			types.NewEntryRecord(
-				sellTypeToAccountID(s.Type),
+				types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.Odplatna),
 				types.CreditBalance(incomeBase),
 			),
 			types.NewEntryRecord(
@@ -134,15 +133,4 @@ func (s *Sell) BookRecords(
 	}
 
 	return nil
-}
-
-func sellTypeToAccountID(sellType types.SellType) types.AccountID {
-	switch sellType {
-	case types.SellTypeRecorded:
-		return types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne, accounts.Odplatna)
-	case types.SellTypeUnrecorded:
-		return types.NewAccountID(accounts.SprzedazNieewidencjonowana)
-	default:
-		panic("invalid sell type")
-	}
 }

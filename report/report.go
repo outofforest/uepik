@@ -33,7 +33,6 @@ var coaAccounts = []*types.Account{
 				types.NewAccount(accounts.Nieodplatna, types.Incomes, types.ValidSources(&operations.Donation{})),
 				types.NewAccount(accounts.Odplatna, types.Incomes, types.ValidSources(
 					&operations.Sell{},
-					&operations.UnrecordedSellSource{},
 				)),
 			),
 		),
@@ -68,7 +67,6 @@ var coaAccounts = []*types.Account{
 		types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 		types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 	),
-	types.NewAccount(accounts.SprzedazNieewidencjonowana, types.Incomes, types.ValidSources(&operations.Sell{})),
 	types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(
 		&operations.CurrencyDiffSource{},
 		&operations.Donation{},
@@ -125,9 +123,6 @@ func newReport(
 	}
 	year.Operations = append(
 		year.Operations,
-		&operations.UnrecordedSell{
-			Contractor: company,
-		},
 		&operations.CurrencyDiff{
 			Contractor: company,
 		},
