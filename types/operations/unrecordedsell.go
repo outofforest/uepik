@@ -35,7 +35,7 @@ func (us *UnrecordedSell) BookRecords(
 			docIndex++
 			entries := findDayRecords(&unrecordedEntries)
 			usDate := entries[0].GetDate()
-			usID := fmt.Sprintf("DW/%d/%d/%d", usDate.Year(), usDate.Month(), docIndex)
+			usID := fmt.Sprintf("ZS/%d/%d/%d", usDate.Year(), usDate.Month(), docIndex)
 
 			source := &UnrecordedSellSource{
 				Document: types.Document{

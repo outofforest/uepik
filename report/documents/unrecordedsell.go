@@ -19,15 +19,8 @@ var (
 type UnrecordedSellDocument struct {
 	Document   types.Document
 	Contractor types.Contractor
-	Pages      []UnrecordedSellPage
+	Records    []UnrecordedSellRecord
 	Summary    UnrecordedSellSummary
-}
-
-// UnrecordedSellPage is a page in the unrecorded sell document.
-type UnrecordedSellPage struct {
-	Page    uint64
-	Records []UnrecordedSellRecord
-	IsLast  bool
 }
 
 // UnrecordedSellRecord represents unrecorded sell record.
@@ -62,42 +55,22 @@ func GenerateUnrecordedSellDocument(
 	contractor types.Contractor,
 	entries []*types.Entry,
 ) types.ReportDocument {
-	const perPage = 9
-
 	report := &UnrecordedSellDocument{
 		Document:   document,
 		Contractor: contractor,
+		Records:    make([]UnrecordedSellRecord, 0, len(entries)),
 		Summary:    NewUnrecordedSellSummary(),
 	}
 
-	var index uint64
-	for len(entries) > 0 {
-		entriesPage := entries
-		if len(entriesPage) > perPage {
-			entriesPage = entriesPage[:perPage]
+	for i, e := range entries {
+		r := UnrecordedSellRecord{
+			Index:      uint64(i + 1),
+			Document:   e.GetDocument(),
+			Contractor: e.GetContractor(),
+			Income:     e.Amount.Credit,
 		}
-		entries = entries[len(entriesPage):]
-
-		records := make([]UnrecordedSellRecord, 0, len(entriesPage))
-		for _, e := range entriesPage {
-			index++
-			r := UnrecordedSellRecord{
-				Index:      index,
-				Document:   e.GetDocument(),
-				Contractor: e.GetContractor(),
-				Income:     e.Amount.Credit,
-			}
-			records = append(records, r)
-			report.Summary = report.Summary.AddRecord(r)
-		}
-
-		report.Pages = append(report.Pages, UnrecordedSellPage{
-			Page:    page(report.Pages),
-			Records: records,
-		})
-	}
-	if len(report.Pages) > 0 {
-		report.Pages[len(report.Pages)-1].IsLast = true
+		report.Records = append(report.Records, r)
+		report.Summary = report.Summary.AddRecord(r)
 	}
 
 	return types.ReportDocument{
