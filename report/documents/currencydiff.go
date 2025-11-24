@@ -20,15 +20,8 @@ var (
 type CurrencyDiffDocument struct {
 	Document   types.Document
 	Contractor types.Contractor
-	Pages      []CurrencyDiffPage
+	Records    []CurrencyDiffRecord
 	Summary    CurrencyDiffSummary
-}
-
-// CurrencyDiffPage is a page in the currency diff document.
-type CurrencyDiffPage struct {
-	Page    uint64
-	Records []CurrencyDiffRecord
-	IsLast  bool
 }
 
 // CurrencyDiffRecord represents currency diff record.
@@ -73,54 +66,34 @@ func GenerateCurrencyDiffDocument(
 	contractor types.Contractor,
 	entries []*types.Entry,
 ) types.ReportDocument {
-	const perPage = 9
-
 	report := &CurrencyDiffDocument{
 		Document:   document,
 		Contractor: contractor,
+		Records:    make([]CurrencyDiffRecord, 0, len(entries)),
 		Summary:    NewCurrencyDiffSummary(),
 	}
 
-	var index uint64
-	for len(entries) > 0 {
-		entriesPage := entries
-		if len(entriesPage) > perPage {
-			entriesPage = entriesPage[:perPage]
-		}
-		entries = entries[len(entriesPage):]
-
-		records := make([]CurrencyDiffRecord, 0, len(entriesPage))
-		for _, e := range entriesPage {
-			data, ok := e.Data.(*types.CurrencyDiff)
-			if !ok {
-				panic("currency diff data source required")
-			}
-
-			index++
-			r := CurrencyDiffRecord{
-				Date:            data.GetDate(),
-				Index:           index,
-				DayOfMonth:      uint8(data.GetDate().Day()),
-				Document:        data.GetDocument(),
-				PaymentDocument: data.BankRecord.Document,
-				Contractor:      data.GetContractor(),
-				Amount:          data.BankRecord.OriginalAmount.Abs(),
-				DocumentRate:    data.DataRate,
-				PaymentRate:     data.BankRecord.Rate,
-				Income:          e.Amount.Credit,
-				Cost:            e.Amount.Debit,
-			}
-			records = append(records, r)
-			report.Summary = report.Summary.AddRecord(r)
+	for i, e := range entries {
+		data, ok := e.Data.(*types.CurrencyDiff)
+		if !ok {
+			panic("currency diff data source required")
 		}
 
-		report.Pages = append(report.Pages, CurrencyDiffPage{
-			Page:    page(report.Pages),
-			Records: records,
-		})
-	}
-	if len(report.Pages) > 0 {
-		report.Pages[len(report.Pages)-1].IsLast = true
+		r := CurrencyDiffRecord{
+			Date:            data.GetDate(),
+			Index:           uint64(i + 1),
+			DayOfMonth:      uint8(data.GetDate().Day()),
+			Document:        data.GetDocument(),
+			PaymentDocument: data.BankRecord.Document,
+			Contractor:      data.GetContractor(),
+			Amount:          data.BankRecord.OriginalAmount.Abs(),
+			DocumentRate:    data.DataRate,
+			PaymentRate:     data.BankRecord.Rate,
+			Income:          e.Amount.Credit,
+			Cost:            e.Amount.Debit,
+		}
+		report.Records = append(report.Records, r)
+		report.Summary = report.Summary.AddRecord(r)
 	}
 
 	return types.ReportDocument{
