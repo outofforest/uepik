@@ -30,12 +30,6 @@ const (
 	Odplatna    = types.CostCategoryTypePaid
 )
 
-// Rodzaje sprzedaży.
-const (
-	Ewidencjonowana    = types.SellTypeRecorded
-	Nieewidencjonowana = types.SellTypeUnrecorded
-)
-
 var timeLocation = lo.Must(time.LoadLocation("Europe/Warsaw"))
 
 // Data tworzy datę.
@@ -238,7 +232,6 @@ func Sprzedaz(
 	kontrahent types.Contractor,
 	naleznosci []types.Due,
 	platnosci []types.Payment,
-	rodzaj types.SellType,
 	opis string,
 ) []types.Operation {
 	if len(naleznosci) == 0 {
@@ -250,7 +243,6 @@ func Sprzedaz(
 		Contractor: kontrahent,
 		Dues:       naleznosci,
 		Payments:   platnosci,
-		Type:       rodzaj,
 		Notes:      opis,
 	}}
 }

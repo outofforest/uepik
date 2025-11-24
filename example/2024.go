@@ -16,7 +16,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -30,7 +29,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -44,7 +42,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -58,7 +55,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -72,7 +68,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -86,7 +81,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -100,7 +94,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -114,7 +107,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -128,7 +120,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -142,7 +133,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -156,7 +146,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -170,7 +159,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -184,7 +172,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -198,7 +185,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -212,7 +198,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -226,7 +211,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -240,7 +224,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -254,7 +237,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -268,7 +250,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Ewidencjonowana,
 			"Miejsce na rejsie 2026/01",
 		),
 		Sprzedaz(
@@ -282,7 +263,6 @@ var (
 			Platnosci(
 				Platnosc("WB/EUR/2025/01/23", Data(2025, 1, 1), 1, Kwota(1, 23, EUR)),
 			),
-			Nieewidencjonowana,
 			"Miejsce na rejsie",
 		),
 		Zakup(

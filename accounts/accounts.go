@@ -18,5 +18,4 @@ const (
 	VAT
 	NiewydatkowanyDochod
 	RozniceKursowe
-	SprzedazNieewidencjonowana
 )
