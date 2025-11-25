@@ -18,10 +18,10 @@ var (
 
 // CurrencyDiffDocument represents currency diff documents.
 type CurrencyDiffDocument struct {
-	Document   types.Document
-	Contractor types.Contractor
-	Records    []CurrencyDiffRecord
-	Summary    CurrencyDiffSummary
+	Document types.Document
+	Company  types.Contractor
+	Records  []CurrencyDiffRecord
+	Summary  CurrencyDiffSummary
 }
 
 // CurrencyDiffRecord represents currency diff record.
@@ -63,14 +63,14 @@ func (cds CurrencyDiffSummary) AddRecord(r CurrencyDiffRecord) CurrencyDiffSumma
 // GenerateCurrencyDiffDocument generates currency diff document.
 func GenerateCurrencyDiffDocument(
 	document types.Document,
-	contractor types.Contractor,
+	company types.Contractor,
 	entries []*types.Entry,
 ) types.ReportDocument {
 	report := &CurrencyDiffDocument{
-		Document:   document,
-		Contractor: contractor,
-		Records:    make([]CurrencyDiffRecord, 0, len(entries)),
-		Summary:    NewCurrencyDiffSummary(),
+		Document: document,
+		Company:  company,
+		Records:  make([]CurrencyDiffRecord, 0, len(entries)),
+		Summary:  NewCurrencyDiffSummary(),
 	}
 
 	for i, e := range entries {

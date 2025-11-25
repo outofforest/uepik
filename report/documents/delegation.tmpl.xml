@@ -1,0 +1,117 @@
+<table:table table:name="{{ .Document.SheetName }}" table:style-name="taPortrait">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+    <table:table-column table:style-name="co3" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co25"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce77"/>
+    <table:table-column table:style-name="co25" table:default-cell-style-name="ce{{ .Currency }}"/>
+    <table:table-header-rows>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Rozliczenie delegacji nr {{ .Document.ID }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro2">
+            <table:table-cell table:style-name="Default" table:number-columns-repeated="5"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Data: {{ date .Document.Date }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Nazwa podatnika: {{ .Company.Name }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Adres: {{ .Company.Address }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Delegowany: {{ .Person.Name }}, {{ .Person.Address }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Cel: {{ .Notes }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Termin: od {{ dateAndTime .Start }} do {{ dateAndTime .End }} ({{ duration .Start .End }})</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+                <text:p>Kraj: {{ .Country.Name }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro2">
+            <table:table-cell table:style-name="Default" table:number-columns-repeated="5"/>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+                <text:p>Nr dokumentu</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Opis</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Kwota</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Waluta</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+                <text:p>Kwota {{ .Currency }}</text:p>
+            </table:table-cell>
+        </table:table-row>
+        <table:table-row table:style-name="ro8">
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="1" calcext:value-type="float">
+                <text:p>1</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="2" calcext:value-type="float">
+                <text:p>2</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce76" office:value-type="float" office:value="3" calcext:value-type="float">
+                <text:p>3</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="4" calcext:value-type="float">
+                <text:p>4</text:p>
+            </table:table-cell>
+            <table:table-cell table:style-name="ce66" office:value-type="float" office:value="5" calcext:value-type="float">
+                <text:p>5</text:p>
+            </table:table-cell>
+        </table:table-row>
+    </table:table-header-rows>
+{{ range .Costs }}
+    <table:table-row table:style-name="ro8">
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Document }}</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .Notes }}</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .OriginalAmount.Amount }}" calcext:value-type="float" table:style-name="ce{{ .Amount.Currency }}" />
+        <table:table-cell office:value-type="string" calcext:value-type="string">
+            <text:p>{{ .OriginalAmount.Currency }}</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="float" office:value="{{ .Amount.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+{{ end }}
+    <table:table-row table:style-name="ro8">
+        <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
+            <text:p>Suma:</text:p>
+        </table:table-cell>
+        <table:covered-table-cell table:number-columns-repeated="3"/>
+        <table:table-cell office:value-type="float" office:value="{{ .Summary.Amount.Amount }}" calcext:value-type="float" />
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+        <table:table-cell table:style-name="Default" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="5" table:number-rows-spanned="1">
+            <text:p>Podpis:</text:p>
+        </table:table-cell>
+    </table:table-row>
+</table:table>

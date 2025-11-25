@@ -24,12 +24,12 @@
         </table:table-row>
         <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
-                <text:p>Nazwa podatnika: {{ .Contractor.Name }}</text:p>
+                <text:p>Nazwa podatnika: {{ .Company.Name }}</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro8">
             <table:table-cell table:style-name="ce6" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="9" table:number-rows-spanned="1">
-                <text:p>Adres: {{ .Contractor.Address }}</text:p>
+                <text:p>Adres: {{ .Company.Address }}</text:p>
             </table:table-cell>
         </table:table-row>
         <table:table-row table:style-name="ro2">

@@ -50,6 +50,7 @@ func (p *Payment) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the payment.
 func (p *Payment) BookRecords(
+	company types.Contractor,
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,

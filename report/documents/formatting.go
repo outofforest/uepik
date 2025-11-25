@@ -14,6 +14,10 @@ func date(date time.Time) string {
 	return date.Format(time.DateOnly)
 }
 
+func dateAndTime(date time.Time) string {
+	return date.Format("2006-01-02 15:04")
+}
+
 func monthName(month time.Month) string {
 	switch month {
 	case time.January:

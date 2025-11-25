@@ -50,6 +50,7 @@ func (d *Donation) BankRecords() []*types.BankRecord {
 
 // BookRecords returns book records for the donation.
 func (d *Donation) BookRecords(
+	company types.Contractor,
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,

@@ -5,7 +5,7 @@ import . "github.com/outofforest/uepik/v2" //nolint:staticcheck
 
 // R2025 to dane księgowe za rok 2025.
 var R2025 = Rok(
-	"NazwaFirmy", "Al. Jerozolimskie 1, 00-199 Warszawa, Chorwacja", "1111111111",
+	Kontrahent("INVINI sp. z o. o.", "", ""),
 	Data(2025, 1, 1), Data(2025, 12, 31),
 	BilansOtwarcia(
 		Kwota(123, 23, PLN),
@@ -25,4 +25,21 @@ var R2025 = Rok(
 		Platnosc("WB/EUR/2025/01/01", Data(2025, 5, 3), 1, Kwota(500, 0, EUR)),
 	),
 	rejs2026HR01,
+	Delegacja(
+		Dokument("RD/2025/01/01", Data(2025, 2, 5)),
+		Kontrahent("Jan Kowalski", "ul. Nowaka 4, 41-001 Poznań", ""),
+		Czas(2025, 1, 1, 17, 0), Czas(2025, 1, 12, 18, 30),
+		Chorwacja,
+		EUR,
+		Platnosci(
+			Platnosc("WB/01", Data(2025, 2, 6), 1, Kwota(20, 0, EUR)),
+			Platnosc("WB/01", Data(2025, 2, 7), 1, Kwota(25, 0, EUR)),
+		),
+		KUP,
+		Odplatna,
+		"Delegacja na rejs szkoleniowy",
+		Dieta(),
+		Dojazd(),
+		KosztDelegacji("FV/13/45", Kwota(100, 25, EUR), "Przelot"),
+	),
 )

@@ -4,43 +4,47 @@ import (
 	"time"
 
 	"github.com/outofforest/uepik/v2/accounts"
+	"github.com/outofforest/uepik/v2/report/documents"
 	"github.com/outofforest/uepik/v2/types"
 )
 
-// Purchase defines the cost of purchased goods or service.
-type Purchase struct {
-	Date             time.Time
+// Delegation represents delegation.
+type Delegation struct {
 	Document         types.Document
-	Contractor       types.Contractor
-	Amount           types.Denom
+	Person           types.Contractor
+	Start            time.Time
+	End              time.Time
+	Country          types.DelegationCountry
+	Currency         types.CurrencySymbol
 	Payments         []types.Payment
 	CostTaxType      types.CostTaxType
 	CostCategoryType types.CostCategoryType
 	Notes            string
+	Costs            []types.DelegationCost
 }
 
-// GetDate returns date of purchase.
-func (d *Purchase) GetDate() time.Time {
-	return d.Date
+// GetDate returns date of delegation.
+func (d *Delegation) GetDate() time.Time {
+	return d.Document.Date
 }
 
 // GetDocument returns document.
-func (d *Purchase) GetDocument() types.Document {
+func (d *Delegation) GetDocument() types.Document {
 	return d.Document
 }
 
 // GetContractor returns contractor.
-func (d *Purchase) GetContractor() types.Contractor {
-	return d.Contractor
+func (d *Delegation) GetContractor() types.Contractor {
+	return d.Person
 }
 
 // GetNotes returns notes.
-func (d *Purchase) GetNotes() string {
+func (d *Delegation) GetNotes() string {
 	return d.Notes
 }
 
-// BankRecords returns bank records for the purchase.
-func (d *Purchase) BankRecords() []*types.BankRecord {
+// BankRecords returns bank records for the delegation.
+func (d *Delegation) BankRecords() []*types.BankRecord {
 	records := []*types.BankRecord{}
 	for _, payment := range d.Payments {
 		records = append(records, &types.BankRecord{
@@ -48,26 +52,29 @@ func (d *Purchase) BankRecords() []*types.BankRecord {
 			Index:          payment.Index,
 			Document:       payment.DocumentID,
 			PaidDocument:   d.Document,
-			Contractor:     d.Contractor,
+			Contractor:     d.Person,
 			OriginalAmount: payment.Amount.Neg(),
 		})
 	}
 	return records
 }
 
-// BookRecords returns book records for the purchase.
-func (d *Purchase) BookRecords(
+// BookRecords returns book records for the delegation.
+func (d *Delegation) BookRecords(
 	company types.Contractor,
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
 ) []types.ReportDocument {
-	if period.End.Before(d.Date) {
+	if period.End.Before(d.Document.Date) {
 		return nil
 	}
 
-	costBase, costRate := rates.ToBase(d.Amount, types.PreviousDay(d.Date))
+	doc, amount := documents.GenerateDelegationDocument(d.Document, company, d.Person, d.Start, d.End, d.Country,
+		d.Currency, d.Costs, d.Notes, rates)
+
+	costBase, costRate := rates.ToBase(amount, types.PreviousDay(d.Document.Date))
 
 	coa.AddEntry(d,
 		types.NewEntryRecord(
@@ -105,29 +112,5 @@ func (d *Purchase) BookRecords(
 		)
 	}
 
-	return nil
-}
-
-func costTaxTypeToAccountID(costTaxType types.CostTaxType) types.AccountID {
-	switch costTaxType {
-	case types.CostTaxTypeTaxable:
-		return types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe,
-			accounts.Operacyjne)
-	case types.CostTaxTypeNonTaxable:
-		return types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Niepodatkowe,
-			accounts.Operacyjne)
-	default:
-		panic("invalid cost tax type")
-	}
-}
-
-func costCategoryTypeToAccountID(costCategoryType types.CostCategoryType) types.AccountIDPart {
-	switch costCategoryType {
-	case types.CostCategoryTypeFreeOfCharge:
-		return accounts.Nieodplatna
-	case types.CostCategoryTypePaid:
-		return accounts.Odplatna
-	default:
-		panic("invalid cost category type")
-	}
+	return []types.ReportDocument{doc}
 }

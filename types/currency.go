@@ -129,6 +129,22 @@ func (d Denom) Sub(denom Denom) Denom {
 	}
 }
 
+// MulUint64 multiplies denom.
+func (d Denom) MulUint64(n uint64) Denom {
+	return Denom{
+		Currency: d.Currency,
+		Amount:   d.Amount.MulUint64(n),
+	}
+}
+
+// MulFloat64 multiplies denom.
+func (d Denom) MulFloat64(n float64) Denom {
+	return Denom{
+		Currency: d.Currency,
+		Amount:   d.Amount.MulFloat64(n),
+	}
+}
+
 // Neg negates denom.
 func (d Denom) Neg() Denom {
 	return Denom{
@@ -249,6 +265,16 @@ func (n Number) Sub(n2 Number) Number {
 	return newNumberFromDecimal(n.decimal.Sub(n2.decimal), n.precision)
 }
 
+// MulUint64 multiplies number.
+func (n Number) MulUint64(n2 uint64) Number {
+	return newNumberFromDecimal(n.decimal.Mul(decimal.NewFromUint64(n2)), n.precision)
+}
+
+// MulFloat64 multiplies number.
+func (n Number) MulFloat64(n2 float64) Number {
+	return newNumberFromDecimal(n.decimal.Mul(decimal.NewFromFloat(n2).Round(int32(n.precision))), n.precision)
+}
+
 // Neg negates number.
 func (n Number) Neg() Number {
 	return newNumberFromDecimal(n.decimal.Neg(), n.precision)
@@ -289,6 +315,19 @@ type CurrencyRates map[CurrencyRateKey]Number
 func (cr CurrencyRates) ToBase(denom Denom, date time.Time) (Denom, Number) {
 	rate := cr.rate(denom.Currency, date)
 	return denom.ToBase(rate), rate
+}
+
+// FromBase converts denom from the base currency.
+func (cr CurrencyRates) FromBase(baseDenom Denom, toCurrency CurrencySymbol, date time.Time) (Denom, Number) {
+	rate := cr.rate(toCurrency, date)
+	currency := Currencies.Currency(toCurrency)
+	return Denom{
+		Currency: toCurrency,
+		Amount: newNumberFromDecimal(
+			baseDenom.Amount.decimal.DivRound(rate.decimal, int32(currency.AmountPrecision)),
+			currency.AmountPrecision,
+		),
+	}, rate
 }
 
 func (cr CurrencyRates) rate(currency CurrencySymbol, date time.Time) Number {
