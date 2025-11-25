@@ -7,6 +7,11 @@ import (
 	"github.com/outofforest/uepik/v2/types"
 )
 
+var (
+	_ types.Operation       = &Purchase{}
+	_ types.EntryDataSource = &Purchase{}
+)
+
 // Purchase defines the cost of purchased goods or service.
 type Purchase struct {
 	Date             time.Time

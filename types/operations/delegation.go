@@ -8,6 +8,11 @@ import (
 	"github.com/outofforest/uepik/v2/types"
 )
 
+var (
+	_ types.Operation       = &Delegation{}
+	_ types.EntryDataSource = &Delegation{}
+)
+
 // Delegation represents delegation.
 type Delegation struct {
 	Document         types.Document
