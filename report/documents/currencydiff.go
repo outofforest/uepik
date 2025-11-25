@@ -5,10 +5,14 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/outofforest/uepik/v2/accounts"
 	"github.com/outofforest/uepik/v2/types"
 )
 
 var (
+	_ types.SheetSource     = &CurrencyDiffDocument{}
+	_ types.EntryDataSource = &CurrencyDiffDocument{}
+
 	//go:embed currencydiff.tmpl.xml
 	currencyDiffTmpl     string
 	currencyDiffTemplate = template.Must(template.New("currencyDiff").Funcs(template.FuncMap{
@@ -22,6 +26,39 @@ type CurrencyDiffDocument struct {
 	Company  types.Contractor
 	Records  []CurrencyDiffRecord
 	Summary  CurrencyDiffSummary
+}
+
+// GetDate returns date of currency diff.
+func (d *CurrencyDiffDocument) GetDate() time.Time {
+	return d.Document.Date
+}
+
+// GetDocument returns document.
+func (d *CurrencyDiffDocument) GetDocument() types.Document {
+	return d.Document
+}
+
+// GetContractor returns contractor.
+func (d *CurrencyDiffDocument) GetContractor() types.Contractor {
+	return d.Company
+}
+
+// GetNotes returns notes.
+func (d *CurrencyDiffDocument) GetNotes() string {
+	return "Różnice kursowe"
+}
+
+// GetSheet returns sheet to report.
+func (d *CurrencyDiffDocument) GetSheet() types.Sheet {
+	return types.Sheet{
+		Date:     d.Document.Date,
+		Template: currencyDiffTemplate,
+		Data:     d,
+		Config: types.SheetConfig{
+			Name:       d.Document.SheetName,
+			LockedRows: 8,
+		},
+	}
 }
 
 // CurrencyDiffRecord represents currency diff record.
@@ -60,13 +97,18 @@ func (cds CurrencyDiffSummary) AddRecord(r CurrencyDiffRecord) CurrencyDiffSumma
 	return cds
 }
 
-// GenerateCurrencyDiffDocument generates currency diff document.
-func GenerateCurrencyDiffDocument(
+// NewCurrencyDiffDocument generates currency diff document.
+func NewCurrencyDiffDocument(
+	coa *types.ChartOfAccounts,
 	document types.Document,
 	company types.Contractor,
-	entries []*types.Entry,
-) types.ReportDocument {
-	report := &CurrencyDiffDocument{
+) *CurrencyDiffDocument {
+	entries := coa.EntriesMonth(types.NewAccountID(accounts.RozniceKursowe), document.Date)
+	if len(entries) == 0 {
+		return nil
+	}
+
+	doc := &CurrencyDiffDocument{
 		Document: document,
 		Company:  company,
 		Records:  make([]CurrencyDiffRecord, 0, len(entries)),
@@ -92,17 +134,9 @@ func GenerateCurrencyDiffDocument(
 			Income:          e.Amount.Credit,
 			Cost:            e.Amount.Debit,
 		}
-		report.Records = append(report.Records, r)
-		report.Summary = report.Summary.AddRecord(r)
+		doc.Records = append(doc.Records, r)
+		doc.Summary = doc.Summary.AddRecord(r)
 	}
 
-	return types.ReportDocument{
-		Date:     document.Date,
-		Template: currencyDiffTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       document.SheetName,
-			LockedRows: 8,
-		},
-	}
+	return doc
 }

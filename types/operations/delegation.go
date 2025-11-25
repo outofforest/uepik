@@ -71,15 +71,15 @@ func (d *Delegation) BookRecords(
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
-) []types.ReportDocument {
+) []types.SheetSource {
 	if period.End.Before(d.Document.Date) {
 		return nil
 	}
 
-	doc, amount := documents.GenerateDelegationDocument(d.Document, company, d.Person, d.Start, d.End, d.Country,
-		d.Currency, d.Costs, d.Notes, rates)
+	doc := documents.NewDelegationDocument(d.Document, company, d.Person, d.Start, d.End, d.Country, d.Currency,
+		d.Costs, d.Notes, rates)
 
-	costBase, costRate := rates.ToBase(amount, types.PreviousDay(d.Document.Date))
+	costBase, costRate := rates.ToBase(doc.Summary.Amount, types.PreviousDay(d.Document.Date))
 
 	coa.AddEntry(d,
 		types.NewEntryRecord(
@@ -117,5 +117,5 @@ func (d *Delegation) BookRecords(
 		)
 	}
 
-	return []types.ReportDocument{doc}
+	return []types.SheetSource{doc}
 }

@@ -10,6 +10,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &VATReport{}
+
 	//go:embed vat.tmpl.xml
 	vatTmpl     string
 	vatTemplate = template.Must(template.New("vat").Parse(vatTmpl))
@@ -20,6 +22,18 @@ type VATReport struct {
 	CompanyName string
 	Months      []VATMonth
 	Summary     VATSummary
+}
+
+// GetSheet returns sheet to report.
+func (r *VATReport) GetSheet() types.Sheet {
+	return types.Sheet{
+		Template: vatTemplate,
+		Data:     r,
+		Config: types.SheetConfig{
+			Name:       "VAT",
+			LockedRows: 6,
+		},
+	}
 }
 
 // VATMonth represents month in the VAT report.
@@ -58,12 +72,12 @@ func (vs VATSummary) AddRecord(r VATRecord) VATSummary {
 	return vs
 }
 
-// GenerateVATReport generates VAT report.
-func GenerateVATReport(
+// NewVATReport generates VAT report.
+func NewVATReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	companyName string,
-) types.ReportDocument {
+) *VATReport {
 	report := &VATReport{
 		CompanyName: companyName,
 		Summary:     NewVATSummary(),
@@ -96,12 +110,5 @@ func GenerateVATReport(
 		report.Months = append(report.Months, monthReport)
 	}
 
-	return types.ReportDocument{
-		Template: vatTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       "VAT",
-			LockedRows: 6,
-		},
-	}
+	return report
 }

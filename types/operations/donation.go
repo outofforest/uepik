@@ -60,7 +60,7 @@ func (d *Donation) BookRecords(
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
-) []types.ReportDocument {
+) []types.SheetSource {
 	if period.End.Before(d.Payment.Date) {
 		return nil
 	}

@@ -10,6 +10,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &BookReport{}
+
 	//go:embed book.tmpl.xml
 	bookTmpl     string
 	bookTemplate = template.Must(template.New("book").Funcs(template.FuncMap{
@@ -21,6 +23,18 @@ var (
 type BookReport struct {
 	CompanyName string
 	Months      []BookMonth
+}
+
+// GetSheet returns sheet to report.
+func (r *BookReport) GetSheet() types.Sheet {
+	return types.Sheet{
+		Template: bookTemplate,
+		Data:     r,
+		Config: types.SheetConfig{
+			Name:       "PiK",
+			LockedRows: 6,
+		},
+	}
 }
 
 // BookMonth is the book month.
@@ -79,12 +93,12 @@ func (bs BookSummary) AddSummary(bs2 BookSummary) BookSummary {
 	return bs
 }
 
-// GenerateBookReport generates book report.
-func GenerateBookReport(
+// NewBookReport generates book report.
+func NewBookReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	companyName string,
-) types.ReportDocument {
+) *BookReport {
 	report := &BookReport{
 		CompanyName: companyName,
 	}
@@ -124,12 +138,5 @@ func GenerateBookReport(
 		report.Months = append(report.Months, monthReport)
 	}
 
-	return types.ReportDocument{
-		Template: bookTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       "PiK",
-			LockedRows: 6,
-		},
-	}
+	return report
 }

@@ -80,11 +80,16 @@ type Payment struct {
 type Operation interface {
 	BankRecords() []*BankRecord
 	BookRecords(company Contractor, period Period, coa *ChartOfAccounts, bankRecords []*BankRecord,
-		rates CurrencyRates) []ReportDocument
+		rates CurrencyRates) []SheetSource
 }
 
-// ReportDocument represents a document in the report.
-type ReportDocument struct {
+// SheetSource is the source of report sheet.
+type SheetSource interface {
+	GetSheet() Sheet
+}
+
+// Sheet represents a sheet in the report.
+type Sheet struct {
 	Date     time.Time
 	Index    uint64
 	Template *template.Template
@@ -162,10 +167,12 @@ func (fy *FiscalYear) BookRecords(
 	coa *ChartOfAccounts,
 	currencyRates CurrencyRates,
 	bankRecords map[Operation][]*BankRecord,
-) []ReportDocument {
-	docs := []ReportDocument{}
+) []Sheet {
+	docs := []Sheet{}
 	for _, o := range fy.Operations {
-		docs = append(docs, o.BookRecords(fy.Company, fy.Period, coa, bankRecords[o], currencyRates)...)
+		for _, d := range o.BookRecords(fy.Company, fy.Period, coa, bankRecords[o], currencyRates) {
+			docs = append(docs, d.GetSheet())
+		}
 	}
 	for i := range docs {
 		docs[i].Index = uint64(i)

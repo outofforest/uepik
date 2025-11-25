@@ -11,6 +11,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &DelegationDocument{}
+
 	//go:embed delegation.tmpl.xml
 	delegationTmpl     string
 	delegationTemplate = template.Must(template.New("delegation").Funcs(template.FuncMap{
@@ -31,6 +33,19 @@ type DelegationDocument struct {
 	Costs      []DelegationCost
 	Notes      string
 	Summary    DelegationSummary
+}
+
+// GetSheet returns sheet to report.
+func (d *DelegationDocument) GetSheet() types.Sheet {
+	return types.Sheet{
+		Date:     d.Document.Date,
+		Template: delegationTemplate,
+		Data:     d,
+		Config: types.SheetConfig{
+			Name:       d.Document.SheetName,
+			LockedRows: 12,
+		},
+	}
 }
 
 // DelegationCost represents delegation cost.
@@ -59,8 +74,8 @@ func (ds DelegationSummary) AddRecord(r DelegationCost) DelegationSummary {
 	return ds
 }
 
-// GenerateDelegationDocument generates delegation document.
-func GenerateDelegationDocument(
+// NewDelegationDocument generates delegation document.
+func NewDelegationDocument(
 	document types.Document,
 	company types.Contractor,
 	person types.Contractor,
@@ -70,8 +85,8 @@ func GenerateDelegationDocument(
 	costs []types.DelegationCost,
 	notes string,
 	rates types.CurrencyRates,
-) (types.ReportDocument, types.Denom) {
-	report := &DelegationDocument{
+) *DelegationDocument {
+	doc := &DelegationDocument{
 		Document: document,
 		Company:  company,
 		Person:   person,
@@ -98,19 +113,11 @@ func GenerateDelegationDocument(
 			Amount:         amount,
 			Notes:          c.GetNotes(),
 		}
-		report.Costs = append(report.Costs, r)
-		report.Summary = report.Summary.AddRecord(r)
+		doc.Costs = append(doc.Costs, r)
+		doc.Summary = doc.Summary.AddRecord(r)
 	}
 
-	return types.ReportDocument{
-		Date:     document.Date,
-		Template: delegationTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       document.SheetName,
-			LockedRows: 12,
-		},
-	}, report.Summary.Amount
+	return doc
 }
 
 func durationString(start, end time.Time) string {

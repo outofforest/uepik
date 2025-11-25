@@ -9,6 +9,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &FlowReport{}
+
 	//go:embed flow.tmpl.xml
 	flowTmpl     string
 	flowTemplate = template.Must(template.New("flow").Parse(flowTmpl))
@@ -25,29 +27,33 @@ type FlowReport struct {
 	Profit         types.Denom
 }
 
-// GenerateFlowReport generates flow report.
-func GenerateFlowReport(
-	period types.Period,
-	coa *types.ChartOfAccounts,
-	companyName string,
-) types.ReportDocument {
-	income := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody))
-	costsTaxed := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe))
-
-	return types.ReportDocument{
+// GetSheet returns sheet to report.
+func (r *FlowReport) GetSheet() types.Sheet {
+	return types.Sheet{
 		Template: flowTemplate,
-		Data: &FlowReport{
-			CompanyName:    companyName,
-			Income:         income,
-			CostsTaxed:     costsTaxed,
-			ProfitYear:     income.Sub(costsTaxed),
-			ProfitPrevious: coa.OpeningBalance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
-			CostsNotTaxed:  coa.Debit(types.NewAccountID(accounts.NiewydatkowanyDochod)),
-			Profit:         coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
-		},
+		Data:     r,
 		Config: types.SheetConfig{
 			Name:       "PF",
 			LockedRows: 6,
 		},
+	}
+}
+
+// NewFlowReport generates flow report.
+func NewFlowReport(
+	coa *types.ChartOfAccounts,
+	companyName string,
+) *FlowReport {
+	income := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody))
+	costsTaxed := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe))
+
+	return &FlowReport{
+		CompanyName:    companyName,
+		Income:         income,
+		CostsTaxed:     costsTaxed,
+		ProfitYear:     income.Sub(costsTaxed),
+		ProfitPrevious: coa.OpeningBalance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+		CostsNotTaxed:  coa.Debit(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+		Profit:         coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
 	}
 }

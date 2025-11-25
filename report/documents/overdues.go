@@ -10,10 +10,27 @@ import (
 )
 
 var (
+	_ types.SheetSource = &OverDueReport{}
+
 	//go:embed overdues.tmpl.xml
 	overDuesTmpl     string
 	overDuesTemplate = template.Must(template.New("overDues").Parse(overDuesTmpl))
 )
+
+// OverDueReport is used to report overdued payments.
+type OverDueReport []OverDueRecord
+
+// GetSheet returns sheet to report.
+func (r *OverDueReport) GetSheet() types.Sheet {
+	return types.Sheet{
+		Template: overDuesTemplate,
+		Data:     r,
+		Config: types.SheetConfig{
+			Name:       "Zaległości",
+			LockedRows: 1,
+		},
+	}
+}
 
 // OverDueRecord represents VAT over due.
 type OverDueRecord struct {
@@ -30,12 +47,12 @@ type overDueSource interface {
 	GetPayments() []types.Payment
 }
 
-// GenerateOverDueReport generates over due report.
-func GenerateOverDueReport(
+// NewOverDueReport generates over due report.
+func NewOverDueReport(
 	period types.Period,
 	operations []types.Operation,
-) types.ReportDocument {
-	report := []OverDueRecord{}
+) *OverDueReport {
+	report := OverDueReport{}
 
 	for _, op := range operations {
 		overDueSource, ok := op.(overDueSource)
@@ -85,12 +102,5 @@ func GenerateOverDueReport(
 		}
 	}
 
-	return types.ReportDocument{
-		Template: overDuesTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       "Zaległości",
-			LockedRows: 1,
-		},
-	}
+	return &report
 }

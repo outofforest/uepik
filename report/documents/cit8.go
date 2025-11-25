@@ -9,6 +9,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &CIT8Report{}
+
 	//go:embed cit8.tmpl.xml
 	cit8Tmpl     string
 	cit8Template = template.Must(template.New("cit8").Parse(cit8Tmpl))
@@ -26,8 +28,20 @@ type CIT8Report struct {
 	ReceivedDonations         types.Denom
 }
 
-// GenerateCIT8Report generates CIT-8 report.
-func GenerateCIT8Report(coa *types.ChartOfAccounts) types.ReportDocument {
+// GetSheet returns sheet to report.
+func (r *CIT8Report) GetSheet() types.Sheet {
+	return types.Sheet{
+		Data:     r,
+		Template: cit8Template,
+		Config: types.SheetConfig{
+			Name:       "CIT-8",
+			LockedRows: 0,
+		},
+	}
+}
+
+// NewCIT8Report generates CIT-8 report.
+func NewCIT8Report(coa *types.ChartOfAccounts) *CIT8Report {
 	incomesFinancial := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Finansowe))
 	incomesOthers := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody, accounts.Operacyjne))
 	costsFinancial := coa.Balance(types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe,
@@ -42,22 +56,15 @@ func GenerateCIT8Report(coa *types.ChartOfAccounts) types.ReportDocument {
 	if nonTaxableProfitOthers.LT(types.BaseZero) {
 		nonTaxableProfitOthers = types.BaseZero
 	}
-	return types.ReportDocument{
-		Data: &CIT8Report{
-			IncomesFinancial:          incomesFinancial,
-			IncomesOthers:             incomesOthers,
-			CostsFinancial:            costsFinancial,
-			CostsOthers:               costsOthers,
-			NonTaxableProfitFinancial: nonTaxableProfitFinancial,
-			NonTaxableProfitOthers:    nonTaxableProfitOthers,
-			UnspentProfit:             coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
-			ReceivedDonations: coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody,
-				accounts.Operacyjne, accounts.Nieodplatna)),
-		},
-		Template: cit8Template,
-		Config: types.SheetConfig{
-			Name:       "CIT-8",
-			LockedRows: 0,
-		},
+	return &CIT8Report{
+		IncomesFinancial:          incomesFinancial,
+		IncomesOthers:             incomesOthers,
+		CostsFinancial:            costsFinancial,
+		CostsOthers:               costsOthers,
+		NonTaxableProfitFinancial: nonTaxableProfitFinancial,
+		NonTaxableProfitOthers:    nonTaxableProfitOthers,
+		UnspentProfit:             coa.Balance(types.NewAccountID(accounts.NiewydatkowanyDochod)),
+		ReceivedDonations: coa.Balance(types.NewAccountID(accounts.PiK, accounts.Przychody,
+			accounts.Operacyjne, accounts.Nieodplatna)),
 	}
 }
