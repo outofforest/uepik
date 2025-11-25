@@ -26,7 +26,7 @@ var coaAccounts = []*types.Account{
 			types.NewAccount(
 				accounts.Finansowe, types.Incomes, types.AllValid(),
 				types.NewAccount(accounts.DodatnieRozniceKursowe, types.Incomes,
-					types.ValidSources(&operations.CurrencyDiffSource{})),
+					types.ValidSources(&documents.CurrencyDiffDocument{})),
 			),
 			types.NewAccount(
 				accounts.Operacyjne, types.Incomes, types.AllValid(),
@@ -43,7 +43,7 @@ var coaAccounts = []*types.Account{
 				types.NewAccount(
 					accounts.Finansowe, types.Costs, types.AllValid(),
 					types.NewAccount(accounts.UjemneRozniceKursowe, types.Costs,
-						types.ValidSources(&operations.CurrencyDiffSource{})),
+						types.ValidSources(&documents.CurrencyDiffDocument{})),
 				),
 				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(
 					&operations.Purchase{},
@@ -62,7 +62,7 @@ var coaAccounts = []*types.Account{
 	types.NewAccount(accounts.VAT, types.Incomes, types.ValidSources(&types.VAT{})),
 	types.NewAccount(
 		accounts.NiewydatkowanyDochod, types.Liabilities, types.ValidSources(
-			&operations.CurrencyDiffSource{},
+			&documents.CurrencyDiffDocument{},
 			&operations.Donation{},
 			&operations.Purchase{},
 			&operations.Delegation{},
@@ -75,13 +75,13 @@ var coaAccounts = []*types.Account{
 		types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(&types.CurrencyDiff{})),
 	),
 	types.NewAccount(accounts.Nieodplatna, types.Liabilities, types.ValidSources(
-		&operations.CurrencyDiffSource{},
+		&documents.CurrencyDiffDocument{},
 		&operations.Donation{},
 		&operations.Purchase{},
 		&operations.Delegation{},
 	)),
 	types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(
-		&operations.CurrencyDiffSource{},
+		&documents.CurrencyDiffDocument{},
 		&operations.Sell{},
 		&operations.Purchase{},
 		&operations.Delegation{},
@@ -134,19 +134,19 @@ func newReport(
 
 	opDocs := year.BookRecords(coa, currencyRates, opBankRecords)
 
-	docs := []types.ReportDocument{
-		documents.GenerateBookReport(year.Period, coa, year.Company.Name),
-		documents.GenerateFlowReport(year.Period, coa, year.Company.Name),
-		documents.GenerateVATReport(year.Period, coa, year.Company.Name),
-		documents.GenerateCategoryReport(year.Period, coa, year.Company.Name,
+	docs := []types.Sheet{
+		documents.NewBookReport(year.Period, coa, year.Company.Name).GetSheet(),
+		documents.NewFlowReport(coa, year.Company.Name).GetSheet(),
+		documents.NewVATReport(year.Period, coa, year.Company.Name).GetSheet(),
+		documents.NewCategoryReport(year.Period, coa, year.Company.Name,
 			"ZESTAWIENIE DZIAŁALNOŚCI NIEODPŁATNEJ",
 			"Nieodpłatna",
-			types.NewAccountID(accounts.Nieodplatna)),
-		documents.GenerateCategoryReport(year.Period, coa, year.Company.Name,
+			types.NewAccountID(accounts.Nieodplatna)).GetSheet(),
+		documents.NewCategoryReport(year.Period, coa, year.Company.Name,
 			"ZESTAWIENIE DZIAŁALNOŚCI ODPŁATNEJ",
 			"Odpłatna",
-			types.NewAccountID(accounts.Odplatna)),
-		documents.GenerateCIT8Report(coa),
+			types.NewAccountID(accounts.Odplatna)).GetSheet(),
+		documents.NewCIT8Report(coa).GetSheet(),
 	}
 	currencies := lo.Keys(bankRecords)
 	sort.Slice(currencies, func(i, j int) bool {
@@ -157,10 +157,10 @@ func newReport(
 		if !exists {
 			panic("currency not initialized")
 		}
-		docs = append(docs, documents.GenerateBankReport(year.Period, year.Company.Name,
-			types.Currencies.Currency(c), ci, bankRecords[c]))
+		docs = append(docs, documents.NewBankReport(year.Period, year.Company.Name,
+			types.Currencies.Currency(c), ci, bankRecords[c]).GetSheet())
 	}
-	docs = append(docs, documents.GenerateOverDueReport(year.Period, year.Operations))
+	docs = append(docs, documents.NewOverDueReport(year.Period, year.Operations).GetSheet())
 	docs = append(docs, opDocs...)
 
 	report := types.Report{

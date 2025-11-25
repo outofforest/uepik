@@ -60,6 +60,6 @@ func (p *Payment) BookRecords(
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
-) []types.ReportDocument {
+) []types.SheetSource {
 	return nil
 }

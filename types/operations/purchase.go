@@ -67,7 +67,7 @@ func (d *Purchase) BookRecords(
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
-) []types.ReportDocument {
+) []types.SheetSource {
 	if period.End.Before(d.Date) {
 		return nil
 	}

@@ -8,6 +8,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &BankReport{}
+
 	//go:embed bank.tmpl.xml
 	bankTmpl     string
 	bankTemplate = template.Must(template.New("bank").Parse(bankTmpl))
@@ -20,6 +22,18 @@ type BankReport struct {
 	Months          []BankMonth
 	PreviousSummary BankSummary
 	CurrentSummary  BankSummary
+}
+
+// GetSheet returns sheet to report.
+func (r *BankReport) GetSheet() types.Sheet {
+	return types.Sheet{
+		Template: bankTemplate,
+		Data:     r,
+		Config: types.SheetConfig{
+			Name:       "BANK." + string(r.Currency.Symbol),
+			LockedRows: 6,
+		},
+	}
 }
 
 // BankMonth is the month in the bank report.
@@ -54,16 +68,16 @@ type BankSummary struct {
 	RateAverage types.Number
 }
 
-// GenerateBankReport generates bank report.
-func GenerateBankReport(
+// NewBankReport generates bank report.
+func NewBankReport(
 	period types.Period,
 	companyName string,
 	currency types.Currency,
 	currencyInit types.InitCurrency,
 	records []types.BankRecord,
-) types.ReportDocument {
+) *BankReport {
 	summary := NewBankSummary(currencyInit)
-	report := BankReport{
+	report := &BankReport{
 		CompanyName:     companyName,
 		Currency:        currency,
 		PreviousSummary: summary,
@@ -85,12 +99,5 @@ func GenerateBankReport(
 		report.Months = append(report.Months, monthReport)
 	}
 
-	return types.ReportDocument{
-		Template: bankTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       "BANK." + string(currency.Symbol),
-			LockedRows: 6,
-		},
-	}
+	return report
 }

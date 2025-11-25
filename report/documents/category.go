@@ -9,6 +9,8 @@ import (
 )
 
 var (
+	_ types.SheetSource = &CategoryReport{}
+
 	//go:embed category.tmpl.xml
 	categoryTmpl     string
 	categoryTemplate = template.Must(template.New("category").Parse(categoryTmpl))
@@ -21,6 +23,18 @@ type CategoryReport struct {
 	CompanyName string
 	Months      []CategoryMonth
 	Summary     CategorySummary
+}
+
+// GetSheet returns sheet to report.
+func (r *CategoryReport) GetSheet() types.Sheet {
+	return types.Sheet{
+		Template: categoryTemplate,
+		Data:     r,
+		Config: types.SheetConfig{
+			Name:       r.SheetName,
+			LockedRows: 6,
+		},
+	}
 }
 
 // CategoryMonth is the month in the category report.
@@ -62,15 +76,15 @@ type CategoryRecord struct {
 	Cost       types.Denom
 }
 
-// GenerateCategoryReport generates bank report.
-func GenerateCategoryReport(
+// NewCategoryReport generates bank report.
+func NewCategoryReport(
 	period types.Period,
 	coa *types.ChartOfAccounts,
 	companyName string,
 	title, sheetName string,
 	accountID types.AccountID,
-) types.ReportDocument {
-	report := CategoryReport{
+) *CategoryReport {
+	report := &CategoryReport{
 		Title:       title,
 		SheetName:   sheetName,
 		CompanyName: companyName,
@@ -105,12 +119,5 @@ func GenerateCategoryReport(
 		report.Months = append(report.Months, monthReport)
 	}
 
-	return types.ReportDocument{
-		Template: categoryTemplate,
-		Data:     report,
-		Config: types.SheetConfig{
-			Name:       sheetName,
-			LockedRows: 6,
-		},
-	}
+	return report
 }

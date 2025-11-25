@@ -11,8 +11,7 @@ import (
 )
 
 var (
-	_ types.Operation       = &CurrencyDiff{}
-	_ types.EntryDataSource = &CurrencyDiffSource{}
+	_ types.Operation = &CurrencyDiff{}
 )
 
 // CurrencyDiff defines the currency diff.
@@ -30,25 +29,28 @@ func (cd *CurrencyDiff) BookRecords(
 	coa *types.ChartOfAccounts,
 	bankRecords []*types.BankRecord,
 	rates types.CurrencyRates,
-) []types.ReportDocument {
-	docs := []types.ReportDocument{}
+) []types.SheetSource {
+	docs := []types.SheetSource{}
 	for _, month := range period.Months() {
 		cdDate := month.AddDate(0, 1, 0).Add(-time.Nanosecond)
 		cdID := fmt.Sprintf("RK/%d/%d/1", cdDate.Year(), cdDate.Month())
-		source := &CurrencyDiffSource{
-			Document: types.Document{
-				ID:        types.DocumentID(cdID),
-				Date:      cdDate,
-				SheetName: strings.ReplaceAll(cdID, "/", "."),
-			},
-			Contractor: company,
+
+		doc := documents.NewCurrencyDiffDocument(coa, types.Document{
+			ID:        types.DocumentID(cdID),
+			Date:      cdDate,
+			SheetName: strings.ReplaceAll(cdID, "/", "."),
+		}, company)
+		if doc == nil {
+			continue
 		}
+
+		docs = append(docs, doc)
 
 		debit := coa.DebitMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
 		credit := coa.CreditMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
 
 		coa.AddEntry(
-			source,
+			doc,
 			types.NewEntryRecord(
 				types.NewAccountID(accounts.PiK, accounts.Koszty, accounts.Podatkowe, accounts.Finansowe,
 					accounts.UjemneRozniceKursowe),
@@ -88,37 +90,6 @@ func (cd *CurrencyDiff) BookRecords(
 					cdDate)),
 			),
 		)
-
-		entries := coa.EntriesMonth(types.NewAccountID(accounts.RozniceKursowe), cdDate)
-		if len(entries) > 0 {
-			docs = append(docs, documents.GenerateCurrencyDiffDocument(source.Document, company, entries))
-		}
 	}
 	return docs
-}
-
-// CurrencyDiffSource is the source of currency diff document.
-type CurrencyDiffSource struct {
-	Document   types.Document
-	Contractor types.Contractor
-}
-
-// GetDate returns date of currency diff.
-func (cds *CurrencyDiffSource) GetDate() time.Time {
-	return cds.Document.Date
-}
-
-// GetDocument returns document.
-func (cds *CurrencyDiffSource) GetDocument() types.Document {
-	return cds.Document
-}
-
-// GetContractor returns contractor.
-func (cds *CurrencyDiffSource) GetContractor() types.Contractor {
-	return cds.Contractor
-}
-
-// GetNotes returns notes.
-func (cds *CurrencyDiffSource) GetNotes() string {
-	return "Różnice kursowe"
 }
