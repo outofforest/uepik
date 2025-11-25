@@ -7,6 +7,11 @@ import (
 	"github.com/outofforest/uepik/v2/types"
 )
 
+var (
+	_ types.Operation       = &Sell{}
+	_ types.EntryDataSource = &Sell{}
+)
+
 // Sell defines the income coming from goods or service sell.
 type Sell struct {
 	Date       time.Time

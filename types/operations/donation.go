@@ -7,6 +7,11 @@ import (
 	"github.com/outofforest/uepik/v2/types"
 )
 
+var (
+	_ types.Operation       = &Donation{}
+	_ types.EntryDataSource = &Donation{}
+)
+
 // Donation defines the income coming from donation.
 type Donation struct {
 	Contractor types.Contractor

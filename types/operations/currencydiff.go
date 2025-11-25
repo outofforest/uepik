@@ -10,6 +10,11 @@ import (
 	"github.com/outofforest/uepik/v2/types"
 )
 
+var (
+	_ types.Operation       = &CurrencyDiff{}
+	_ types.EntryDataSource = &CurrencyDiffSource{}
+)
+
 // CurrencyDiff defines the currency diff.
 type CurrencyDiff struct{}
 

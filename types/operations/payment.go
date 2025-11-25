@@ -6,6 +6,11 @@ import (
 	"github.com/outofforest/uepik/v2/types"
 )
 
+var (
+	_ types.Operation       = &Payment{}
+	_ types.EntryDataSource = &Payment{}
+)
+
 // Payment defines payment operation.
 type Payment struct {
 	Contractor types.Contractor
