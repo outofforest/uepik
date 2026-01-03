@@ -117,21 +117,12 @@
     </table:table-row>
     <table:table-row table:style-name="ro8">
         <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
-            <text:p>Razem na koniec poprzedniego okresu sprawozdawczego:</text:p>
-        </table:table-cell>
-        <table:covered-table-cell table:number-columns-repeated="3"/>
-        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .AccumulatedPreviousSummary.Income.Amount }}" calcext:value-type="float" />
-        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .AccumulatedPreviousSummary.CostTaxed.Amount }}" calcext:value-type="float" />
-        <table:table-cell table:style-name="ce96" office:value-type="float" office:value="{{ .AccumulatedPreviousSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
-    </table:table-row>
-    <table:table-row table:style-name="ro8">
-        <table:table-cell table:style-name="ce29" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="4" table:number-rows-spanned="1">
             <text:p>Razem od początku roku:</text:p>
         </table:table-cell>
         <table:covered-table-cell table:number-columns-repeated="3"/>
-        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .AccumulatedCurrentSummary.Income.Amount }}" calcext:value-type="float" />
-        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .AccumulatedCurrentSummary.CostTaxed.Amount }}" calcext:value-type="float" />
-        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .AccumulatedCurrentSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .AccumulatedSummary.Income.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .AccumulatedSummary.CostTaxed.Amount }}" calcext:value-type="float" />
+        <table:table-cell table:style-name="ce98" office:value-type="float" office:value="{{ .AccumulatedSummary.CostNotTaxed.Amount }}" calcext:value-type="float" />
     </table:table-row>
 {{ end }}
 </table:table>
