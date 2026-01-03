@@ -39,12 +39,11 @@ func (r *BookReport) GetSheet() types.Sheet {
 
 // BookMonth is the book month.
 type BookMonth struct {
-	Year                       uint64
-	Month                      string
-	Records                    []BookRecord
-	AccumulatedPreviousSummary BookSummary
-	MonthSummary               BookSummary
-	AccumulatedCurrentSummary  BookSummary
+	Year               uint64
+	Month              string
+	Records            []BookRecord
+	MonthSummary       BookSummary
+	AccumulatedSummary BookSummary
 }
 
 // BookRecord defines the book record.
@@ -103,15 +102,14 @@ func NewBookReport(
 		CompanyName: companyName,
 	}
 	var index uint64
-	summaryAccumulatedCurrent := NewBookSummary()
+	summaryAccumulated := NewBookSummary()
 	for _, month := range period.Months() {
 		entries := coa.EntriesMonth(types.NewAccountID(accounts.PiK), month)
 		monthReport := BookMonth{
-			Year:                       uint64(month.Year()),
-			Month:                      monthName(month.Month()),
-			Records:                    make([]BookRecord, 0, len(entries)),
-			AccumulatedPreviousSummary: summaryAccumulatedCurrent,
-			MonthSummary:               NewBookSummary(),
+			Year:         uint64(month.Year()),
+			Month:        monthName(month.Month()),
+			Records:      make([]BookRecord, 0, len(entries)),
+			MonthSummary: NewBookSummary(),
 		}
 
 		for _, e := range entries {
@@ -133,8 +131,8 @@ func NewBookReport(
 			monthReport.MonthSummary = monthReport.MonthSummary.AddRecord(r)
 		}
 
-		summaryAccumulatedCurrent = summaryAccumulatedCurrent.AddSummary(monthReport.MonthSummary)
-		monthReport.AccumulatedCurrentSummary = summaryAccumulatedCurrent
+		summaryAccumulated = summaryAccumulated.AddSummary(monthReport.MonthSummary)
+		monthReport.AccumulatedSummary = summaryAccumulated
 		report.Months = append(report.Months, monthReport)
 	}
 
