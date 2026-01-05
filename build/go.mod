@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	github.com/outofforest/build/v2 v2.4.0
-	github.com/outofforest/tools v1.3.0
+	github.com/outofforest/tools v1.4.3
 )
 
 require (
