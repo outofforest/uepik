@@ -5,8 +5,10 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/outofforest/build/v2 v2.4.0 h1:DivJEpglIgvTeQ6v5rVCBOIlQQuaf0fYeDdaKSfA7Sk=
-github.com/outofforest/build/v2 v2.4.0/go.mod h1:VAk235ilXcyAaMXrzVQepa4PpeHSsw7kk3Vp4vM/keA=
+github.com/outofforest/archive v0.5.0 h1:i4qjGwpmw7wB1c0VQo5TV3cO019U7lvfJGL2P03tyFM=
+github.com/outofforest/archive v0.5.0/go.mod h1:ZHLm4PQMKmHY3kM8sYqfqr46/y0jLwXcQ/IwbQM2NOw=
+github.com/outofforest/build/v2 v2.6.2 h1:iAWsw0JqNFGbHJ8hxzTeA+DlyISF+fhYfawsR7+XJSM=
+github.com/outofforest/build/v2 v2.6.2/go.mod h1:1I0m+oqxOIt0u+uRe/cnJSolshYQIzGDMKLjpFItqng=
 github.com/outofforest/ioc/v2 v2.5.2 h1:4mNzLuzoZTXL/cO0qf1TrSYvejMgbZz5OUhdLzAUbek=
 github.com/outofforest/ioc/v2 v2.5.2/go.mod h1:yI+FHuHchC/t6nVo3WJ96qEgCXdHQKFI/4wW2/75YcU=
 github.com/outofforest/libexec v0.3.9 h1:KvVLuKDHqpydwNoKm+j36hi9DVPU61X4oHonlZ5cw88=
@@ -41,8 +43,8 @@ github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
-github.com/ulikunitz/xz v0.5.12 h1:37Nm15o69RwBkXM0J6A5OlE67RZTfzUxTj8fB3dfcsc=
-github.com/ulikunitz/xz v0.5.12/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
+github.com/ulikunitz/xz v0.5.15 h1:9DNdB5s+SgV3bQ2ApL10xRc35ck0DuIX/isZvIk+ubY=
+github.com/ulikunitz/xz v0.5.15/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 go.uber.org/atomic v1.7.0/go.mod h1:fEN4uk6kAWBTFdckzkM89CLk9XfWZrxpCo0nPH17wJc=
 go.uber.org/atomic v1.9.0/go.mod h1:fEN4uk6kAWBTFdckzkM89CLk9XfWZrxpCo0nPH17wJc=
