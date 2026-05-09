@@ -18,4 +18,5 @@ const (
 	VAT
 	NiewydatkowanyDochod
 	RozniceKursowe
+	ZaliczkiPIT
 )

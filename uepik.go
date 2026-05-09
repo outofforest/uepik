@@ -274,6 +274,29 @@ func Zakup(
 	}}
 }
 
+// UmowaODzielo reprezentuje umowę o dzieło.
+func UmowaODzielo(
+	data time.Time,
+	dokument types.Document,
+	kontrahent types.Contractor,
+	kwota types.Denom,
+	platnosci []types.Payment,
+	typPodatkowy types.CostTaxType,
+	typPozytku types.CostCategoryType,
+	opis string,
+) []types.Operation {
+	return []types.Operation{&operations.ContractResult{
+		Date:             data,
+		Document:         dokument,
+		Contractor:       kontrahent,
+		Amount:           kwota,
+		Payments:         platnosci,
+		CostTaxType:      typPodatkowy,
+		CostCategoryType: typPozytku,
+		Notes:            opis,
+	}}
+}
+
 // Raport generuje raport.
 func Raport(
 	naDzien time.Time,

@@ -47,6 +47,7 @@ var coaAccounts = []*types.Account{
 				),
 				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(
 					&operations.Purchase{},
+					&operations.ContractResult{},
 					&operations.Delegation{},
 				)),
 			),
@@ -54,6 +55,7 @@ var coaAccounts = []*types.Account{
 				accounts.Niepodatkowe, types.Costs, types.AllValid(),
 				types.NewAccount(accounts.Operacyjne, types.Costs, types.ValidSources(
 					&operations.Purchase{},
+					&operations.ContractResult{},
 					&operations.Delegation{},
 				)),
 			),
@@ -65,6 +67,7 @@ var coaAccounts = []*types.Account{
 			&documents.CurrencyDiffDocument{},
 			&operations.Donation{},
 			&operations.Purchase{},
+			&operations.ContractResult{},
 			&operations.Delegation{},
 			&operations.Sell{},
 		),
@@ -78,13 +81,18 @@ var coaAccounts = []*types.Account{
 		&documents.CurrencyDiffDocument{},
 		&operations.Donation{},
 		&operations.Purchase{},
+		&operations.ContractResult{},
 		&operations.Delegation{},
 	)),
 	types.NewAccount(accounts.Odplatna, types.Liabilities, types.ValidSources(
 		&documents.CurrencyDiffDocument{},
 		&operations.Sell{},
 		&operations.Purchase{},
+		&operations.ContractResult{},
 		&operations.Delegation{},
+	)),
+	types.NewAccount(accounts.ZaliczkiPIT, types.Liabilities, types.ValidSources(
+		&operations.ContractResult{},
 	)),
 }
 
@@ -147,6 +155,7 @@ func newReport(
 			"Odpłatna",
 			types.NewAccountID(accounts.Odplatna)).GetSheet(),
 		documents.NewCIT8Report(coa).GetSheet(),
+		documents.NewPIT4Report(year.Period, coa).GetSheet(),
 	}
 	currencies := lo.Keys(bankRecords)
 	sort.Slice(currencies, func(i, j int) bool {
