@@ -42,4 +42,14 @@ var R2025 = Rok(
 		Dojazd(),
 		KosztDelegacji("FV/13/45", Kwota(100, 25, EUR), "Przelot"),
 	),
+	UmowaODzielo(
+		Data(2025, 1, 20),
+		Dokument("UD/1/1", Data(2025, 1, 20)),
+		Kontrahent("INVINI sp. z o. o.", "", ""),
+		Kwota(1000, 0, PLN),
+		Platnosci(Platnosc("WB/EUR/2025/01/24", Data(2025, 1, 21), 1, Kwota(940, 0, PLN))),
+		KUP,
+		Odplatna,
+		"Umowa o dzieło",
+	),
 )
