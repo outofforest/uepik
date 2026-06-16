@@ -25,6 +25,7 @@ var BaseZero = NewDenom(BaseCurrency.Symbol)
 var Currencies = CurrencyMap{
 	PLN: BaseCurrency,
 	EUR: {Symbol: EUR, AmountPrecision: 2, RatePrecision: 4},
+	NOK: {Symbol: NOK, AmountPrecision: 2, RatePrecision: 4},
 }
 
 // CurrencyMap is used to define currencies.
