@@ -12,6 +12,7 @@ import (
 const (
 	PLN CurrencySymbol = "PLN"
 	EUR CurrencySymbol = "EUR"
+	NOK CurrencySymbol = "NOK"
 )
 
 // BaseCurrency is the currency used to generate reports.
