@@ -17,6 +17,7 @@ import (
 const (
 	PLN = types.PLN
 	EUR = types.EUR
+	GBP = types.GBP
 	NOK = types.NOK
 )
 
