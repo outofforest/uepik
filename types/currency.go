@@ -12,6 +12,7 @@ import (
 const (
 	PLN CurrencySymbol = "PLN"
 	EUR CurrencySymbol = "EUR"
+	GBP CurrencySymbol = "GBP"
 	NOK CurrencySymbol = "NOK"
 )
 
@@ -25,6 +26,7 @@ var BaseZero = NewDenom(BaseCurrency.Symbol)
 var Currencies = CurrencyMap{
 	PLN: BaseCurrency,
 	EUR: {Symbol: EUR, AmountPrecision: 2, RatePrecision: 4},
+	GBP: {Symbol: GBP, AmountPrecision: 2, RatePrecision: 4},
 	NOK: {Symbol: NOK, AmountPrecision: 2, RatePrecision: 4},
 }
 
