@@ -52,4 +52,10 @@ var R2025 = Rok(
 		Odplatna,
 		"Umowa o dzieło",
 	),
+	Wymiana(
+		Dokument("Wymiana01", Data(2025, 1, 22)),
+		Kwota(2, 0, EUR),
+		Kwota(10, 0, PLN),
+		100, 101,
+	),
 )

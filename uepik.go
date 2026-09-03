@@ -365,3 +365,19 @@ func Delegacja(
 		Costs:            koszty,
 	}}
 }
+
+// Wymiana definiuje wymianę walut.
+func Wymiana(
+	dokument types.Document,
+	kwotaWymieniana types.Denom,
+	kwotaOtrzymana types.Denom,
+	indexZ, indexNa uint64,
+) []types.Operation {
+	return []types.Operation{&operations.Exchange{
+		Document:  dokument,
+		SrcAmount: kwotaWymieniana,
+		DstAmount: kwotaOtrzymana,
+		SrcIndex:  indexZ,
+		DstIndex:  indexNa,
+	}}
+}
